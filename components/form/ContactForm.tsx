@@ -44,7 +44,7 @@ export default function ContactForm() {
         <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 overflow-hidden mt-10 mb-10 ">
             {/* ---- COLONNE GAUCHE ---- */}
             <div className="bg-white text-gray-900 p-10 flex flex-col justify-center space-y-6">
-                <h2 className="text-5xl font-bold text-[#242078] uppercase">Contactez-nous</h2>
+                <h2 className="text-4xl font-bold text-[#242078] uppercase">Contactez-nous</h2>
                 <p className="text-gray-600 text-lg leading-relaxed">
                     Votre adresse électronique ne sera pas publiée. <br />
                     Les champs obligatoires sont marqués (<span className="text-[#fd980e]">*</span>)
