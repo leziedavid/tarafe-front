@@ -5,6 +5,17 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { AlertProvider } from "@/contexts/AlertContext"
 import localFont from "next/font/local" // si tu veux des fonts locales
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tarafé",
+  description: "Tarafé est une plateforme digitale de personnalisation des produits mode, accessoires et déco, avec une touche africaine, pour les entreprises et les particuliers. Notre mission est de valoriser les savoir-faire et le patrimoine textile local. Bienvenue !",
+  openGraph: {
+		title: "Tarafé",
+		description: "Tarafé est une plateforme digitale de personnalisation des produits mode, accessoires et déco, avec une touche africaine, pour les entreprises et les particuliers. Notre mission est de valoriser les savoir-faire et le patrimoine textile local. Bienvenue !",
+		url: "tarafe.com",
+	},
+};
 
 const poppins = localFont({
   src: "./fonts/Poppins.woff2",

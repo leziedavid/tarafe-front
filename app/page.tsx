@@ -1,5 +1,6 @@
 "use client";
 
+import ContactForm from "@/components/form/ContactForm";
 import Footer from "@/components/page/Footer";
 import Hero from "@/components/page/Hero";
 // import Lifestyle from "@/components/page/Lifestyle";
@@ -16,6 +17,7 @@ export default function Home() {
       <Hero />
       <ProductList />
       <MonthlyAd /> {/* 👈 Pub du mois */}
+      <ContactForm />
       <Footer />
 {/* 
       <Testimonial />
