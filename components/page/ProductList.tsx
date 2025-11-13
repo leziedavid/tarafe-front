@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { Spinner } from "../spinner/Loader";
 
 interface Product {
     id: number;
@@ -136,7 +137,7 @@ export default function ProductList() {
             {/* Product Grid ou Spinner */}
             {loading ? (
                 <div className="flex justify-center items-center h-60">
-                    <div className="w-10 h-10 border-4 border-[#fd980e] border-t-transparent rounded-full animate-spin" />
+                    <Spinner />
                 </div>
             ) : (
                 <div
