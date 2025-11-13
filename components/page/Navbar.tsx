@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Search, ShoppingCart, Menu } from "lucide-react";
+import { Search, ShoppingCart, Menu, User } from "lucide-react";
 import {
     Sheet,
     SheetContent,
@@ -90,9 +90,7 @@ export default function Navbar() {
             <div className="flex items-center space-x-4">
                 <Search className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" />
                 <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" />
-                <button className="border border-gray-300 px-4 py-1.5 rounded-full font-bold hover:bg-[#fd980e] hover:text-white transition-colors duration-200">
-                    Sign In
-                </button>
+                <User className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" />
             </div>
         </nav>
     );
