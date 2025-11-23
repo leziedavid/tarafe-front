@@ -19,7 +19,7 @@ const products: Product[] = [
         name: "The Classic Knit Polo",
         price: 12.0,
         colors: "7 Colors available",
-        image: "/ads/fille-noir.jpg",
+        image: "/ads/Tarafe-51069Z.jpg",
         category: "MEN'S",
     },
     {
@@ -27,7 +27,7 @@ const products: Product[] = [
         name: "Zip Jacket",
         price: 16.25,
         colors: "2 Colors available",
-        image: "/ads/fille-noir.jpg",
+        image: "/ads/Tarafe-45821F.jpg",
         category: "JACKET",
     },
     {
@@ -35,7 +35,7 @@ const products: Product[] = [
         name: "The Utility Jacket",
         price: 25.0,
         colors: "3 Colors available",
-        image: "/ads/fille-noir.jpg",
+        image: "/ads/Tarafe-51069Z.jpg",
         category: "WOMEN'S",
     },
     {
