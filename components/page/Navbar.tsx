@@ -10,24 +10,30 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useState } from "react";
 
 const NAV_LINKS = [
-    { label: "Accueil", href: "#" },
-    { label: "Produits", href: "#" },
-    { label: "Réalisations", href: "#" },
-    { label: "A propos", href: "#" },
+    { label: "Accueil", href: "/" },
+    { label: "Produits", href: "/realisations" },
+    { label: "Réalisations", href: "/gallerie" },
+    { label: "A propos", href: "/apropos" },
 ];
 
 export default function Navbar() {
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
         <nav className="flex items-center justify-between py-4 px-6 md:px-10">
             {/* ==== LEFT : MENU (mobile) + LOGO ==== */}
             <div className="flex items-center space-x-3">
                 {/* Menu Mobile */}
                 <div className="md:hidden">
-                    <Sheet>
+                    <Sheet open={isOpen} onOpenChange={setIsOpen}>
                         <SheetTrigger asChild>
-                            <button className="p-2 rounded-md hover:bg-gray-100 transition">
+                            <button
+                                className="p-2 rounded-md hover:bg-gray-100 transition"
+                                type="button"
+                            >
                                 <Menu className="w-5 h-5" />
                             </button>
                         </SheetTrigger>
@@ -48,7 +54,8 @@ export default function Navbar() {
                                     <li key={link.label}>
                                         <a
                                             href={link.href}
-                                            className="transition-colors duration-200 hover:text-[#fd980e]"
+                                            className="transition-colors duration-200 hover:text-[#fd980e] block py-2"
+                                            onClick={() => setIsOpen(false)}
                                         >
                                             {link.label}
                                         </a>

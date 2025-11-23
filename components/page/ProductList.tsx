@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Spinner } from "../spinner/Loader";
-
+import Link from "next/link";
 interface Product {
     id: number;
     name: string;
@@ -110,16 +110,16 @@ export default function ProductList() {
         <section className="max-w-7xl mx-auto px-6 py-10">
             {/* Header */}
             <div className="flex items-center justify-between mb-10">
-                <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                <h2 className="text-xl sm:text-1xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight ">
                     NOUVEAUTÉS
                 </h2>
-                <a href="#" className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+                <Link href="/realisations" className="text-gray-600 hover:text-gray-900 text-sm font-medium">
                     Voir plus
-                </a>
+                </Link>
             </div>
 
             {/* Category Filters */}
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12">
+            {/* <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12">
                 {categories.map((category) => (
                     <button
                         key={category}
@@ -132,7 +132,7 @@ export default function ProductList() {
                         {category}
                     </button>
                 ))}
-            </div>
+            </div> */}
 
             {/* Product Grid ou Spinner */}
             {loading ? (

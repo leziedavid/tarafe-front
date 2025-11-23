@@ -50,7 +50,7 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="w-full bg-[#242078] text-background py-12 md:py-20">
+        <footer className="w-full bg-[#242078] text-background py-12 md:py-20 bootom-0">
             <div className="container mx-auto px-6">
                 {/* === Grid principale === */}
                 <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-start">
