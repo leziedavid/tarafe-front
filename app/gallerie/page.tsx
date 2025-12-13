@@ -11,7 +11,7 @@ export default function Home() {
     <main className="min-h-screen bg-white text-gray-900">
       <Navbar />
       <HomeGallerie />
-      <Footer />
+      <Footer reglages={[]} />
     </main>
   );
 }
