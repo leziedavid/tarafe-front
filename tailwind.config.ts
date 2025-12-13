@@ -82,6 +82,11 @@ const config: Config = {
         "slide-in-right": "slide-in-right 0.3s ease forwards",
         "slide-in-bottom": "slide-in-bottom 0.3s ease forwards",
       },
+      fontFamily: {
+        poppins: ['var(--font-poppins)'],
+        raleway: ['var(--font-raleway)'],
+        opensans: ['var(--font-open-sans)'],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

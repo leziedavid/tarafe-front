@@ -7,20 +7,41 @@ import Hero from "@/components/page/Hero";
 import MonthlyAd from "@/components/page/MonthlyAd";
 import Navbar from "@/components/page/Navbar";
 import ProductList from "@/components/page/ProductList";
+import { getAllRealisations } from "@/service/realisationServices";
+import { ApiResponse } from "@/types/interfaces";
+import { useEffect, useState } from "react";
 
 
 export default function Home() {
+
+  // const [loading, setLoading] = useState(true);
+  const [response, setResponse] = useState<ApiResponse | null>(null);
+  const [page, setPage] = useState(0);
+  const itemsPerPage = 6;
+  const [totalPages, setTotalPages] = useState(0);
+
+  const getAllRealisation = async () => {
+    const response = await getAllRealisations();
+    if (response.statusCode === 200 && response.data) {
+      setResponse(response.data); // 👈 DONNE DIRECTEMENT ApiResponse
+    }
+  };
+
+
+  useEffect(() => {
+    getAllRealisation();
+  }, []);
 
   return (
     <main className="min-h-screen bg-white text-gray-900">
       <Navbar />
       <Hero />
       {/* <CanvaClone /> */}
-      <ProductList />
+      <ProductList products={response?.realisations ?? []} />
       <MonthlyAd /> {/* 👈 Pub du mois */}
       <ContactForm />
-      <Footer />
-{/* 
+      <Footer reglages={response?.reglages ?? []} />
+      {/*
       <Testimonial />
       <Lifestyle /> */}
     </main>

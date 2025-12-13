@@ -2,115 +2,53 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Spinner } from "../spinner/Loader";
 import Link from "next/link";
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    colors: string;
-    image: string;
-    category: string;
+import { Realisation } from "@/types/interfaces";
+import FullPageLoader from "../spinner/FullPageLoader";
+import { getImagesUrl } from "@/types/baseUrl";
+import { useRouter } from "next/navigation";
+
+interface ProductListProps {
+    products: Realisation[];
 }
 
-const products: Product[] = [
-    {
-        id: 1,
-        name: "The Classic Knit Polo",
-        price: 12.0,
-        colors: "7 Colors available",
-        image: "/ads/Tarafe-51069Z.jpg",
-        category: "MEN'S",
-    },
-    {
-        id: 2,
-        name: "Zip Jacket",
-        price: 16.25,
-        colors: "2 Colors available",
-        image: "/ads/Tarafe-45821F.jpg",
-        category: "JACKET",
-    },
-    {
-        id: 3,
-        name: "The Utility Jacket",
-        price: 25.0,
-        colors: "3 Colors available",
-        image: "/ads/Tarafe-51069Z.jpg",
-        category: "WOMEN'S",
-    },
-    {
-        id: 4,
-        name: "The Suede Jacket",
-        price: 18.75,
-        colors: "7 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "SUITS",
-    },
-    {
-        id: 5,
-        name: "Casual Hoodie",
-        price: 14.5,
-        colors: "5 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "HOODIE",
-    },
-    {
-        id: 6,
-        name: "Urban Crewneck",
-        price: 10.99,
-        colors: "3 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "CREWNECK",
-    },
-    {
-        id: 7,
-        name: "Slim T-Shirt",
-        price: 8.75,
-        colors: "4 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "T-SHIRT",
-    },
-    {
-        id: 8,
-        name: "Elegant Dress",
-        price: 21.0,
-        colors: "2 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "WOMEN'S",
-    },
-];
+const ProductList = ({ products }: ProductListProps) => {
 
-const categories = ["ALL", "WOMEN'S", "MEN'S", "T-SHIRT", "SUITS", "CREWNECK", "JACKET", "HOODIE"];
+    const [filteredProducts, setFilteredProducts] = useState<Realisation[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [noData, setNoData] = useState(false);
+    const urlImages = getImagesUrl();
+    const router = useRouter();
 
-export default function ProductList() {
-    const [activeCategory, setActiveCategory] = useState("ALL");
-    const [filteredProducts, setFilteredProducts] = useState(products);
-    const [loading, setLoading] = useState(false);
-
-    // Fonction de filtrage avec spinner
-    const handleFilter = (category: string) => {
-        setActiveCategory(category);
-        setLoading(true);
-
-        setTimeout(() => {
-            if (category === "ALL") {
-                setFilteredProducts(products);
-            } else {
-                setFilteredProducts(products.filter((p) => p.category === category));
-            }
-            setLoading(false);
-        }, 700); // petit délai pour montrer le spinner
+    const navigateTo = (path: string) => {
+        const libelleModified = path.replace(/ /g, '-');
+        router.push('/product/' + libelleModified);
     };
 
     useEffect(() => {
         setFilteredProducts(products);
-    }, []);
+
+        if (products.length > 0) {
+            setLoading(false);
+            setNoData(false);
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            if (products.length === 0) {
+                setLoading(false);
+                setNoData(true);
+            }
+        }, 4000);
+
+        return () => clearTimeout(timer);
+    }, [products]);
 
     return (
         <section className="max-w-7xl mx-auto px-6 py-10">
             {/* Header */}
             <div className="flex items-center justify-between mb-10">
-                <h2 className="text-xl sm:text-1xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight ">
+                <h2 className="text-xl sm:text-1xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight">
                     NOUVEAUTÉS
                 </h2>
                 <Link href="/realisations" className="text-gray-600 hover:text-gray-900 text-sm font-medium">
@@ -118,52 +56,33 @@ export default function ProductList() {
                 </Link>
             </div>
 
-            {/* Category Filters */}
-            {/* <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12">
-                {categories.map((category) => (
-                    <button
-                        key={category}
-                        onClick={() => handleFilter(category)}
-                        className={`px-5 py-2 rounded-full border font-medium text-sm sm:text-base transition-all duration-200 ${activeCategory === category
-                                ? "bg-[#fd980e] text-white border-[#fd980e] scale-105"
-                                : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                            }`}
-                    >
-                        {category}
-                    </button>
-                ))}
-            </div> */}
-
-            {/* Product Grid ou Spinner */}
-            {loading ? (
+            {/* Loader */}
+            {loading && (
                 <div className="flex justify-center items-center h-60">
-                    <Spinner />
+                    <FullPageLoader status="Chargement des nouveautés" />
                 </div>
-            ) : (
-                <div
-                    className="grid grid-cols-2 md:grid-cols-4 gap-6 transition-all duration-300 animate-fadeIn"
-                    key={activeCategory}
-                >
+            )}
+
+            {/* Aucun résultat + image */}
+            {!loading && noData && (
+                <div className="flex flex-col justify-center items-center h-60 text-center">
+                    <Image src="/images/empty_1.svg" alt="Aucune donnée"  width={180}  height={180}  className="opacity-80"  />
+                    <p className="mt-4 text-gray-500 text-lg">Aucune donnée disponible.</p>
+                </div>
+            )}
+
+            {/* Grille des produits */}
+            {!loading && !noData && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 transition-all duration-300 animate-fadeIn">
                     {filteredProducts.map((product) => (
-                        <div
-                            key={product.id}
-                            className="flex flex-col transform hover:scale-[1.02] transition-transform"
-                        >
+                        <div key={product.id_realisations} onClick={() => navigateTo(product.libelle_realisations)}  className="flex flex-col transform hover:scale-[1.02] transition-transform cursor-pointer">
                             <div className="relative w-full aspect-[3/4] overflow-hidden bg-gray-100 rounded-md">
-                                <Image
-                                    src={product.image}
-                                    alt={product.name}
-                                    fill
-                                    className="object-cover hover:scale-105 transition-transform duration-300"
-                                />
+                                <Image src={`${urlImages}/${product.images_realisations}`} alt={product.libelle_realisations} fill className="object-cover hover:scale-105 transition-transform duration-300 cursor-pointer" unoptimized />
                             </div>
-                            <div className="mt-4 flex flex-col">
-                                <h3 className="text-xl font-bold text-black hover:text-[#fd980e] transition-colors duration-200">
-                                    {product.name}
+                            <div className="mt-4 flex flex-col bg-gray-100 min-h-[60px] h-16 p-2 rounded-md">
+                                <h3  className="text-sm sm:text-lg font-medium text-black hover:text-[#fd980e] transition-colors duration-200 cursor-pointer">
+                                    {product.libelle_realisations || " "} {/* espace insécable si vide */}
                                 </h3>
-                                <div className="flex justify-between mt-1">
-                                    <p className="text-gray-600 text-sm">{product.colors}</p>
-                                </div>
                             </div>
                         </div>
                     ))}
@@ -171,4 +90,6 @@ export default function ProductList() {
             )}
         </section>
     );
-}
+};
+
+export default ProductList;
