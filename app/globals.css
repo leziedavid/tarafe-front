@@ -56,6 +56,7 @@
 }
 
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -67,6 +68,12 @@
 
 @layer base {
   :root {
+    /* Fonts */
+    --font-jost: "Jost", sans-serif;
+    --font-poppins: "Poppins", sans-serif;
+    --font-raleway: "Raleway", sans-serif;
+    --font-open-sans: "Open Sans", sans-serif;
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -93,6 +100,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -120,12 +128,16 @@
     --chart-5: 340 75% 55%;
   }
 }
+
 @layer utilities {
   :root {
-    --font-poppins: "Poppins", sans-serif;
+      font-family: var(--font-jost);
+    /* --font-poppins: "Poppins", sans-serif; */
   }
+
   body {
-    font-family: var(--font-poppins);
+    font-family: var(--font-jost);
+    /* font-family: var(--font-poppins); */
   }
 }
 
@@ -133,12 +145,15 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   .hoverEffect {
     @apply duration-300 ease-in-out transition-all cursor-pointer;
   }
+
   button {
     @apply cursor-pointer;
   }
@@ -147,6 +162,7 @@
 
 /* Minimal responsive adjustments */
 @media (max-width: 640px) {
+
   .clerk-sign-in,
   .clerk-sign-up {
     padding: 1rem 0.5rem !important;
@@ -190,6 +206,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     /* font-family: "Inter", sans-serif; */
@@ -280,6 +297,7 @@
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -291,6 +309,7 @@
     opacity: 0;
     transform: translateY(-5px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -324,6 +343,7 @@
     transform: translateY(-10px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -343,7 +363,9 @@
 .admin-nav-item.active {
   transform: translateY(-1px) scale(1.02);
   box-shadow: 0 6px 16px rgba(59, 156, 60, 0.2);
-} /* Responsive Table Styles */
+}
+
+/* Responsive Table Styles */
 .responsive-table-container {
   @apply overflow-x-auto;
   scrollbar-width: thin;
@@ -373,6 +395,7 @@
     opacity: 0;
     transform: translateY(10px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -396,6 +419,7 @@
     transform: translateY(-10px) scale(0.95);
     opacity: 0;
   }
+
   to {
     transform: translateY(0) scale(1);
     opacity: 1;
@@ -407,6 +431,7 @@
     transform: translateY(0) scale(1);
     opacity: 1;
   }
+
   to {
     transform: translateY(-10px) scale(0.95);
     opacity: 0;
@@ -423,13 +448,23 @@
 
 
 @keyframes slide-in-right {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes slide-in-bottom {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }
 
 @layer utilities {
@@ -448,7 +483,8 @@
   main {
     justify-content: start !important;
   }
-  main > div {
+
+  main>div {
     border-radius: 0 !important;
     min-height: 100vh !important;
     max-width: 100% !important;
@@ -460,9 +496,12 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .hide-scrollbar {
-  -ms-overflow-style: none; /* IE */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* Réduction du calendrier */
@@ -472,15 +511,28 @@
   background: transparent;
   font-size: 0.8rem;
 }
+
 .react-calendar__navigation button {
   color: #1e293b;
   font-weight: 600;
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
 }
 
 .animate-shake {
@@ -488,8 +540,13 @@
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .animate-fade-in {
@@ -497,17 +554,42 @@
 }
 
 
-/* @keyframes fade-in {
+/* Effets d'animation */
+@keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.animate-fade-in {
-  animation: fade-in 0.4s ease-in-out;
-} */
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+/* Effets de hover avancés */
+.group:hover .group-hover\:translate-x-1 {
+  transform: translateX(4px);
+}
+
+/* Optimisation des performances */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
