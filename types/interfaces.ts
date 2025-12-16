@@ -214,7 +214,6 @@ export interface OptionRealisation {
     updated_at: string | null; // Peut être une chaîne de caractères ou null
 }
 
-
 // Interface pour la structure de pagination des réalisations
 export interface PaginationLinks {
     url: string | null;
@@ -240,4 +239,53 @@ export interface AllDataResponse {
     };
     reglages: Reglage[];
     OptionRealisation: OptionRealisation[];
+}
+
+export interface Product {
+    id: number;
+    name: string;
+    price: number;
+    oldPrice?: number;
+    image: string;
+    tag?: "NEW ARRIVAL" | "GET OFF 20%";
+    colors: string[];
+    stock: number;
+    available: boolean;
+    category: string;
+    subCategory: string;
+}
+
+
+
+// Définir l'interface pour l'image dans la galerie
+export interface GallerieImage {
+    id_gallerie_images: string; // Identifiant de l'image
+    files_gallerie_images: string; // Chemin du fichier d'image
+    libelle_gallerie_images: string | null; // Libellé de l'image (peut être nul)
+    created_at: string; // Date de création de l'image
+    updated_at: string | null; // Date de mise à jour de l'image (peut être nul)
+}
+export interface GalleryCategory {
+    idcategories_gallery: number;
+    libelle: string;
+}
+
+export interface GallerieImagesResponse {
+
+    data: {
+        current_page: number;
+        data: GallerieImage[];  // Liste des réalisations
+        first_page_url: string;
+        from: number;
+        last_page: number;
+        last_page_url: string;
+        links: PaginationLinks[];
+        next_page_url: string | null;
+        path: string;
+        per_page: number;
+        prev_page_url: string | null;
+        to: number;
+        total: number;
+    };
+    reglages: Reglage[];
 }

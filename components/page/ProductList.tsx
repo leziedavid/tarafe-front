@@ -66,28 +66,47 @@ const ProductList = ({ products }: ProductListProps) => {
             {/* Aucun résultat + image */}
             {!loading && noData && (
                 <div className="flex flex-col justify-center items-center h-60 text-center">
-                    <Image src="/images/empty_1.svg" alt="Aucune donnée"  width={180}  height={180}  className="opacity-80"  />
+                    <Image src="/images/empty_1.svg" alt="Aucune donnée" width={180} height={180} className="opacity-80" />
                     <p className="mt-4 text-gray-500 text-lg">Aucune donnée disponible.</p>
                 </div>
             )}
 
-            {/* Grille des produits */}
+
+            {/* Grid (réalisations responsive) */}
             {!loading && !noData && (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 transition-all duration-300 animate-fadeIn">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0">
                     {filteredProducts.map((product) => (
-                        <div key={product.id_realisations} onClick={() => navigateTo(product.libelle_realisations)}  className="flex flex-col transform hover:scale-[1.02] transition-transform cursor-pointer">
-                            <div className="relative w-full aspect-[3/4] overflow-hidden bg-gray-100 rounded-md">
-                                <Image src={`${urlImages}/${product.images_realisations}`} alt={product.libelle_realisations} fill className="object-cover hover:scale-105 transition-transform duration-300 cursor-pointer" unoptimized />
+                        <div key={product.id_realisations} className="group">
+                            <div className="relative rounded-3xl bg-[#efefec] overflow-hidden">
+                                {/* Image */}
+                                <div
+                                    className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-center bg-cover rounded-3xl"
+                                    style={{ backgroundImage: `url(${urlImages}/${product.images_realisations})` }}
+                                />
+
+                                {/* Overlay bouton Voir plus */}
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 sm:group-hover:opacity-100 transition">
+                                    <button
+                                        onClick={() => navigateTo(product.libelle_realisations)}
+                                        className="bg-[#c08457] text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold"
+                                    >
+                                        Voir plus
+                                    </button>
+                                </div>
                             </div>
-                            <div className="mt-4 flex flex-col bg-gray-100 min-h-[60px] h-16 p-2 rounded-md">
-                                <h3  className="text-sm sm:text-lg font-medium text-black hover:text-[#fd980e] transition-colors duration-200 cursor-pointer">
-                                    {product.libelle_realisations || " "} {/* espace insécable si vide */}
+
+                            {/* Card info */}
+                            <div className="mt-2 sm:mt-3 px-1 sm:px-2">
+                                <h3 className="font-semibold text-sm sm:text-base">
+                                    {product.libelle_realisations || "\u00A0"} {/* espace insécable si vide */}
                                 </h3>
+
                             </div>
                         </div>
                     ))}
                 </div>
             )}
+
         </section>
     );
 };
