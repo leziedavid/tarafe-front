@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getRealisationsByLaballe } from "@/service/realisationServices";
 import { getImagesUrl } from "@/types/baseUrl";
 import { DetailRealisation, Images, Realisation, Reglage } from "@/types/interfaces";
@@ -23,36 +24,38 @@ interface ReadMoreProps {
 }
 
 export default function Page() {
-
     const { id } = useParams<{ id: string }>();
     const [realisations, setRealisations] = useState<Realisation[]>([]);
     const [images, setImages] = useState<Images[]>([]);
     const [reglages, setReglages] = useState<Reglage[]>([]);
     const [realisationImages, setRealisationImages] = useState<ProductImage[]>([]);
-    const [activeImage, setActiveImage] = useState<string>("");
-    const [size, setSize] = useState("S");
-    const [carouselIndex, setCarouselIndex] = useState(0);
+    const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
+    const [loading, setLoading] = useState(true);
     const urlImages = getImagesUrl();
 
-    const sizes = ["S", "M", "L", "XL", "XXL"];
-    const itemsPerPage = 3; // nombre d'images visibles dans le carousel
-
     const fetchData = async (id: string) => {
-        const libelleModified = id.substring(id.lastIndexOf("/") + 1);
-        const libelle = libelleModified.replace(/-/g, " ");
+        setLoading(true);
+        try {
+            const libelleModified = id.substring(id.lastIndexOf("/") + 1);
+            const libelle = libelleModified.replace(/-/g, " ");
 
-        const result = await getRealisationsByLaballe(libelle);
+            const result = await getRealisationsByLaballe(libelle);
 
-        if (result.statusCode === 200 && result.data) {
-            setReglages(result.data.reglages);
-            setRealisations(result.data.realisations);
-            setImages(result.data.images);
+            if (result.statusCode === 200 && result.data) {
+                setReglages(result.data.reglages);
+                setRealisations(result.data.realisations);
+                setImages(result.data.images);
 
-            const formattedImages = buildRealisationImages(result.data);
-            setRealisationImages(formattedImages);
-            setActiveImage(formattedImages[0]?.src || "");
-        } else {
-            toast.error(result.message || "Erreur lors du chargement");
+                const formattedImages = buildRealisationImages(result.data);
+                setRealisationImages(formattedImages);
+                setActiveImageIndex(0);
+            } else {
+                toast.error(result.message || "Erreur lors du chargement");
+            }
+        } catch (error) {
+            toast.error("Erreur lors du chargement des données");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -81,14 +84,24 @@ export default function Page() {
         return formatted;
     }
 
-    if (!realisations || realisations.length === 0) {
-        return (
-            <div className="flex justify-center items-center h-60">
-                <FullPageLoader status="Chargement du produit" />
-            </div>
-        );
-    }
+    // === Fonctions pour la slide d'images ===
+    const nextImage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (realisationImages.length <= 1) return;
 
+        const nextIndex = (activeImageIndex + 1) % realisationImages.length;
+        setActiveImageIndex(nextIndex);
+    };
+
+    const prevImage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (realisationImages.length <= 1) return;
+
+        const prevIndex = (activeImageIndex - 1 + realisationImages.length) % realisationImages.length;
+        setActiveImageIndex(prevIndex);
+    };
+
+    // === Composant ReadMore ===
     const ReadMore: React.FC<ReadMoreProps> = ({ html, maxWords = 30 }) => {
         const [expanded, setExpanded] = useState(false);
 
@@ -107,7 +120,10 @@ export default function Page() {
             <div className="text-gray-600 prose prose-sm max-w-none">
                 <span dangerouslySetInnerHTML={{ __html: displayHtml }} />
                 {shouldTruncate && (
-                    <button onClick={() => setExpanded(!expanded)} className="text-sm text-gray-500 ml-1 underline hover:text-gray-700 transition-colors"   >
+                    <button
+                        onClick={() => setExpanded(!expanded)}
+                        className="text-sm text-gray-500 ml-1 underline hover:text-gray-700 transition-colors"
+                    >
                         {expanded ? "Réduire" : "Afficher la suite"}
                     </button>
                 )}
@@ -115,117 +131,145 @@ export default function Page() {
         );
     };
 
-
-
-    // if (!realisationImages || realisationImages.length === 0) {
-    //     return (
-    //         <div className="flex justify-center items-center h-60">
-    //             <FullPageLoader status="Chargement des nouveautés" />
-    //         </div>
-    //     );
-    // }
+    if (loading || !realisations || realisations.length === 0) {
+        return (
+            <div className="flex justify-center items-center h-60">
+                <FullPageLoader status="Chargement du produit" />
+            </div>
+        );
+    }
 
     const realisation = realisations[0];
-    const totalPages = Math.ceil(realisationImages.length / itemsPerPage);
-
-    const handlePrev = () => {
-        setCarouselIndex((prev) => Math.max(prev - 1, 0));
-    };
-
-    const handleNext = () => {
-        setCarouselIndex((prev) => Math.min(prev + 1, totalPages - 1));
-    };
-
-    const visibleImages = realisationImages.slice(
-        carouselIndex * itemsPerPage,
-        carouselIndex * itemsPerPage + itemsPerPage
-    );
+    const activeImage = realisationImages[activeImageIndex];
+    const totalImages = realisationImages.length;
 
     return (
         <>
             <Navbar />
 
             <div className="w-full max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
-                {/* Left Section Images */}
+                {/* Left Section - Images avec slider */}
                 <div>
-                    <div className="w-full h-[500px] relative rounded-2xl overflow-hidden bg-gray-100">
-                        <Image
-                            src={`${urlImages}/${activeImage}`}
-                            alt={realisation.libelle_realisations}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            unoptimized
-                        />
-                    </div>
+                    {/* Image principale avec boutons de slide */}
+                    <div className="relative w-full h-[500px] rounded-2xl overflow-hidden bg-gray-100">
+                        {activeImage && (
+                            <Image
+                                src={`${urlImages}/${activeImage.src}`}
+                                alt={realisation.libelle_realisations}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                unoptimized
+                            />
+                        )}
 
-                    {/* Carousel */}
-                    <div className="flex items-center mt-4">
-                        <button
-                            onClick={handlePrev}
-                            disabled={carouselIndex === 0}
-                            className="px-2 py-1 bg-gray-200 rounded-xl disabled:opacity-50" >
-                            ◀
-                        </button>
-
-                        <div className="flex gap-4 overflow-hidden flex-1">
-                            {visibleImages.map((img) => (
-                                <div key={img.id} className={`flex-shrink-0 w-28 h-28 rounded-xl overflow-hidden cursor-pointer border ${activeImage === img.src ? "border-black" : "border-transparent"}`}
-                                    onClick={() => setActiveImage(img.src)}
+                        {/* Boutons de navigation du slider */}
+                        {totalImages > 1 && (
+                            <>
+                                <button
+                                    onClick={prevImage}
+                                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-all z-20"
                                 >
-                                    <Image
-                                        src={`${urlImages}/${img.src}`}
-                                        alt={img.src}
-                                        width={150}
-                                        height={150}
-                                        className="object-cover w-full h-full"
-                                        unoptimized
-                                    />
-                                </div>
-                            ))}
-                        </div>
+                                    <ChevronLeft className="w-5 h-5" />
+                                </button>
+                                <button
+                                    onClick={nextImage}
+                                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-all z-20"
+                                >
+                                    <ChevronRight className="w-5 h-5" />
+                                </button>
 
-                        <button
-                            onClick={handleNext}
-                            disabled={carouselIndex >= totalPages - 1}
-                            className="px-2 py-1 bg-gray-200 rounded-xl disabled:opacity-50"
-                        >
-                            ▶
-                        </button>
+                                {/* Compteur d'images */}
+                                {totalImages > 1 && (
+                                    <div className="absolute bottom-4 right-4 bg-black/60 text-white text-sm px-3 py-1 rounded-lg z-10">
+                                        {activeImageIndex + 1}/{totalImages}
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </div>
+
+                    {/* Miniatures des images */}
+                    {totalImages > 1 && (
+                        <div className="mt-4">
+                            <div className="flex gap-2 overflow-x-auto pb-2">
+                                {realisationImages.map((image, index) => (
+                                    <button
+                                        key={image.id}
+                                        onClick={() => setActiveImageIndex(index)}
+                                        className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 transition-all ${index === activeImageIndex ? 'ring-2 ring-[#fd980e] scale-105' : 'opacity-70 hover:opacity-100'}`}
+                                    >
+                                        <Image
+                                            src={`${urlImages}/${image.src}`}
+                                            alt={image.alt}
+                                            fill
+                                            className="object-cover"
+                                            sizes="80px"
+                                            unoptimized
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                {/* Right Section */}
+                {/* Right Section - Informations produit */}
                 <div className="space-y-6">
                     {/* Description */}
-                    <div className="bg-white rounded-xl p-2">
-                        <p className="text-sm text-gray-400 uppercase">CODE : {realisation.code_realisation}</p>
-                        <h1 className="text-3xl font-semibold mb-3">{realisation.libelle_realisations}</h1>
-                        <ReadMore html={realisation.descript_real || ""} maxWords={80} />
+                    <div className="bg-white rounded-xl p-6">
+                        <p className="text-sm text-gray-400 uppercase mb-2">
+                            CODE : {realisation.code_realisation}
+                        </p>
+                        <h1 className="text-3xl font-semibold mb-4">
+                            {realisation.libelle_realisations}
+                        </h1>
+                        <div className="border-t pt-4">
+                            <ReadMore html={realisation.descript_real || ""} maxWords={80} />
+                        </div>
                     </div>
 
-                    {/* Select Size */}
-                    {/* <div>
-                    <p className="font-medium mb-2">Select Size</p>
-                    <div className="flex gap-2">
-                        {sizes.map((s) => (
-                            <button
-                                key={s}
-                                onClick={() => setSize(s)}
-                                className={`px-6 py-3 rounded-xl border transition text-sm ${size === s
-                                    ? "bg-black text-white border-black"
-                                    : "bg-gray-100 text-gray-700 border-transparent"
-                                    }`}
-                            >
-                                {s}
-                            </button>
-                        ))}
-                    </div>
-                </div> */}
+                    {/* Informations supplémentaires si disponibles */}
+                    {realisation.created_at && (
+                        <div className="bg-gray-50 rounded-xl p-4">
+                            <p className="text-sm text-gray-500">
+                                Créé le: {new Date(realisation.created_at).toLocaleDateString('fr-FR')}
+                            </p>
+                        </div>
+                    )}
 
+                    {/* Miniatures en version verticale pour mobile */}
+                    {totalImages > 1 && (
+                        <div className="md:hidden">
+                            <div className="flex items-center justify-between mb-2">
+                                <h3 className="font-medium text-gray-700">Images ({totalImages})</h3>
+                                <div className="text-sm text-gray-500">
+                                    {activeImageIndex + 1}/{totalImages}
+                                </div>
+                            </div>
+                            <div className="flex gap-2 overflow-x-auto">
+                                {realisationImages.map((image, index) => (
+                                    <button
+                                        key={image.id}
+                                        onClick={() => setActiveImageIndex(index)}
+                                        className={`relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 ${index === activeImageIndex ? 'ring-2 ring-[#fd980e]' : 'opacity-70'}`}
+                                    >
+                                        <Image
+                                            src={`${urlImages}/${image.src}`}
+                                            alt={image.alt}
+                                            fill
+                                            className="object-cover"
+                                            sizes="64px"
+                                            unoptimized
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
-
             </div>
+
             <Footer reglages={reglages ?? []} />
         </>
     );

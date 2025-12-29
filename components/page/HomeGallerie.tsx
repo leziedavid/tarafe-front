@@ -198,24 +198,30 @@ export default function HomeGallerie() {
                 </div>
 
 
+                {/* Categories */}
+                <div className="flex flex-wrap gap-3 mb-6">
+                    {loading ? (
+                        Array(5).fill(0).map((_, i) => (<div key={i} className="w-24 h-8 bg-gray-200 rounded-full animate-pulse" />))) : (
+                        <>
+                            <button key="all" onClick={() => { handleFilter(0); }} className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                                Tous
+                            </button>
 
-                {/* Category Filters */}
-                <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12">
-                    {categories.map((category) => (
-                        <button key={category.idcategories_gallery}
-                            onClick={() => handleFilter(category.idcategories_gallery)}
-                            className={`px-5 py-2 rounded-full border font-medium text-sm sm:text-base transition-all duration-200 ${activeCategory === category.idcategories_gallery ? "bg-[#fd980e] text-white border-[#fd980e] scale-105" : "border-gray-300 text-gray-700 hover:bg-gray-50"}`} >
-                            {category.libelle}
-                        </button>
-                    ))}
+                            {categories.map((cat) => (
+                                <button
+                                    key={cat.idcategories_gallery}
+                                    onClick={() => handleFilter(cat.idcategories_gallery)}
+                                    className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.idcategories_gallery ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                                    {cat.libelle}
+                                </button>
+                            ))}
+                        </>
+                    )}
                 </div>
 
                 {/* Bouton Réinitialiser visible uniquement si une catégorie est active */}
                 <div className={`flex justify-center mb-8 transition-all duration-300 ${activeCategory !== 0 ? "opacity-100 max-h-20" : "opacity-0 max-h-0 overflow-hidden"}`}>
-                    <button
-                        onClick={resetFilters} // appelle la nouvelle fonction
-                        className="px-6 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium transition transform hover:scale-105"
-                    >
+                    <button onClick={resetFilters} className="px-6 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium transition transform hover:scale-105">
                         Réinitialiser
                     </button>
                 </div>
@@ -227,7 +233,6 @@ export default function HomeGallerie() {
                         <Spinner />
                     </div>
                 ) : (
-
 
                     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0">
                         {gallery.map((item, index) => (

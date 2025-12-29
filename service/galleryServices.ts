@@ -19,7 +19,7 @@ export const getAllRealisations = async (): Promise<BaseResponse<ApiResponse>> =
 export const getAllImagesGallery = async (filters: Filters): Promise<BaseResponse<GallerieImagesResponse>> => {
 
     // Construction de l'URL avec les paramètres de filtre
-    const url = new URL(`${getBaseUrl()}/gallerie-images`);
+    const url = new URL(`${getBaseUrl()}/images/gallerie-images`);
     url.searchParams.append('page', filters.page.toString());
     url.searchParams.append('limit', filters.limit.toString());
 
@@ -42,7 +42,7 @@ export const getAllImagesGallery = async (filters: Filters): Promise<BaseRespons
 // categories-gallery
 export const getAllCategoriesGallery = async (): Promise<BaseResponse<GalleryCategory[]>> => {
 
-    const response = await fetch(`${getBaseUrl()}/categories-gallery`, {
+    const response = await fetch(`${getBaseUrl()}/categories/categories-gallery`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",

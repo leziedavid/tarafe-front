@@ -1,3 +1,85 @@
+
+
+export enum OrderStatus {
+    NEW = "NEW",
+    PROCESSING = "PROCESSING",
+    READY = "READY",
+    DELIVERED = "DELIVERED",
+    CANCELLED = "CANCELLED",
+    REFUNDED = "REFUNDED",
+}
+
+export enum UserStatus {
+    INACTIVE = "INACTIVE",
+    ACTIVE = "ACTIVE",
+    BLOCKED = "BLOCKED",
+}
+
+export enum Role {
+    ADMIN = "Admin",
+    VENDOR = "Vendeurs",
+    MANAGER = "Gestionnaire",
+    CLIENT = "Clients",
+}
+
+
+export enum PaymentMethod {
+    IMMEDIATE = "IMMEDIATE",
+    ON_ARRIVAL = "ON_ARRIVAL",
+    MOBILE_MONEY = "MOBILE_MONEY",
+    CARD = "CARD",
+    BANK_TRANSFER = "BANK_TRANSFER",
+}
+
+export enum PaymentMethodFrench {
+    IMMEDIATE = "PAIEMENT IMMÉDIAT",
+    ON_ARRIVAL = "PAIEMENT À LA LIVRAISON",
+    MOBILE_MONEY = "MOBILE MONEY",
+    CARD = "CARTE BANCAIRE",
+    BANK_TRANSFER = "VIREMENT BANCAIRE",
+}
+
+export enum DeliveryMethod {
+    HOME_DELIVERY = "HOME_DELIVERY",
+    STORE_PICKUP = "STORE_PICKUP",
+    LIFT = "LIFT",
+    PICKUP = "PICKUP",
+    DROP = "DROP",
+}
+
+export enum DeliveryMethodFrench {
+    HOME_DELIVERY = "LIVRAISON À DOMICILE",
+    STORE_PICKUP = "RETRAIT EN MAGASIN",
+    LIFT = "COVOITURAGE",
+    PICKUP = "POINT DE RETRAIT",
+    DROP = "DÉPÔT À UN POINT",
+}
+
+export interface User {
+    id: number;
+    name?: string;
+    sexe_users?: 'M' | 'F' | 'A' | '';
+    contact?: string;
+    piece?: string;
+    email: string;
+    photo?: string;
+    password?: string;
+    status: number;
+    nom_ntreprise?: number;
+    pays?: string;
+    lieu_livraison?: string;
+    ville?: string;
+    quartier?: string;
+    code_postal?: string;
+    email_verified_at?: string; // ISO string
+    remember_token?: string | null;
+    is_admin: Role;
+    stores: Store[];
+    created_at?: string; // ISO string
+    updated_at?: string; // ISO string
+}
+
+
 export interface Category {
     id_categories_produits: string;
     libelle_categories_produits: string;
@@ -74,6 +156,7 @@ export interface Realisation {
     position: string;
     created_at: string;
     updated_at: string | null;
+    images?: Images[];
 }
 
 export interface Images {
@@ -206,6 +289,16 @@ export interface PolitiqueResponse {
 }
 
 
+export interface ApiDataCategoriesByRealisation {
+    data: {
+        id_op_realisation: number;               // ID unique de l'option de réalisation
+        idrealis_op_realisation: number;          // ID de la relation avec la réalisation
+        idoption_realis_op_realisation: number;   // ID de l'option associée
+        created_at: string | null;                // Date de création (peut être null)
+        updated_at: string | null;                // Date de mise à jour (peut être null)
+    }[];
+}
+
 export interface OptionRealisation {
     id_option_reaalisation: number;
     stateOption_reaalisation: number;
@@ -241,20 +334,71 @@ export interface AllDataResponse {
     OptionRealisation: OptionRealisation[];
 }
 
+export interface CategoryProduct {
+    id: number;
+    name: string;
+    slug: string;
+    added_by: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface SubCategoryProduct {
+    id: number;
+    name: string;
+    slug: string;
+    category_id: number;
+    added_by: number;
+    created_at: string;
+    updated_at: string;
+}
+
+
+export interface ProductImage {
+    id: number;
+    product_id: number;
+    path: string;
+    is_main: number; // 0 | 1
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ProductStats {
+    total_items: number;
+    featured: number;
+    out_of_stock: number;
+    average_stock: number;
+}
+
+
 export interface Product {
     id: number;
     name: string;
-    price: number;
-    oldPrice?: number;
+    slug: string;
+    sku: string;
+    description: string;
     image: string;
-    tag?: "NEW ARRIVAL" | "GET OFF 20%";
-    colors: string[];
+    images: ProductImage[];
+    price: string;          // "10000.00"
+    old_price: string | null;
     stock: number;
-    available: boolean;
-    category: string;
-    subCategory: string;
+    available: number;      // 0 | 1
+    featured: number;       // 0 | 1
+    tag: "NEW ARRIVAL" | "GET OFF 20%" | "BEST SELLER" | "LIMITED" | null;
+    rating: string;         // "0.0"
+    review_count: number;
+    category_id: number;
+    sub_category_id: number;
+    store_id: number;
+    added_by: number;
+    colors: any[];          // relation vide pour l’instant
+    sizes: any[];           // relation vide pour l’instant
+    category: CategoryProduct;
+    sub_category: SubCategoryProduct;
+    store: Store;
+    created_at: string;
+    updated_at: string;
 }
-
 
 
 // Définir l'interface pour l'image dans la galerie
@@ -289,3 +433,178 @@ export interface GallerieImagesResponse {
     };
     reglages: Reglage[];
 }
+
+export interface MyOrder {
+    id_orders: string;
+    transaction_id: string;
+    total: string;
+    date_orders: string;        // format: YYYY-MM-DD
+    heurs_orders: string;       // format: HH:mm:ss
+    couleur_orders: string | null;
+    taille_orders: string | null;
+    pointures_orders: string | null;
+    Mode_paiement: string;
+    adresse_paiement: string | null;
+    contact_paiement: string | null;
+    email_orders: string;
+    nomUsers_orders: string;
+    status_orders: string;      // "0", "1", etc.
+    storesId_orders: string;
+    user_id: string;
+    notes_orders: string | null;
+    personnalise: string;
+    created_at: string;         // format: YYYY-MM-DD HH:mm:ss
+    updated_at: string | null;
+}
+
+export interface Demande {
+    id: number;
+    realisation_id: number;
+    realisation: Realisation;
+    texte?: string;
+    police?: string;
+    dimension?: string;
+    colors?: string;
+    nom_prenom: string;
+    entreprise?: string;
+    numero?: string;
+    email: string;
+    description?: string;
+    position: string;
+    files: string
+};
+
+
+export interface Transaction {
+    id: string;
+    date: string; // format YYYY-MM-DD
+    libelle: string;
+    categorieTransactionsId: string;
+    sortie_caisse: string;
+    sortie_banque: string;
+    entree_caisse: string;
+    entree_banque: string;
+    type_operation: string; // Type d'opération (par exemple "NSP")
+    // type_operation: "WAVE" | "ORANGE MONEY" | string;
+    details: string;
+    created_at: string; // datetime
+    updated_at: string; // datetime
+    categorie_label: string;
+}
+export interface CategorieTransaction {
+    id: number;
+    label: string;
+    defautPrice: string;
+    created_at: string | null;
+    updated_at: string | null;
+}
+export interface GraphData {
+    date: string;
+    value: number;
+    label: string;
+    color: string;
+}
+
+
+// types/interfaces.ts
+export interface Store {
+    id: number;
+    name: string;
+    slug: string;
+    logo: string | null;
+    description: string;
+    active: number; // 0 | 1
+    added_by: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface TransactionDataGraphe {
+    BarGraphByDate: GraphData[];
+    BarGraphByTypeOperation: GraphData[];
+    BarGraphByCategorieTransactions: GraphData[];
+    PieGraphByDate: GraphData[];
+    PieGraphByTypeOperation: GraphData[];
+    PieGraphByCategorieTransactions: GraphData[];
+}
+
+export interface OrderDetails {
+    id_orders: number;
+    transaction_id: string;
+    total: number;
+    date_orders: string;
+    heurs_orders: string;
+    couleur_orders: string | null;
+    taille_orders: string | null;
+    pointures_orders: string | null;
+    Mode_paiement: string;
+    adresse_paiement: string | null;
+    contact_paiement: string;
+    email_orders: string;
+    nomUsers_orders: string;
+    status_orders: number;
+    storesId_orders: number;
+    user_id: number;
+    notes_orders: string | null;
+    personnalise: number;
+    created_at: string;
+    updated_at: string | null;
+    id_achats: number;
+    codeAchat: string;
+    orderId: number;
+    id_reali: number;
+    dimensionAchats: string;
+    taillesParamsAchats: string | null;
+    pointuresParamsAchats: string | null;
+    couleursAchats: string;
+    NomPrenomAchats: string;
+    EntrepriseAchats: string;
+    numeroAchats: string;
+    emailAchats: string;
+    FileAchats: string;
+    PositionsFiles: string;
+    imgLogosAchats: string;
+    policeAchats: string;
+    texteAchats: string;
+    isMails: number;
+    modelfiles: string | null;
+    typesmodeel: number;
+    devisAchat: string | null;
+    typesdevis: number;
+    factures: string;
+    typesfactures: number;
+    objetmodels: string | null;
+    objetdevis: string | null;
+    objetfactures: string;
+    remarques: string;
+    id_realisations: number;
+    code_realisation: string;
+    libelle_realisations: string;
+    descript_real: string;
+    images_realisations: string;
+    statut_realisations: string;
+    isActive: number;
+    users_realisations: number;
+    position: number;
+}
+export interface TotalTransaction {
+    total_sortie_caisse: string;  // Montant total de la sortie caisse
+    total_sortie_banque: string;  // Montant total de la sortie banque
+    total_entree_caisse: string;  // Montant total de l'entrée caisse
+    total_entree_banque: string;  // Montant total de l'entrée banque
+    total_general: number;        // Total général de toutes les transactions
+}
+
+export interface TransactionTotalsResponse {
+    totals: TotalTransaction; // Totaux des transactions
+}
+
+export interface AdminRealisationFilters {
+    page?: number;
+    limit?: number;
+    option_id?: number;
+    statut?: number;
+    libelle?: string;
+}
+
+

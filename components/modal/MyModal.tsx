@@ -15,6 +15,12 @@ interface MyModalProps {
      * mode="default" 👉 conserve le comportement normal
      */
     mode?: "mobile" | "default";
+    /**
+     * typeModal="large" 👉 modal large sur desktop
+     * typeModal="normal" 👉 modal normal (max-w-lg)
+     * undefined 👉 garde le comportement par défaut (normal)
+     */
+    typeModal?: "large" | "normal";
 }
 
 export default function MyModal({
@@ -23,6 +29,7 @@ export default function MyModal({
     children,
     className,
     mode = "default",
+    typeModal = "normal",
 }: MyModalProps) {
     const [isOpen, setIsOpen] = React.useState(open);
     const startY = React.useRef<number | null>(null);
@@ -61,6 +68,28 @@ export default function MyModal({
         };
     }, [isOpen]);
 
+    // Détermine la largeur en fonction du typeModal
+    const getMaxWidth = () => {
+        switch (typeModal) {
+            case "large":
+                return "sm:max-w-3xl"; // ou "sm:max-w-4xl" selon votre besoin
+            case "normal":
+            default:
+                return "sm:max-w-lg";
+        }
+    };
+
+    // Détermine la position du bouton X en fonction du typeModal
+    const getCloseButtonPosition = () => {
+        switch (typeModal) {
+            case "large":
+                return "sm:top-[calc(50%-290px)] sm:right-6"; // ajusté pour la hauteur
+            case "normal":
+            default:
+                return "sm:top-[calc(50%-255px)] right-4";
+        }
+    };
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -78,7 +107,8 @@ export default function MyModal({
                     <motion.div
                         className={cn(
                             "fixed z-[9999] flex flex-col w-full bg-white dark:bg-neutral-900 shadow-xl rounded-t-2xl",
-                            "bottom-0 left-0 sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-lg sm:rounded-2xl",
+                            "bottom-0 left-0 sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full",
+                            getMaxWidth(), // Applique la largeur dynamique
                             "max-h-[85vh] sm:max-h-[90vh] overflow-hidden",
                             className
                         )}
@@ -101,7 +131,8 @@ export default function MyModal({
                         </div>
                     </motion.div>
 
-                    {/* === Bouton X “en chapeau” (légèrement plus haut) === */}
+                    {/* === Bouton X "en chapeau" (position dynamique) === */}
+                  {/* === Bouton X “en chapeau” (légèrement plus haut) === */}
                     <motion.button
                         onClick={handleClose}
                         className={cn(

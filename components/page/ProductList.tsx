@@ -3,20 +3,38 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Realisation } from "@/types/interfaces";
 import FullPageLoader from "../spinner/FullPageLoader";
 import { getImagesUrl } from "@/types/baseUrl";
 import { useRouter } from "next/navigation";
+
+// Interface pour les images
+interface ImageRealisation {
+    id_img_realisations: number;
+    realisations_id: number;
+    codeId: string;
+    filles_img_realisations: string;
+    one_img_realisations: string | null;
+    created_at: string;
+    updated_at: string | null;
+}
+
+// Étendre l'interface Realisation pour inclure les images
+interface RealisationWithImages extends Realisation {
+    images?: ImageRealisation[];
+}
 
 interface ProductListProps {
     products: Realisation[];
 }
 
 const ProductList = ({ products }: ProductListProps) => {
-
-    const [filteredProducts, setFilteredProducts] = useState<Realisation[]>([]);
+    const [filteredProducts, setFilteredProducts] = useState<RealisationWithImages[]>([]);
     const [loading, setLoading] = useState(true);
     const [noData, setNoData] = useState(false);
+    const [activeImageIndex, setActiveImageIndex] = useState<Record<string, number>>({});
+
     const urlImages = getImagesUrl();
     const router = useRouter();
 
@@ -25,8 +43,48 @@ const ProductList = ({ products }: ProductListProps) => {
         router.push('/product/' + libelleModified);
     };
 
+    // === Fonctions pour la slide d'images ===
+    const nextImage = (e: React.MouseEvent, realisationId: string) => {
+        e.stopPropagation();
+        const realisation = filteredProducts.find(r => r.id_realisations === realisationId);
+        if (!realisation || !realisation.images || realisation.images.length <= 1) return;
+
+        const currentIndex = activeImageIndex[realisationId] || 0;
+        const nextIndex = (currentIndex + 1) % realisation.images.length;
+        setActiveImageIndex(prev => ({ ...prev, [realisationId]: nextIndex }));
+    };
+
+    const prevImage = (e: React.MouseEvent, realisationId: string) => {
+        e.stopPropagation();
+        const realisation = filteredProducts.find(r => r.id_realisations === realisationId);
+        if (!realisation || !realisation.images || realisation.images.length <= 1) return;
+
+        const currentIndex = activeImageIndex[realisationId] || 0;
+        const prevIndex = (currentIndex - 1 + realisation.images.length) % realisation.images.length;
+        setActiveImageIndex(prev => ({ ...prev, [realisationId]: prevIndex }));
+    };
+
+    // === Fonction pour obtenir l'image active ===
+    const getActiveImage = (realisation: RealisationWithImages) => {
+        const activeIndex = activeImageIndex[realisation.id_realisations] || 0;
+        if (realisation.images && realisation.images.length > 0) {
+            return realisation.images[activeIndex];
+        }
+        // Si pas d'images multiples, utiliser l'image principale
+        return {
+            filles_img_realisations: realisation.images_realisations,
+            id_img_realisations: 0
+        };
+    };
+
     useEffect(() => {
-        setFilteredProducts(products);
+        // Transformer les produits pour inclure les images
+        const productsWithImages = products.map((product: any) => ({
+            ...product,
+            images: product.images || []
+        })) as RealisationWithImages[];
+
+        setFilteredProducts(productsWithImages);
 
         if (products.length > 0) {
             setLoading(false);
@@ -71,42 +129,94 @@ const ProductList = ({ products }: ProductListProps) => {
                 </div>
             )}
 
-
-            {/* Grid (réalisations responsive) */}
+            {/* Grid avec slide d'images */}
             {!loading && !noData && (
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0">
-                    {filteredProducts.map((product) => (
-                        <div key={product.id_realisations} className="group">
-                            <div className="relative rounded-3xl bg-[#efefec] overflow-hidden">
-                                {/* Image */}
-                                <div
-                                    className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-center bg-cover rounded-3xl"
-                                    style={{ backgroundImage: `url(${urlImages}/${product.images_realisations})` }}
-                                />
+                    {filteredProducts.map((product) => {
+                        const activeImage = getActiveImage(product);
+                        const totalImages = product.images?.length || 0;
+                        const currentIndex = activeImageIndex[product.id_realisations] || 0;
 
-                                {/* Overlay bouton Voir plus */}
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 sm:group-hover:opacity-100 transition">
-                                    <button
-                                        onClick={() => navigateTo(product.libelle_realisations)}
-                                        className="bg-[#c08457] text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold"
-                                    >
-                                        Voir plus
-                                    </button>
+                        return (
+                            <div key={product.id_realisations} className="group">
+                                <div className="relative rounded-3xl bg-[#efefec] overflow-hidden">
+                                    {/* Image avec slider */}
+                                    <div className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-center bg-cover rounded-3xl"  style={{ backgroundImage: `url(${urlImages}/${activeImage.filles_img_realisations})`,transition: 'background-image 0.3s ease' }}  >
+                                    
+                                        {/* Boutons de navigation du slider */}
+                                        {totalImages > 1 && (
+                                            <>
+                                                <button
+                                                    onClick={(e) => prevImage(e, product.id_realisations)}
+                                                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1.5 rounded-full hover:bg-white transition-all z-20"
+                                                >
+                                                    <ChevronLeft className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={(e) => nextImage(e, product.id_realisations)}
+                                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1.5 rounded-full hover:bg-white transition-all z-20"
+                                                >
+                                                    <ChevronRight className="w-4 h-4" />
+                                                </button>
+
+                                                {/* Compteur d'images */}
+                                                {totalImages > 1 && (
+                                                    <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10">
+                                                        {currentIndex + 1}/{totalImages}
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+
+                                    {/* Overlay bouton Voir plus */}
+                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 sm:group-hover:opacity-100 transition z-10">
+                                        <button
+                                            onClick={() => navigateTo(product.libelle_realisations)}
+                                            className="bg-[#c08457] text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold hover:bg-[#a96f46] transition-colors"
+                                        >
+                                            Voir plus
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Card info */}
-                            <div className="mt-2 sm:mt-3 px-1 sm:px-2">
-                                <h3 className="font-semibold text-sm sm:text-base">
-                                    {product.libelle_realisations || "\u00A0"} {/* espace insécable si vide */}
-                                </h3>
+                                {/* Card info */}
+                                <div className="mt-2 sm:mt-3 px-1 sm:px-2">
+                                    <h3 className="font-semibold text-sm sm:text-base line-clamp-1">
+                                        {product.libelle_realisations || "\u00A0"}
+                                    </h3>
+                                </div>
 
+                                {/* Miniatures des images */}
+                                {totalImages > 1 && (
+                                    <div className="mt-2 flex gap-1 overflow-x-auto px-1">
+                                        {product.images?.slice(0, 4).map((image, index) => (
+                                            <button
+                                                key={image.id_img_realisations}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setActiveImageIndex(prev => ({
+                                                        ...prev,
+                                                        [product.id_realisations]: index
+                                                    }));
+                                                }}
+                                                className={`relative w-8 h-8 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? 'ring-2 ring-[#fd980e]' : 'opacity-70 hover:opacity-100'}`}
+                                            >
+                                                <div  className="w-full h-full bg-center bg-cover"  style={{ backgroundImage: `url(${urlImages}/${image.filles_img_realisations})` }}  />
+                                            </button>
+                                        ))}
+                                        {totalImages > 4 && (
+                                            <div className="relative w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs">
+                                                +{totalImages - 4}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
-
         </section>
     );
 };

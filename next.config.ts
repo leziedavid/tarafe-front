@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '**',
       },
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'http://127.0.0.1:8000',
+      },
 
       {
         protocol: "https",
@@ -18,10 +26,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
-      // https://ms.cloud.tarafe.com/api/v1/homepage-data
 
-
-
+      {
+        protocol: 'https',
+        hostname: 'security.tarafe.com',
+        pathname: '**',
+      },
       {
         protocol: 'https',
         hostname: 'ms.cloud.tarafe.com',

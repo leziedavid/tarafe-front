@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import Footer from "@/components/page/Footer";
 import { Spinner } from "../spinner/Loader";
@@ -12,38 +12,36 @@ import { getAllRealisationsByFilter } from "@/service/realisationServices";
 import FullPageLoader from "../spinner/FullPageLoader";
 import { getImagesUrl } from "@/types/baseUrl";
 
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    colors: string;
-    image: string;
-    categoryId: number; // ID de l'option correspondante
+// Interface pour les images
+interface ImageRealisation {
+    id_img_realisations: number;
+    realisations_id: number;
+    codeId: string;
+    filles_img_realisations: string;
+    one_img_realisations: string | null;
+    created_at: string;
+    updated_at: string | null;
 }
 
-const products: Product[] = [
-    { id: 1, name: "The Classic Knit Polo", price: 12, colors: "7 Colors", image: "/ads/Tarafe-51069Z.jpg", categoryId: 1 },
-    { id: 2, name: "Zip Jacket", price: 16.25, colors: "2 Colors", image: "/ads/Tarafe-45821F.jpg", categoryId: 2 },
-    { id: 3, name: "The Utility Jacket", price: 25, colors: "3 Colors", image: "/ads/Tarafe-51069Z.jpg", categoryId: 3 },
-    { id: 4, name: "The Suede Jacket", price: 18.75, colors: "7 Colors", image: "/ads/fille-noir.jpg", categoryId: 4 },
-    { id: 5, name: "Casual Hoodie", price: 14.5, colors: "5 Colors", image: "/ads/fille-noir.jpg", categoryId: 5 },
-    { id: 6, name: "Urban Crewneck", price: 10.99, colors: "3 Colors", image: "/ads/fille-noir.jpg", categoryId: 6 },
-    { id: 7, name: "Slim T-Shirt", price: 8.75, colors: "4 Colors", image: "/ads/fille-noir.jpg", categoryId: 7 },
-    { id: 8, name: "Elegant Dress", price: 21, colors: "2 Colors", image: "/ads/fille-noir.jpg", categoryId: 3 },
-];
+// Étendre l'interface Realisation pour inclure les images
+interface RealisationWithImages extends Realisation {
+    images?: ImageRealisation[];
+}
 
 export default function AllProduits() {
     const router = useRouter();
 
     // === Etats ===
     const [activeCategory, setActiveCategory] = useState<number>(0); // 0 = TOUS
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
     const [loading, setLoading] = useState(false);
     const [reglages, setReglages] = useState<Reglage[]>([]);
     const [option, setOption] = useState<OptionRealisation[]>([]);
-    const [realisations, setRealisations] = useState<Realisation[]>([]);
+    const [realisations, setRealisations] = useState<RealisationWithImages[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
+    const [activeImageIndex, setActiveImageIndex] = useState<Record<string, number>>({});
+    const itemsPerPage = 20; // Nombre d'éléments par page
+
     const urlImages = getImagesUrl();
 
     // === Navigation vers produit ===
@@ -56,15 +54,20 @@ export default function AllProduits() {
     const fetchData = async () => {
         setLoading(true);
         try {
-
-            const result = await getAllRealisationsByFilter(currentPage, activeCategory);
+            const result = await getAllRealisationsByFilter(currentPage, Number(itemsPerPage), activeCategory);
             if (result.statusCode === 200 && result.data && result.data.realisations.data.length !== 0) {
                 setOption(result.data.OptionRealisation);
-                setRealisations(result.data.realisations.data);
+
+                // Transformer les données pour inclure les images si disponibles
+                const realisationsWithImages = result.data.realisations.data.map((real: RealisationWithImages) => ({
+                    ...real,
+                    images: real.images || [] // Assurez-vous que votre API retourne les images
+                }));
+
+                setRealisations(realisationsWithImages);
                 setTotalPages(result.data.realisations.last_page);
                 setReglages(result.data.reglages);
                 setLoading(false);
-
             } else {
                 toast.error(result.message || "Erreur lors du chargement");
                 setLoading(false);
@@ -77,24 +80,61 @@ export default function AllProduits() {
 
     useEffect(() => {
         fetchData();
-        setFilteredProducts(products); // initialisation
     }, [currentPage, activeCategory]);
 
     // === Filtrage ===
     const handleFilter = (categoryId: number) => {
         setActiveCategory(categoryId);
+        setCurrentPage(1); // Réinitialiser à la première page lors du filtrage
         setLoading(true);
-
-        setTimeout(() => {
-            if (categoryId === 0) {
-                setFilteredProducts(products);
-            } else {
-                setFilteredProducts(products.filter((p) => p.categoryId === categoryId));
-            }
-            setLoading(false);
-        }, 500);
     };
-    
+
+    // === Fonctions de pagination ===
+    const onNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prev => prev + 1);
+        }
+    };
+
+    const onPreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1);
+        }
+    };
+
+    // === Fonctions pour la slide d'images ===
+    const nextImage = (e: React.MouseEvent, realisationId: string) => {
+        e.stopPropagation(); // Empêche la propagation vers le bouton "Voir plus"
+        const realisation = realisations.find(r => r.id_realisations === realisationId);
+        if (!realisation || !realisation.images || realisation.images.length <= 1) return;
+
+        const currentIndex = activeImageIndex[realisationId] || 0;
+        const nextIndex = (currentIndex + 1) % realisation.images.length;
+        setActiveImageIndex(prev => ({ ...prev, [realisationId]: nextIndex }));
+    };
+
+    const prevImage = (e: React.MouseEvent, realisationId: string) => {
+        e.stopPropagation(); // Empêche la propagation vers le bouton "Voir plus"
+        const realisation = realisations.find(r => r.id_realisations === realisationId);
+        if (!realisation || !realisation.images || realisation.images.length <= 1) return;
+
+        const currentIndex = activeImageIndex[realisationId] || 0;
+        const prevIndex = (currentIndex - 1 + realisation.images.length) % realisation.images.length;
+        setActiveImageIndex(prev => ({ ...prev, [realisationId]: prevIndex }));
+    };
+
+    // === Fonction pour obtenir l'image active ===
+    const getActiveImage = (realisation: RealisationWithImages) => {
+        const activeIndex = activeImageIndex[realisation.id_realisations] || 0;
+        if (realisation.images && realisation.images.length > 0) {
+            return realisation.images[activeIndex];
+        }
+        // Si pas d'images multiples, utiliser l'image principale
+        return {
+            filles_img_realisations: realisation.images_realisations,
+            id_img_realisations: 0
+        };
+    };
 
     if (!realisations || realisations.length === 0) {
         return (
@@ -120,80 +160,153 @@ export default function AllProduits() {
                         <Spinner />
                     </div>
                 ) : (
-
+                    
                     <>
+                        {/* Categories */}
+                        <div className="flex flex-wrap gap-3 mb-6">
+                            {loading ? (
+                                Array(5).fill(0).map((_, i) => (<div key={i} className="w-24 h-8 bg-gray-200 rounded-full animate-pulse" />))) : (
+                                <>
+                                    <button key="all" onClick={() => { handleFilter(0); }} className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                                        Tous
+                                    </button>
 
-                        {/* Category Filters */}
-                        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12">
-                            <button onClick={() => handleFilter(0)} className={`px-5 py-2 rounded-full border font-medium text-sm sm:text-base transition-all duration-200 ${activeCategory === 0 ? "bg-[#fd980e] text-white border-[#fd980e] scale-105" : "border-gray-300 text-gray-700 hover:bg-gray-50"}`}  >
-                                Tous
-                            </button>
-
-                            {option.map((category) => (
-                                <button key={category.id_option_reaalisation} onClick={() => handleFilter(category.id_option_reaalisation)} className={`px-5 py-2 rounded-full border font-medium text-sm sm:text-base transition-all duration-200 ${activeCategory === category.id_option_reaalisation ? "bg-[#fd980e] text-white border-[#fd980e] scale-105" : "border-gray-300 text-gray-700 hover:bg-gray-50"}`} >
-                                    {category.libelleOption_reaalisation}
-                                </button>
-                            ))}
+                                    {option.map((cat) => (
+                                        <button
+                                            key={cat.id_option_reaalisation}
+                                            onClick={() => handleFilter(cat.id_option_reaalisation)}
+                                            className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.id_option_reaalisation ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                                            {cat.libelleOption_reaalisation}
+                                        </button>
+                                    ))}
+                                </>
+                            )}
                         </div>
 
-
+                        {/* Grille de produits - Structure inchangée */}
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0">
-                            {realisations.map((product) => (
-                                <div key={product.id_realisations} className="group">
-                                    <div className="relative rounded-3xl bg-[#efefec] overflow-hidden">
-                                        {/* Image */}
-                                        <div
-                                            className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-center bg-cover rounded-3xl"
-                                            style={{ backgroundImage: `url(${urlImages}/${product.images_realisations})` }}
-                                        />
+                            {realisations.map((product) => {
+                                const activeImage = getActiveImage(product);
+                                const totalImages = product.images?.length || 0;
+                                const currentIndex = activeImageIndex[product.id_realisations] || 0;
 
-                                        {/* Overlay bouton Voir plus */}
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 sm:group-hover:opacity-100 transition">
-                                            <button
-                                                onClick={() => navigateTo(product.libelle_realisations)}
-                                                className="bg-[#c08457] text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold"
-                                            >
-                                                Voir plus
-                                            </button>
+                                return (
+                                    <div key={product.id_realisations} className="group">
+                                        <div className="relative rounded-3xl bg-[#efefec] overflow-hidden">
+                                            {/* Image avec possibilité de slider */}
+                                            <div className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-center bg-cover rounded-3xl" style={{ backgroundImage: `url(${urlImages}/${activeImage.filles_img_realisations})`, transition: 'background-image 0.3s ease' }}  >
+
+                                                {/* Boutons de navigation du slider - AU-DESSUS du bouton "Voir plus" */}
+                                                {totalImages > 1 && (
+                                                    <>
+                                                        <button
+                                                            onClick={(e) => prevImage(e, product.id_realisations)}
+                                                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1.5 rounded-full hover:bg-white transition-all z-20"
+                                                            style={{ zIndex: 20 }} // Plus élevé que le bouton "Voir plus"
+                                                        >
+                                                            <ChevronLeft className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) => nextImage(e, product.id_realisations)}
+                                                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1.5 rounded-full hover:bg-white transition-all z-20"
+                                                            style={{ zIndex: 20 }} // Plus élevé que le bouton "Voir plus"
+                                                        >
+                                                            <ChevronRight className="w-4 h-4" />
+                                                        </button>
+
+                                                        {/* Compteur d'images */}
+                                                        {totalImages > 1 && (
+                                                            <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10">
+                                                                {currentIndex + 1}/{totalImages}
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
+
+                                            {/* Overlay bouton Voir plus - avec z-index plus bas */}
+                                            <div className="absolute inset-0 flex items-center justify-center opacity-0 sm:group-hover:opacity-100 transition z-10">
+                                                <button
+                                                    onClick={() => navigateTo(product.libelle_realisations)}
+                                                    className="bg-[#c08457] text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold hover:bg-[#a96f46] transition-colors"
+                                                >
+                                                    Voir plus
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Card info */}
-                                    <div className="mt-2 sm:mt-3 px-1 sm:px-2">
-                                        <h3 className="font-semibold text-sm sm:text-base">
-                                            {product.libelle_realisations || "\u00A0"} {/* espace insécable si vide */}
-                                        </h3>
+                                        {/* Card info - inchangé */}
+                                        <div className="mt-2 sm:mt-3 px-1 sm:px-2">
+                                            <h3 className="font-semibold text-sm sm:text-base">
+                                                {product.libelle_realisations || "\u00A0"}
+                                            </h3>
+                                        </div>
 
+                                        {/* Miniatures des images - optionnel */}
+                                        {totalImages > 1 && (
+                                            <div className="mt-2 flex gap-1 overflow-x-auto px-1">
+                                                {product.images?.slice(0, 4).map((image, index) => (
+                                                    <button
+                                                        key={image.id_img_realisations}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveImageIndex(prev => ({
+                                                                ...prev,
+                                                                [product.id_realisations]: index
+                                                            }));
+                                                        }}
+                                                        className={`relative w-8 h-8 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? 'ring-2 ring-[#fd980e]' : 'opacity-70 hover:opacity-100'}`}
+                                                    >
+                                                        <div
+                                                            className="w-full h-full bg-center bg-cover"
+                                                            style={{ backgroundImage: `url(${urlImages}/${image.filles_img_realisations})` }}
+                                                        />
+                                                    </button>
+                                                ))}
+                                                {totalImages > 4 && (
+                                                    <div className="relative w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs">
+                                                        +{totalImages - 4}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
-                        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6 transition-all duration-300 animate-fadeIn">
-                            {realisations.map((product) => (
-                                <div key={product.id_realisations} onClick={() => navigateTo(product.libelle_realisations)} className="flex flex-col transform hover:scale-[1.02] transition-transform cursor-pointer">
-                                    <div className="relative w-full aspect-[3/4] overflow-hidden bg-gray-100 rounded-md">
-                                        <Image src={`${urlImages}/${product.images_realisations}`} alt={product.libelle_realisations} fill className="object-cover hover:scale-105 transition-transform duration-300 cursor-pointer" unoptimized />
-                                    </div>
-                                    <div className="mt-4 flex flex-col bg-gray-100 min-h-[60px] h-16 p-2 rounded-md">
-                                        <h3 className="text-sm sm:text-lg font-medium text-black hover:text-[#fd980e] transition-colors duration-200 cursor-pointer">
-                                            {product.libelle_realisations || " "}
-                                        </h3>
-                                    </div>
-                                </div>
-                            ))}
-                        </div> */}
+                        {/* Pagination - Ajoutée */}
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-6 gap-4 mt-8">
+                            <div className="text-gray-600 text-sm sm:text-base text-center sm:text-left">
+                                Page {currentPage} sur {totalPages || 1}
+                            </div>
 
+                            <div className="flex gap-2 justify-center">
+                                <button
+                                    className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
+                                    onClick={onPreviousPage}
+                                    disabled={currentPage <= 1}
+                                >
+                                    <ChevronLeft className="h-4 w-4 mr-1" />
+                                    Précédent
+                                </button>
+
+                                <button
+                                    className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
+                                    onClick={onNextPage}
+                                    disabled={currentPage >= totalPages}
+                                >
+                                    Suivant
+                                    <ChevronRight className="h-4 w-4 ml-1" />
+                                </button>
+                            </div>
+                        </div>
                     </>
-
                 )}
-
             </section>
-
 
             {/* Footer */}
             <Footer reglages={reglages} />
-
         </>
     );
 }

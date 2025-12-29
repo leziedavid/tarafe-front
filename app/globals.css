@@ -8,6 +8,16 @@
 
 @theme {
 
+
+    /* Brand */
+  --color-brand-primary: hsl(var(--brand-primary));
+  --color-brand-secondary: hsl(var(--brand-secondary));
+
+    /* (optionnel) foregrounds */
+  --color-brand-primary-foreground: #ffffff;
+  --color-brand-secondary-foreground: #ffffff;
+  
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 
@@ -68,11 +78,17 @@
 
 @layer base {
   :root {
-    /* Fonts */
+
+    
+        /* Fonts */
     --font-jost: "Jost", sans-serif;
     --font-poppins: "Poppins", sans-serif;
     --font-raleway: "Raleway", sans-serif;
     --font-open-sans: "Open Sans", sans-serif;
+
+        /* Brand colors */
+    --brand-primary: 29 32% 53%;   /* #b07b5e */
+    --brand-secondary: 195 69% 27%; /* #155e75 */
 
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -102,6 +118,17 @@
   }
 
   .dark {
+
+        /* Fonts */
+    --font-jost: "Jost", sans-serif;
+    --font-poppins: "Poppins", sans-serif;
+    --font-raleway: "Raleway", sans-serif;
+    --font-open-sans: "Open Sans", sans-serif;
+    
+        /* Optionnel : mêmes couleurs ou ajustées */
+    --brand-primary: 29 32% 53%;
+    --brand-secondary: 195 69% 35%;
+
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
@@ -131,15 +158,16 @@
 
 @layer utilities {
   :root {
-      font-family: var(--font-jost);
-    /* --font-poppins: "Poppins", sans-serif; */
+    --font-mono:Menlo,
   }
 
   body {
-    font-family: var(--font-jost);
-    /* font-family: var(--font-poppins); */
+    font-family: var(--font-mono);
+    -ms-overflow-style: none; /* IE scrollbar */
+    scrollbar-width: none; /* Firefox scrollbar */
   }
 }
+
 
 @layer base {
   * {
@@ -209,7 +237,6 @@
 
   body {
     @apply bg-background text-foreground;
-    /* font-family: "Inter", sans-serif; */
   }
 }
 
@@ -553,43 +580,59 @@
   animation: fade-in 0.3s ease-in-out;
 }
 
+.swipe-item {
+  touch-action: pan-y;
+  transition: transform 0.2s;
+}
 
-/* Effets d'animation */
-@keyframes fade-in-up {
+.swipe-item.swiped {
+  transform: translateX(-80px);
+}
+
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* nouveau  */
+
+
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.animation-delay-300 {
-  animation-delay: 300ms;
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
 }
 
-.animation-delay-500 {
-  animation-delay: 500ms;
+.animate-slideUp {
+  animation: slideUp 0.6s ease-out;
 }
 
-.animation-delay-600 {
-  animation-delay: 600ms;
+/* Style pour les toggle switches */
+input:checked + label {
+  background-color: #2563eb;
 }
 
-/* Effets de hover avancés */
-.group:hover .group-hover\:translate-x-1 {
-  transform: translateX(4px);
-}
-
-/* Optimisation des performances */
-.backdrop-blur-sm {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+input:checked + label .dot {
+  transform: translateX(24px);
 }

@@ -1,6 +1,5 @@
 "use client";
 
-// import CanvaClone from "@/components/form/CanvaClone";
 import ContactForm from "@/components/form/ContactForm";
 import Footer from "@/components/page/Footer";
 import Hero from "@/components/page/Hero";
@@ -14,11 +13,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
 
-  // const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState<ApiResponse | null>(null);
-  const [page, setPage] = useState(0);
-  const itemsPerPage = 6;
-  const [totalPages, setTotalPages] = useState(0);
 
   const getAllRealisation = async () => {
     const response = await getAllRealisations();
