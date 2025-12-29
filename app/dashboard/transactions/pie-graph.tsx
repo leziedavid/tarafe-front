@@ -19,6 +19,7 @@ export interface GraphData {
   date: string;
   value: number;
   label: string;
+  [key: string]: string | number;
 }
 
 interface PieGraphProps {

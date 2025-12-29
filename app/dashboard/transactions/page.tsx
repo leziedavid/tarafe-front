@@ -464,7 +464,7 @@ export default function Page() {
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         {pieGraphByDate?.length > 0 ? (
-                            <PieGraph data={pieGraphByDate} title="Graphique à secteurs par date" />
+                            <PieGraph data={pieGraphByDate as unknown as any} title="Graphique à secteurs par date" />
                         ) : (
                             <div className="flex flex-col gap-2">
                                 <Skeleton className="bg-muted rounded-md aspect-square" />
@@ -472,7 +472,7 @@ export default function Page() {
                         )}
 
                         {pieGraphByTypeOperation?.length > 0 ? (
-                            <PieGraph data={pieGraphByTypeOperation} title="Graphique à secteurs par type d'opération" />
+                            <PieGraph data={pieGraphByTypeOperation  as unknown as any} title="Graphique à secteurs par type d'opération" />
                         ) : (
                             <div className="flex flex-col gap-2">
                                 <Skeleton className="bg-muted rounded-md aspect-square" />
@@ -480,7 +480,7 @@ export default function Page() {
                         )}
 
                         {pieGraphByCategorieTransactions?.length > 0 ? (
-                            <PieGraph data={pieGraphByCategorieTransactions} title="Graphique à secteurs par catégories" />
+                            <PieGraph data={pieGraphByCategorieTransactions  as unknown as any} title="Graphique à secteurs par catégories" />
                         ) : (
                             <div className="flex flex-col gap-2">
                                 <Skeleton className="bg-muted rounded-md aspect-square" />
