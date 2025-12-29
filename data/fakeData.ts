@@ -92,12 +92,10 @@ export const fakeProducts: Product[] = [
         sub_category_id: 1,
         store_id: 7,
         added_by: 21,
-
+        sizes: [],
         colors: [],
-
         category: fakeCategories[0],
         sub_category: fakeSubCategories[0],
-
         store: {
             id: 7,
             name: "Tarafé",
@@ -148,7 +146,7 @@ export const fakeProducts: Product[] = [
         sub_category_id: 3,
         store_id: 7,
         added_by: 21,
-
+        sizes: [],
         colors: [],
 
         category: fakeCategories[1],
@@ -203,7 +201,7 @@ export const fakeProducts: Product[] = [
         sub_category_id: 5,
         store_id: 7,
         added_by: 21,
-
+        sizes: [],
         colors: [],
 
         category: fakeCategories[2],
