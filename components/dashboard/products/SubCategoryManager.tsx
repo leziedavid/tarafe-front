@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { CategoryProduct, SubCategoryProduct } from "@/types/interfaces";
 import { Table } from "@/components/table/tables/table";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { SubCategoryProductColumns } from "@/components/table/columns/tableColumns";
 import { deleteSubCategory, getAllCategoriesIn, getAllSubCategories } from "@/service/categoryServices";
@@ -20,12 +19,10 @@ export default function SubCategoryManager() {
 
     const [open, setOpen] = useState(false);
     const [initialValues, setInitialValues] = useState<SubCategoryProduct | undefined>(undefined);
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const [idCategory, setIdCategory] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [limit] = useState(10);
-    const [isReady, setIsReady] = useState(false);
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
     const fetchSubCategories = async () => {
@@ -76,7 +73,6 @@ export default function SubCategoryManager() {
 
 
     const addCategory = (category: SubCategoryProduct) => {
-        alert(category.id);
         setIdCategory(category.id);
         setOpen(true);
         setInitialValues(category);

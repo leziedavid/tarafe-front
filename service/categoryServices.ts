@@ -1,3 +1,4 @@
+import { fetchWithAuth } from "@/app/middleware";
 import { BaseResponse } from "@/types/BaseResponse";
 import { getBaseUrl } from "@/types/baseUrl";
 import { CategoryProduct, SubCategoryProduct } from "@/types/interfaces";
@@ -140,8 +141,8 @@ export const createSubCategory = async (
 
 
 // Mettre à jour une sous-catégorie
-export const updateSubCategory = async (id: number, data: { name: string; categoryId: number }): Promise<BaseResponse<SubCategoryProduct>> => {
-    const response = await fetch(`${baseUrl}/products-sous-categories/${id}`, {
+export const updateSubCategory = async (id: number, data: { name: string; category_id: number }): Promise<BaseResponse<SubCategoryProduct>> => {
+    const response = await fetchWithAuth(`${baseUrl}/products-sous-categories/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

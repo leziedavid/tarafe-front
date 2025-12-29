@@ -69,9 +69,7 @@ export default function SubCategoryForm({
                     name: initialValues.name ?? "",
                     slug: initialValues.slug ?? "",
                     categoryId: (
-                        initialValues.category_id ??
-                        initialValues.category?.id ??
-                        ""
+                        initialValues.category_id ?? ""
                     ).toString(),
                 }],
             });
@@ -84,7 +82,7 @@ export default function SubCategoryForm({
                 const item = values.items[0];
                 await updateSubCategory(initialValues!.id, {
                     name: item.name,
-                    categoryId: Number(item.categoryId),
+                    category_id: Number(item.categoryId),
                 });
                 toast.success("Sous-catégorie mise à jour");
             } else {
