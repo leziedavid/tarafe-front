@@ -348,6 +348,7 @@ export interface SubCategoryProduct {
     name: string;
     slug: string;
     category_id: number;
+    category?: CategoryProduct;
     added_by: number;
     created_at: string;
     updated_at: string;

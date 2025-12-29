@@ -352,12 +352,7 @@ export const SubCategoryProductColumns = (): any[] => [
         name: "Catégorie",
         render: (item: SubCategoryProduct) => (<span className="text-md px-2 py-1 rounded bg-gray-100"> {item.category?.name}  </span>),
     },
-    {
-        key: "productCount",
-        name: "Produits",
-        render: (item: SubCategoryProduct) => (<span className="text-md text-muted-foreground"> {item.productCount} </span>
-        ),
-    },
+
     {
         key: "created_at",
         name: "Créé le",
