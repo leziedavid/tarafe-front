@@ -2,26 +2,6 @@
 
 import { z } from 'zod';
 
-export const transactionSchema2 = z.object({
-    date: z.string().min(1, { message: "La date est requise" }),
-    libelle: z.string().min(1, { message: "Le libellé est requis" }),
-    categorieTransactionsId: z.string().min(1, { message: "La catégorie est requise" }),
-    autreCategorie: z.string().optional(), // s'affiche seulement si "Autre"
-    sortie_caisse: z.string().optional(),
-    sortie_banque: z.string().optional(),
-    entree_caisse: z.string().optional(),
-    entree_banque: z.string().optional(),
-    type_operation: z.enum([
-        'MOOV MONEY',
-        'ORANGE MONEY',
-        'MTN MONEY',
-        'WAVE',
-        'BANQUE',
-        'NSP'
-    ], { required_error: "Le type d'opération est requis" }),
-    details: z.string().optional()
-});
-
 export const transactionSchema = z.object({
     date: z.string().min(1, { message: "La date est requise" }),
     libelle: z.string().min(1, { message: "Le libellé est requis" }),
@@ -33,7 +13,7 @@ export const transactionSchema = z.object({
         'entree_banque',
         'sortie_caisse',
         'sortie_banque'
-    ], { required_error: "Le type de transaction est requis" }),
+    ] as const, { message: "Le type de transaction est requis" }),
 
     somme: z
         .string()
@@ -49,7 +29,7 @@ export const transactionSchema = z.object({
         'WAVE',
         'BANQUE',
         'NSP'
-    ], { required_error: "Le type d'opération est requis" }),
+    ] as const, { message: "Le type d'opération est requis" }),
 
     details: z.string().optional(),
 
