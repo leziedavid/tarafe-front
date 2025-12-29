@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import React, { useState } from 'react';
 import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { toast } from "sonner";
