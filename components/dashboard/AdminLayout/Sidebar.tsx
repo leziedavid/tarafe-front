@@ -43,6 +43,7 @@ const NAV_SECTIONS: NavSection[] = [
             { label: "Realisations", icon: ListTodo, href: "/dashboard/realisations" },
             { label: "Boutiques", icon: ListTodo, href: "/dashboard/store"},
             { label: "Liste des boutiques", icon: ListTodo, href: "/dashboard/boutiques"},
+            { label: "Configurations", icon: Settings, href: "/dashboard/configurations"},
             { label: "Calendar", icon: Calendar, href: "/dashboard/calendar" },
             { label: "Analytics", icon: BarChart3, href: "/dashboard/analytics" },
             { label: "Team", icon: Users, href: "/dashboard/team" },

@@ -192,8 +192,12 @@ export interface Reglage {
     active: string;
     titre_banner1: string;
     texte_banner1: string;
+
     titre_banner2: string | null;
     texte_banner2: string | null;
+
+    titre_banner3: string | null;
+    texte_banner3: string | null;
     localisation_reglages: string;
     email_reglages: string;
     phone1_reglages: string;
@@ -219,6 +223,35 @@ export interface Reglage {
     updated_at: string;
 }
 
+// Interface pour une équipe
+export interface Equipe {
+    id_equipe: number;
+    nomPren_equipe?: string | null;
+    fonction_equipe?: string | null;
+    email_equipe?: string | null;
+    photo_equipe?: string | null;
+    created_at?: string | null; // timestamps
+    updated_at?: string | null;
+}
+
+// Interface pour une visite
+export interface Visit {
+    id_visit: number;
+    nb_visite_site?: number | null;
+    nb_abonnes_facebook?: number | null;
+    nb_abonnes_twitter?: number | null;
+    nb_abonnes_instagram?: number | null;
+    nb_abonnes_youtube?: number | null;
+    created_at?: string | null; // timestamps
+    updated_at?: string | null;
+}
+
+// Interface principale regroupant reglages, equipes et visits
+export interface DataReglage {
+    reglages: Reglage[];
+    equipes: Equipe[];
+    visits: Visit[];
+}
 export interface Publicite {
     id_publicite: string;
     typesCard1: string;
@@ -227,10 +260,13 @@ export interface Publicite {
     files_publicite2: string;
     libelle_publicite1: string;
     libelle_publicite2: string;
+    files_publicite3: string;
     link1: string;
     link2: string;
+    link3: string;
     class1: string;
     class2: string;
+    class3: string;
     created_at: string;
     updated_at: string;
 }

@@ -15,42 +15,18 @@ import RichTextEditor from "@/components/rich-text-editor";
 import { getImagesUrl } from "@/types/baseUrl";
 
 // ================= VALIDATION ZOD =================
-// Schéma de base sans validation des images
-const baseRealisationSchema = z.object({
+export const realisationSchema = z.object({
     id_realisations: z.number().optional(),
     category: z.array(z.string()).min(1, { message: "La catégorie est requise." }),
     libelle: z.string().min(1, { message: "Le libellé est requis." }),
     description: z.string().min(1, { message: "La description est requise." }),
-    images: z.array(z.instanceof(File))
-        .refine((files) =>
-            files.every(file => ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)),
-            { message: 'Les fichiers doivent être des images PNG ou JPEG.' }
-        )
-        .refine((files) =>
-            files.every(file => file.size <= 5 * 1024 * 1024),
-            { message: 'Chaque fichier ne doit pas dépasser 5 Mo.' }
-        )
+    images: z.array(z.instanceof(File)).min(1, { message: "Veuillez télécharger au moins une image." }).refine((files) =>
+        files.every(file => ['image/png', 'image/jpeg'].includes(file.type)), { message: 'Les fichiers doivent être des images PNG ou JPEG.', })
+        .refine((files) => files.every(file => file.size <= 50 * 1024 * 1024), { message: 'Chaque fichier ne doit pas dépasser 5 Mo.', })
 });
-
-// Schéma pour la création (images obligatoires)
-const createRealisationSchema = baseRealisationSchema.extend({
-    images: z.array(z.instanceof(File))
-        .min(1, { message: "Veuillez télécharger au moins une image." })
-        .refine((files) =>
-            files.every(file => ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)),
-            { message: 'Les fichiers doivent être des images PNG ou JPEG.' }
-        )
-        .refine((files) =>
-            files.every(file => file.size <= 5 * 1024 * 1024),
-            { message: 'Chaque fichier ne doit pas dépasser 5 Mo.' }
-        )
-});
-
-// Schéma pour la modification (images optionnelles)
-const updateRealisationSchema = baseRealisationSchema;
 
 // ================= TYPES =================
-export type RealisationFormValues = z.infer<typeof baseRealisationSchema>;
+export type RealisationFormValues = z.infer<typeof realisationSchema>;
 
 type RealisationFormProps = {
     isOpen: boolean;
@@ -72,12 +48,10 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
     const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
     const [existingImageUrls, setExistingImageUrls] = useState<{ url: string, name: string }[]>([]);
 
-    // Déterminer le mode (création ou modification)
-    const isEditMode = !!datas?.id_realisations;
-
     // ================= FORM SETUP =================
     const { register, handleSubmit, setValue, watch, control, formState: { errors }, } = useForm<RealisationFormValues>({
-        resolver: zodResolver(isEditMode ? updateRealisationSchema : createRealisationSchema),
+
+        resolver: zodResolver(realisationSchema),
         defaultValues: {
             category: [],
             libelle: datas?.libelle_realisations || "",
@@ -87,6 +61,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
     });
 
     // ================= CHARGEMENT DES CATÉGORIES =================
+
     const fetchCategories = async () => {
         try {
             const result = await getCategories();
@@ -105,16 +80,22 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
     };
 
     useEffect(() => {
+
         fetchCategories();
+
     }, [isOpen]);
 
     // ================= REMPLISSAGE DES DONNÉES =================
+    // Effet pour remplir automatiquement les données si datas est défini
     useEffect(() => {
+
         const fetchCategoriesById = async () => {
             try {
                 if (!datas?.id_realisations) return;
 
-                const result = await getCategoriesById(Number(datas.id_realisations));
+                const result = await getCategoriesById(
+                    Number(datas.id_realisations)
+                );
 
                 if (result.statusCode === 200 && Array.isArray(result.data)) {
                     const categoryIds = result.data
@@ -122,17 +103,24 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                         .filter(Boolean)
                         .map(String);
 
+                    // Select2
                     setSelectedCategory(categoryIds);
-                    setValue("category", categoryIds, { shouldValidate: true });
+
+                    // React Hook Form
+                    setValue("category", categoryIds, {
+                        shouldValidate: true,
+                    });
                 }
             } catch (error) {
                 console.error(error);
-                toast.error("Erreur lors du chargement des catégories associées.");
+                toast.error(
+                    "Erreur lors du chargement des catégories associées."
+                );
             }
         };
 
         if (datas?.id_realisations) {
-            // Mode modification
+            // Champs texte
             setValue("libelle", datas.libelle_realisations ?? "");
             setValue("description", datas.descript_real ?? "");
 
@@ -158,9 +146,10 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
             }
 
             setExistingImageUrls(imageUrls);
+
             fetchCategoriesById();
         } else {
-            // Mode création - reset
+            // Reset création
             setValue("libelle", "");
             setValue("description", "");
             setValue("category", []);
@@ -171,20 +160,26 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
         }
     }, [datas?.id_realisations, urlImages]);
 
+
+
     // Mettre à jour les images dans le formulaire
     useEffect(() => {
-        setValue("images", images, { shouldValidate: true });
+        if (images.length > 0) {
+            setValue("images", images, { shouldValidate: true });
+        }
     }, [images, setValue]);
 
     // ================= FONCTIONS =================
     const handleImageUpload = (files: FileList) => {
         const newFiles = Array.from(files);
 
+        // Vérifier le nombre maximal d'images (8 par exemple)
         if (images.length + newFiles.length > 8) {
             toast.error("Maximum 8 images autorisées");
             return;
         }
 
+        // Vérifier les types de fichiers
         const validFiles = newFiles.filter(file =>
             ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)
         );
@@ -195,16 +190,23 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
 
         setImages(prev => [...prev, ...validFiles]);
 
+        // Créer des prévisualisations
         const newPreviews = validFiles.map(file => URL.createObjectURL(file));
         setImagePreviews(prev => [...prev, ...newPreviews]);
     };
 
     const removeImage = (index: number, isExistingImage: boolean = false) => {
         if (isExistingImage) {
+            // Supprimer une image existante du tableau
             setExistingImageUrls(prev => prev.filter((_, i) => i !== index));
+
+            // Si l'image supprimée était l'image principale, on devrait peut-être gérer cela différemment
+            // Pour l'instant, on la supprime simplement de l'affichage
         } else {
+            // Supprimer une nouvelle image
             setImages(prev => prev.filter((_, i) => i !== index));
             setImagePreviews(prev => {
+                // Libérer l'URL de prévisualisation
                 URL.revokeObjectURL(prev[index]);
                 return prev.filter((_, i) => i !== index);
             });
@@ -217,19 +219,25 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
     };
 
     const handleFormSubmit: SubmitHandler<RealisationFormValues> = async (formData) => {
-        // Validation manuelle supplémentaire
-        const totalImages = existingImageUrls.length + formData.images.length;
 
-        if (totalImages === 0) {
+        // Vérifier si c'est une création et qu'il n'y a pas d'images
+        if (!datas?.id_realisations && formData.images.length === 0) {
             toast.error("Veuillez télécharger au moins une image");
             return;
         }
 
-        // Créer FormData
-        const formDataToSend = new FormData();
+        // Vérifier si on a des images existantes OU des nouvelles images pour la modification
+        if (datas?.id_realisations && formData.images.length === 0 && existingImageUrls.length === 0) {
+            toast.error("Veuillez télécharger au moins une image");
+            return;
+        }
 
+        // Créer FormData pour l'envoi des données
+        const formDataToSend = new FormData();
+        // Ajouter les nouvelles images si elles existent
         formData.images.forEach((file) => formDataToSend.append("filedatas", file));
-        formDataToSend.append("states", totalImages > 0 ? "1" : "0");
+        // Ajouter les autres données
+        formDataToSend.append("states", formData.images.length > 0 || existingImageUrls.length > 0 ? "1" : "0");
         formDataToSend.append("libelle", formData.libelle);
         formDataToSend.append("description", formData.description);
         formDataToSend.append("usersid", "21");
@@ -254,7 +262,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                 }
             } else {
                 const result = await createRealisation(formDataToSend);
-                if (result.statusCode === 201) {
+                if (result.statusCode === 200) {
                     toast.success("Réalisation créée avec succès !");
                     fetchdatas();
                     onClose();
@@ -270,19 +278,23 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
         }
     };
 
+
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen ">
             <div className="max-w-6xl mx-auto">
+
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                            {isEditMode ? `Modifier la réalisation` : "Ajouter une nouvelle réalisation"}
+                            {datas?.id_realisations ? `Modifier la réalisation` : "Ajouter une nouvelle réalisation"}
                         </h2>
                         <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
-                            Remplissez les informations ci-dessous pour {isEditMode ? "modifier" : "ajouter"} une réalisation
+                            Remplissez les informations ci-dessous pour {datas?.id_realisations ? "modifier" : "ajouter"} une réalisation
                         </p>
                     </div>
+
+
                 </div>
 
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
@@ -292,7 +304,6 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                 <Upload className="w-5 h-5" />
                                 Images de la réalisation
-                                {!isEditMode && <span className="text-red-500">*</span>}
                             </h3>
                             <span className="text-sm text-gray-500 dark:text-gray-400">
                                 {existingImageUrls.length + images.length}/8 images
@@ -315,7 +326,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                 />
                             </label>
 
-                            {/* Images existantes */}
+                            {/* Afficher les images existantes */}
                             {existingImageUrls.map((imageUrl, index) => (
                                 <div key={`existing-${index}`} className="relative h-32 rounded-lg overflow-hidden group">
                                     <Image
@@ -324,12 +335,13 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                         fill
                                         className="object-cover"
                                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                                        unoptimized
+                                        unoptimized // Pour les images blob
                                     />
                                     <button
                                         type="button"
                                         onClick={() => removeImage(index, true)}
                                         className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                        aria-label={`Supprimer l'image existante ${index + 1}`}
                                     >
                                         <X className="w-4 h-4" />
                                     </button>
@@ -339,7 +351,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                 </div>
                             ))}
 
-                            {/* Nouvelles images */}
+                            {/* Afficher les nouvelles images */}
                             {imagePreviews.map((preview, index) => (
                                 <div key={`new-${index}`} className="relative h-32 rounded-lg overflow-hidden group">
                                     <Image
@@ -348,12 +360,13 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                         fill
                                         className="object-cover"
                                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                                        unoptimized
+                                        unoptimized // Pour les images blob
                                     />
                                     <button
                                         type="button"
                                         onClick={() => removeImage(index, false)}
                                         className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                        aria-label={`Supprimer la nouvelle image ${index + 1}`}
                                     >
                                         <X className="w-4 h-4" />
                                     </button>
@@ -366,9 +379,6 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
 
                         {errors.images && (
                             <p className="text-red-500 text-sm mt-2">{errors.images.message}</p>
-                        )}
-                        {!isEditMode && (
-                            <p className="text-sm text-gray-500 mt-2">* Au moins une image est requise lors de la création</p>
                         )}
                     </div>
 
@@ -413,6 +423,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                     valueExtractor={(item: { value: number; label: string }) => item.value.toString()}
                                     placeholder="Sélectionnez des catégories"
                                     mode="multiple"
+                                // disabled={loadingCategories}
                                 />
                                 {loadingCategories && (
                                     <p className="text-sm text-gray-500 mt-1">Chargement des catégories...</p>
@@ -435,17 +446,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                             <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Description *
                             </label>
-                            <Controller
-                                name="description"
-                                control={control}
-                                render={({ field }) => (
-                                    <RichTextEditor
-                                        content={field.value || ""}
-                                        onChange={field.onChange}
-                                        editable={true}
-                                    />
-                                )}
-                            />
+                            <Controller name="description" control={control} render={({ field }) => (<RichTextEditor content={field.value || ""} onChange={field.onChange} editable={true} />)} />
                             {errors.description && (
                                 <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
                             )}
@@ -454,29 +455,16 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
 
                     {/* Boutons d'action */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-end pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <Button
-                            type="button"
-                            onClick={onClose}
-                            className="px-6 py-3 border bg-white border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                            disabled={isUploading}
-                        >
+                        <Button type="button" onClick={onClose} className="px-6 py-3 border bg-white border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" disabled={isUploading} >
                             Annuler
                         </Button>
-                        <Button
-                            type="submit"
-                            disabled={isUploading}
-                            className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
+                        <Button type="submit" disabled={isUploading} className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2" >
                             {isUploading ? (
                                 <>
                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                                     Enregistrement...
                                 </>
-                            ) : isEditMode ? (
-                                "Mettre à jour"
-                            ) : (
-                                "Créer la réalisation"
-                            )}
+                            ) : datas?.id_realisations ? ("Mettre à jour") : ("Créer la réalisation")}
                         </Button>
                     </div>
                 </form>

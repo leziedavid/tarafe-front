@@ -26,7 +26,8 @@ export const createRealisation = async (data: FormData): Promise<BaseResponse<Re
 // updateRealisations
 export const updateRealisation = async (id: number, data: FormData): Promise<BaseResponse<Realisation>> => {
     const response = await fetch(`${getBaseUrl()}/realisations/${id}`, {
-        method: 'PUT',
+        // method: 'PUT',
+        method: 'POST',
         body: data,
     });
     return await response.json();

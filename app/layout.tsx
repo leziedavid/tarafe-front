@@ -7,7 +7,7 @@ import { AlertProvider } from "@/contexts/AlertContext"
 import localFont from "next/font/local"
 import { Jost } from "next/font/google"
 import type { Metadata } from "next"
-import { Plus_Jakarta_Sans } from "next/font/google"
+import { Plus_Jakarta_Sans, Roboto as RobotoFont } from "next/font/google"
 import Providers from "@/components/Providers"
 
 // metadata moved to the more detailed declaration below
@@ -46,6 +46,13 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: "swap",
 })
 
+const roboto = RobotoFont({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "500", "700", "900"],
+  variable: "--font-roboto",
+  display: "swap",
+})
+
 
 export const metadata: Metadata = {
   title: "Tarafé",
@@ -74,7 +81,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
       {/* <body className={`${jost.variable} antialiased`} > */}
 
-      <body className={`${plusJakartaSans.className} antialiased`} >
+      <body
+  className={`
+    ${roboto.className}
+    antialiased
+  `}
+>
+
         <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
           <div className="flex flex-col min-h-screen">
             <main className="flex-1">

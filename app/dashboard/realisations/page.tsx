@@ -98,32 +98,19 @@ export default function Page() {
 
         try {
             // Optimistic update
-            setRealisations(prev => prev.map(real =>
-                real.id_realisations === id
-                    ? { ...real, statut_realisations: newValue }
-                    : real
-            ));
-
+            setRealisations(prev => prev.map(real => real.id_realisations === id ? { ...real, statut_realisations: newValue } : real));
             // Appel API
             const result = await updateRealisationStatut(Number(id), newValue);
-
             if (result.statusCode !== 200) {
                 // Rollback en cas d'erreur
-                setRealisations(prev => prev.map(real =>
-                    real.id_realisations === id
-                        ? { ...real, statut_realisations: currentValue }
-                        : real
-                ));
+                setRealisations(prev => prev.map(real => real.id_realisations === id ? { ...real, statut_realisations: currentValue } : real));
                 console.error("Erreur lors de la mise à jour du statut:", result.message);
             }
         } catch (error) {
             console.error("Erreur lors de la mise à jour du statut:", error);
             // Rollback en cas d'erreur
-            setRealisations(prev => prev.map(real =>
-                real.id_realisations === id
-                    ? { ...real, statut_realisations: currentValue }
-                    : real
-            ));
+            setRealisations(prev => prev.map(real => real.id_realisations === id ? { ...real, statut_realisations: currentValue } : real));
+            fetchData();
         }
     };
 
@@ -133,33 +120,21 @@ export default function Page() {
 
         try {
             // Optimistic update
-            setRealisations(prev => prev.map(real =>
-                real.id_realisations === id
-                    ? { ...real, isActive: newValue }
-                    : real
-            ));
-
+            setRealisations(prev => prev.map(real => real.id_realisations === id ? { ...real, isActive: newValue } : real));
             // Appel API
             const result = await updateRealisationActive(Number(id), newValue);
-
             if (result.statusCode !== 200) {
                 // Rollback en cas d'erreur
-                setRealisations(prev => prev.map(real =>
-                    real.id_realisations === id
-                        ? { ...real, isActive: currentValue }
-                        : real
-                ));
+                setRealisations(prev => prev.map(real => real.id_realisations === id ? { ...real, isActive: currentValue } : real));
                 console.error("Erreur lors de la mise à jour de l'état actif:", result.message);
             }
         } catch (error) {
             console.error("Erreur lors de la mise à jour de l'état actif:", error);
             // Rollback en cas d'erreur
-            setRealisations(prev => prev.map(real =>
-                real.id_realisations === id
-                    ? { ...real, isActive: currentValue }
-                    : real
-            ));
+            setRealisations(prev => prev.map(real => real.id_realisations === id ? { ...real, isActive: currentValue } : real));
+            fetchData();
         }
+
     };
 
     // Fonction pour obtenir l'image active
@@ -195,7 +170,7 @@ export default function Page() {
     };
 
     // Delete Realisation deleteProduct
-    const  handleDeleteClick = async (productId: number) => {
+    const handleDeleteClick = async (productId: number) => {
 
         const result = await deleteRealisation(Number(productId));
         if (result.statusCode === 200 && result.data) {
@@ -324,13 +299,13 @@ export default function Page() {
                                         <input
                                             type="checkbox"
                                             className="sr-only peer"
-                                            checked={realisation.isActive === "1"}
+                                            checked={String(realisation.isActive) === "1"}
                                             onChange={() => handleToggleActive(realisation.id_realisations, realisation.isActive)}
                                             disabled={loading}
                                         />
                                         <div className="relative w-8 h-4 md:w-9 md:h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] md:after:top-[2px] after:start-[1px] md:after:start-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 md:after:h-4 md:after:w-4 after:transition-all peer-checked:bg-brand-primary"></div>
                                         <span className="select-none ms-2 text-[10px] md:text-xs font-medium truncate">
-                                            {realisation.isActive === "1" ? "Vedette" : "Normal"}
+                                            {String(realisation.isActive) === "1" ? "Vedette" : "Normal"}
                                         </span>
                                     </label>
                                 </div>
@@ -475,12 +450,13 @@ export default function Page() {
 
                                     <div className="flex items-center">
                                         <label className="inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" className="sr-only peer" checked={realisation.isActive === "1"}
+                                            <input type="checkbox" className="sr-only peer" 
+                                                checked={String(realisation.isActive) === "1"}
                                                 onChange={() => handleToggleActive(realisation.id_realisations, realisation.isActive)}
                                                 disabled={loading} />
                                             <div className="relative w-9 h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-primary"></div>
                                             <span className="select-none ms-2 text-sm font-medium">
-                                                {realisation.isActive === "1" ? "Vedette" : "Normal"}
+                                                {String(realisation.isActive) === "1" ? "Vedette" : "Normal"}
                                             </span>
                                         </label>
                                     </div>
