@@ -1,10 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import SliderManager from '@/components/form/SliderManager';
 import PubliciteManager from '@/components/form/PubliciteManager';
 import { FileText, Settings, Image, Users, Wallet } from 'lucide-react';
-import PartenaireManager from '@/components/form/PartenaireManager';
-import PaymentMethodeManager from '@/components/form/PaymentMethodeManager';
 import ReglageManager from '@/components/form/ReglageManager';
 import AdminLayout from '@/components/dashboard/AdminLayout/AdminLayout';
 import EquipeManager from '@/components/form/EquipeManager';
