@@ -81,12 +81,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
       {/* <body className={`${jost.variable} antialiased`} > */}
 
-      <body
-  className={`
-    ${roboto.className}
-    antialiased
-  `}
->
+      <body className={`${roboto.className}  antialiased `}>
 
         <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
           <div className="flex flex-col min-h-screen">
