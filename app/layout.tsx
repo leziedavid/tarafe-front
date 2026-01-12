@@ -1,7 +1,6 @@
 // app/layout.tsx
 
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { AlertProvider } from "@/contexts/AlertContext"
 import localFont from "next/font/local"
@@ -9,6 +8,7 @@ import { Jost } from "next/font/google"
 import type { Metadata } from "next"
 import { Plus_Jakarta_Sans, Roboto as RobotoFont } from "next/font/google"
 import Providers from "@/components/Providers"
+import { ThemeProvider } from "@/components/theme-provider"
 
 // metadata moved to the more detailed declaration below
 
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
 		url: "tarafe.com",
 	},
     icons:{
-    icon: "/ads/logos2.png",
+    icon: "/logos2.png",
     },
 };
 
@@ -83,7 +83,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
       <body className={`${roboto.className}  antialiased `}>
 
-        <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" enableSystem={false} defaultTheme="light" disableTransitionOnChange>
           <div className="flex flex-col min-h-screen">
             <main className="flex-1">
               {/* <CartProvider> */}
