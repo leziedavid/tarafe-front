@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { CategoryProduct, Product, SubCategoryProduct } from "@/types/interfaces";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AddCart from "./AddCart";
+import { useAlert } from "@/contexts/AlertContext";
 
 export default function Store() {
     const [activeCategory, setActiveCategory] = useState<string>("ALL");
@@ -30,6 +31,8 @@ export default function Store() {
     const [sortBy, setSortBy] = useState<'name' | 'price' | 'date' | 'stock'>('date');
     // Ajoutez cet état après les autres états
     const [activeImageIndex, setActiveImageIndex] = useState<Record<number, number>>({});
+    const { showAlert } = useAlert();
+
     // -----------------------------
     // Fetch Products
     // -----------------------------
@@ -166,9 +169,7 @@ export default function Store() {
                 {loading ? (
                     Array(5).fill(0).map((_, i) => (<div key={i} className="w-24 h-8 bg-gray-200 rounded-full animate-pulse" />))) : (
                     <>
-                        <button
-                            key="all"
-                            onClick={() => {
+                        <button  key="all"  onClick={() => {
                                 setActiveCategory("ALL");
                                 setSelectedCategory(null);
                                 setActiveSubCategory(null);
@@ -216,9 +217,7 @@ export default function Store() {
             {/* Products grid */}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0 mb-8">
                 {loading ? (
-                    Array(8).fill(0).map((_, i) => (
-                        <div key={i} className="animate-pulse bg-gray-200 rounded-3xl h-[220px]" />
-                    ))
+                    Array(8).fill(0).map((_, i) => (  <div key={i} className="animate-pulse bg-gray-200 rounded-3xl h-[220px]" />  ))
                 ) : (
                     products.map((product) => {
                         const activeImage = getActiveImage(product);
@@ -238,19 +237,10 @@ export default function Store() {
                                     {/* Boutons de navigation du slider (seulement si >1 image) */}
                                     {totalImages > 1 && (
                                         <>
-                                            <button
-                                                type="button"
-                                                onClick={(e) => {
-                                                    e.stopPropagation(); prevImage(product.id);
-                                                }}
-                                                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1 rounded-full hover:bg-white z-20"
-                                            >
+                                            <button  type="button"  onClick={(e) => {   e.stopPropagation(); prevImage(product.id);  }}  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1 rounded-full hover:bg-white z-20"  >
                                                 <ChevronLeft className="w-4 h-4" />
                                             </button>
-                                            <button
-                                                type="button"
-                                                onClick={(e) => { e.stopPropagation(); nextImage(product.id); }}
-                                                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1 rounded-full hover:bg-white z-20" >
+                                            <button type="button" onClick={(e) => { e.stopPropagation(); nextImage(product.id); }}  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1 rounded-full hover:bg-white z-20" >
                                                 <ChevronRight className="w-4 h-4" />
                                             </button>
 
@@ -264,15 +254,6 @@ export default function Store() {
                                     {/* Overlay Add / Buy */}
                                     {product.price && product.available && (
                                         <AddCart product={product} />
-
-                                        // <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 sm:group-hover:opacity-100 transition z-10">
-                                        //     <button className="bg-white text-black px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-sm font-semibold mb-2">
-                                        //         ADD TO CART
-                                        //     </button>
-                                        //     <button className="border border-white text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-sm font-semibold">
-                                        //         BUY NOW
-                                        //     </button>
-                                        // </div>
                                     )}
 
                                     {/* Image */}

@@ -1,8 +1,8 @@
 "use client";
 
+import { useAlert } from "@/contexts/AlertContext";
 import { Product } from "@/types/interfaces";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
 
 type cartItem = {
   product: Product;
@@ -22,78 +22,89 @@ const updateCartInLS = (products: cartItem[]) => {
   localStorage.setItem("cartItems", JSON.stringify(products));
 };
 
-const CartContext = createContext<CartContext>({
-  items: [],
-  updateCart() {},
-  removeFromCart() {},
-  clearCart() {},
-  countAllItems() {
-    return 0;
-  },
-  countTotalPrice() {
-    return "0";
-  },
-});
+const CartContext = createContext<CartContext>({} as CartContext);
 
 const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
+  const { showAlert } = useAlert();
 
+  // 🗑 SUPPRIMER UN PRODUIT
   const removeFromCart = (product: Product) => {
     const newProducts = cartItems.filter(
       (item) => item.product.id !== product.id
     );
+
     setCartItems(newProducts);
     updateCartInLS(newProducts);
+    showAlert(`❌ ${product.name} retiré du panier`, "success");
   };
 
+  // 🧹 VIDER LE PANIER
   const clearCart = () => {
     setCartItems([]);
     updateCartInLS([]);
+    showAlert("🧹 Panier vidé avec succès", "success");
   };
 
+  // ➕ AJOUT / MISE À JOUR PANIER
   const updateCart = (product: Product, qty: number) => {
     const finalCartItems = [...cartItems];
-    const index = cartItems.findIndex((item) => product.id === item.product.id);
+    const index = finalCartItems.findIndex(
+      (item) => item.product.id === product.id
+    );
 
+    // 🆕 Nouveau produit
     if (index === -1) {
-      // 🟢 Nouveau produit dans le panier
       if (qty > product.stock) {
-        toast.error(`Stock insuffisant : seulement ${product.stock} disponible(s).`);
+        showAlert(  `Stock insuffisant : seulement ${product.stock} disponible(s)`, "error"  );
         return;
       }
+
       finalCartItems.push({ count: qty, product });
-    } else {
-      // 🟢 Produit déjà dans le panier
-      const newQty = finalCartItems[index].count + qty;
-
-      if (newQty > product.stock) {
-        toast.error(`Stock insuffisant : seulement ${product.stock} disponible(s).`);
-        return;
-      }
-
-      finalCartItems[index].count = newQty;
-    }
-
-    // ❌ Supprimer si quantité = 0
-    if (finalCartItems[index]?.count === 0) {
-      removeFromCart(product);
-    } else {
       setCartItems(finalCartItems);
       updateCartInLS(finalCartItems);
+
+      showAlert(`✅ ${product.name} ajouté au panier`, "success");
+      return;
     }
+
+    // 🔁 Produit existant
+    const newQty = finalCartItems[index].count + qty;
+
+    if (newQty > product.stock) {
+      showAlert( `Stock insuffisant : seulement ${product.stock} disponible(s)`,  "error" );
+      return;
+    }
+
+    if (newQty <= 0) {
+      removeFromCart(product);
+      return;
+    }
+
+    finalCartItems[index].count = newQty;
+    setCartItems(finalCartItems);
+    updateCartInLS(finalCartItems);
+    showAlert( `🔄 Quantité mise à jour (${newQty}) pour ${product.name}`, "success" );
   };
 
-  const countAllItems = () => {
-    return cartItems.reduce((total, cartItem) => total + cartItem.count, 0);
-  };
+  // 📊 COMPTE ARTICLES
+  const countAllItems = () =>
+    cartItems.reduce((total, item) => total + item.count, 0);
 
-  const countTotalPrice = () => {
-    return cartItems.reduce( (total, cartItem) => total + Number(cartItem.product.price) * cartItem.count,0).toFixed(2);
-  };
+  // 💰 TOTAL PRIX
+  const countTotalPrice = () =>
+    cartItems
+      .reduce(
+        (total, item) =>
+          total + Number(item.product.price) * item.count,
+        0
+      )
+      .toFixed(2);
 
+  // ♻️ Charger depuis le localStorage
   useEffect(() => {
     const result = localStorage.getItem("cartItems");
-    if (result !== null) {
+    if (result) {
       setCartItems(JSON.parse(result));
     }
   }, []);
@@ -104,9 +115,9 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
         items: cartItems,
         updateCart,
         removeFromCart,
-        countTotalPrice,
-        countAllItems,
         clearCart,
+        countAllItems,
+        countTotalPrice,
       }}
     >
       {children}
@@ -115,5 +126,4 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export default CartProvider;
-
 export const useCart = () => useContext(CartContext);

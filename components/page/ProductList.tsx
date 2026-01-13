@@ -114,12 +114,33 @@ const ProductList = ({ products }: ProductListProps) => {
                 </Link>
             </div>
 
+
             {/* Loader */}
             {loading && (
-                <div className="flex justify-center items-center h-60">
-                    <FullPageLoader status="Chargement des nouveautés" />
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0 mb-8">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                        <div key={i} className="group">
+                            {/* Card image */}
+                            <div className="relative rounded-3xl bg-[#efefec] overflow-hidden">
+                                <div className="animate-pulse w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-gray-200 rounded-3xl" />
+                            </div>
+
+                            {/* Titre */}
+                            <div className="mt-2 sm:mt-3 px-1 sm:px-2">
+                                <div className="animate-pulse h-4 sm:h-5 bg-gray-200 rounded w-3/4" />
+                            </div>
+
+                            {/* Miniatures */}
+                            <div className="mt-2 flex gap-1 overflow-x-auto px-1">
+                                {Array.from({ length: 4 }).map((_, idx) => (
+                                    <div  key={idx}  className="animate-pulse w-8 h-8 rounded bg-gray-200 flex-shrink-0"  />
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             )}
+
 
             {/* Aucun résultat + image */}
             {!loading && noData && (
@@ -141,8 +162,8 @@ const ProductList = ({ products }: ProductListProps) => {
                             <div key={product.id_realisations} className="group">
                                 <div className="relative rounded-3xl bg-[#efefec] overflow-hidden">
                                     {/* Image avec slider */}
-                                    <div className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-center bg-cover rounded-3xl"  style={{ backgroundImage: `url(${urlImages}/${activeImage.filles_img_realisations})`,transition: 'background-image 0.3s ease' }}  >
-                                    
+                                    <div className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-center bg-cover rounded-3xl" style={{ backgroundImage: `url(${urlImages}/${activeImage.filles_img_realisations})`, transition: 'background-image 0.3s ease' }}  >
+
                                         {/* Boutons de navigation du slider */}
                                         {totalImages > 1 && (
                                             <>
@@ -202,7 +223,7 @@ const ProductList = ({ products }: ProductListProps) => {
                                                 }}
                                                 className={`relative w-8 h-8 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? 'ring-2 ring-[#fd980e]' : 'opacity-70 hover:opacity-100'}`}
                                             >
-                                                <div  className="w-full h-full bg-center bg-cover"  style={{ backgroundImage: `url(${urlImages}/${image.filles_img_realisations})` }}  />
+                                                <div className="w-full h-full bg-center bg-cover" style={{ backgroundImage: `url(${urlImages}/${image.filles_img_realisations})` }} />
                                             </button>
                                         ))}
                                         {totalImages > 4 && (

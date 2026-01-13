@@ -58,13 +58,13 @@ export const metadata: Metadata = {
   title: "Tarafé",
   description: "Tarafé est une plateforme digitale de personnalisation des produits mode, accessoires et déco, avec une touche africaine, pour les entreprises et les particuliers. Notre mission est de valoriser les savoir-faire et le patrimoine textile local. Bienvenue !",
   openGraph: {
-		title: "Tarafé",
-		description: "Tarafé est une plateforme digitale de personnalisation des produits mode, accessoires et déco, avec une touche africaine, pour les entreprises et les particuliers. Notre mission est de valoriser les savoir-faire et le patrimoine textile local. Bienvenue !",
-		url: "tarafe.com",
-	},
-    icons:{
+    title: "Tarafé",
+    description: "Tarafé est une plateforme digitale de personnalisation des produits mode, accessoires et déco, avec une touche africaine, pour les entreprises et les particuliers. Notre mission est de valoriser les savoir-faire et le patrimoine textile local. Bienvenue !",
+    url: "tarafe.com",
+  },
+  icons: {
     icon: "/logos2.png",
-    },
+  },
 };
 
 
@@ -87,9 +87,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <div className="flex flex-col min-h-screen">
             <main className="flex-1">
               {/* <CartProvider> */}
-              <Providers>
-                <AlertProvider>  {children}  </AlertProvider>
-              </Providers>
+              <AlertProvider>
+                <Providers>
+                  <AlertProvider>  {children}  </AlertProvider>
+                </Providers>
+              </AlertProvider>
             </main>
           </div>
         </ThemeProvider>
