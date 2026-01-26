@@ -266,8 +266,7 @@ export default function AllProduits() {
                                                                 [product.id_realisations]: index
                                                             }));
                                                         }}
-                                                        className={`relative w-8 h-8 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? 'ring-2 ring-[#fd980e]' : 'opacity-70 hover:opacity-100'}`}
-                                                    >
+                                                        className={`relative w-8 h-8 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? 'ring-2 ring-[#fd980e]' : 'opacity-70 hover:opacity-100'}`} >
                                                         <div
                                                             className="w-full h-full bg-center bg-cover"
                                                             style={{ backgroundImage: `url(${urlImages}/${image.filles_img_realisations})` }}
