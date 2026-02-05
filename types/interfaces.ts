@@ -157,6 +157,7 @@ export interface Realisation {
     created_at: string;
     updated_at: string | null;
     images?: Images[];
+    size?: string;
 }
 
 export interface Images {

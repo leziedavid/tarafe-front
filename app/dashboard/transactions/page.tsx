@@ -377,52 +377,52 @@ export default function Page() {
                         <div className="space-y-4">
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                                 {/* Carte Solde Caisse */}
-                                <div className="bg-green-700 text-white rounded-lg border p-6">
+                                <div className="bg-green-700 text-white rounded-sm border p-6">
                                     <div className="flex flex-row items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Solde Caisse</h3>
                                     </div>
-                                    <div className="text-2xl font-bold">
+                                    <div className="text-xl font-bold">
                                         {total?.total_general?.toLocaleString() ?? 0} FCFA
                                     </div>
                                 </div>
 
                                 {/* Carte Total Entrée Caisse */}
-                                <div className="bg-white rounded-lg border p-6">
+                                <div className="bg-white rounded-sm border p-6">
                                     <div className="flex flex-row items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Total Entrée Caisse</h3>
                                     </div>
-                                    <div className="text-2xl font-bold">
+                                    <div className="text-xl font-bold">
                                         {total?.total_entree_caisse?.toLocaleString() ?? 0} FCFA
                                     </div>
                                 </div>
 
                                 {/* Carte Total Sortie Caisse */}
-                                <div className="bg-white rounded-lg border p-6">
+                                <div className="bg-white rounded-sm border p-6">
                                     <div className="flex flex-row items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Total Sortie Caisse</h3>
                                     </div>
-                                    <div className="text-2xl font-bold">
+                                    <div className="text-xl font-bold">
                                         {total?.total_sortie_caisse?.toLocaleString() ?? 0} FCFA
                                     </div>
                                 </div>
 
                                 {/* Carte Total Sortie Banque */}
-                                <div className="bg-white rounded-lg border p-6">
+                                <div className="bg-white rounded-sm border p-6">
                                     <div className="flex flex-row items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Total Sortie Banque</h3>
                                     </div>
-                                    <div className="text-2xl font-bold">
+                                    <div className="text-xl font-bold">
                                         {total?.total_sortie_banque?.toLocaleString() ?? 0} FCFA
                                     </div>
                                 </div>
 
 
                                 {/* Carte Total Sortie Banque */}
-                                <div className="bg-white rounded-lg border p-6">
+                                <div className="bg-white rounded-sm border p-6">
                                     <div className="flex flex-row items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Total Entrée Banque</h3>
                                     </div>
-                                    <div className="text-2xl font-bold">
+                                    <div className="text-xl font-bold">
                                         {total?.total_entree_banque?.toLocaleString() ?? 0} FCFA
                                     </div>
                                 </div>
@@ -472,7 +472,7 @@ export default function Page() {
                         )}
 
                         {pieGraphByTypeOperation?.length > 0 ? (
-                            <PieGraph data={pieGraphByTypeOperation  as unknown as any} title="Graphique à secteurs par type d'opération" />
+                            <PieGraph data={pieGraphByTypeOperation as unknown as any} title="Graphique à secteurs par type d'opération" />
                         ) : (
                             <div className="flex flex-col gap-2">
                                 <Skeleton className="bg-muted rounded-md aspect-square" />
@@ -480,7 +480,7 @@ export default function Page() {
                         )}
 
                         {pieGraphByCategorieTransactions?.length > 0 ? (
-                            <PieGraph data={pieGraphByCategorieTransactions  as unknown as any} title="Graphique à secteurs par catégories" />
+                            <PieGraph data={pieGraphByCategorieTransactions as unknown as any} title="Graphique à secteurs par catégories" />
                         ) : (
                             <div className="flex flex-col gap-2">
                                 <Skeleton className="bg-muted rounded-md aspect-square" />
@@ -507,7 +507,7 @@ export default function Page() {
                             <div className="flex gap-2">
                                 <button
                                     onClick={openCategorieForm}
-                                    className="flex items-center gap-2 border border-gray-300 bg-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition"
+                                    className="flex items-center gap-2 border border-gray-300 bg-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-gray-50 transition"
                                 >
                                     <List className="w-4 h-4" />
                                     <span>Liste des catégories</span>
@@ -515,14 +515,14 @@ export default function Page() {
 
                                 <button
                                     onClick={openImportDialog}
-                                    className="flex items-center gap-2 bg-brand-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition"
+                                    className="flex items-center gap-2 bg-brand-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:opacity-90 transition"
                                 >
                                     <Upload className="w-4 h-4" />
                                     <span>Importer les transactions</span>
                                 </button>
 
 
-                                <button onClick={Downloads} className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"  >
+                                <button onClick={Downloads} className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-sm text-sm font-medium transition"  >
                                     <Download className="w-4 h-4" />
                                     <span>Exporter</span>
                                 </button>

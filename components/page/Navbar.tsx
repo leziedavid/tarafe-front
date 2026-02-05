@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Search, ShoppingCart, Menu, User } from "lucide-react";
-import {Sheet,SheetContent,SheetTrigger,SheetHeader,SheetTitle,} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -18,7 +18,7 @@ const NAV_LINKS = [
 ];
 
 export default function Navbar() {
-    
+
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false); // ← important
     const [showSideCart, setShowSideCart] = useState(false);
@@ -32,7 +32,7 @@ export default function Navbar() {
     return (
         <>
 
-            <nav className="flex items-center justify-between py-4 px-6 md:px-10">
+            <nav className="flex items-center justify-between py-6 px-6 md:px-10">
                 {/* ==== LEFT : MENU (mobile) + LOGO ==== */}
                 <div className="flex items-center space-x-3">
                     {/* Menu Mobile */}
@@ -109,7 +109,7 @@ export default function Navbar() {
                     <Search className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" />
                     {/* Panier avec badge */}
                     <div className="relative">
-                        <ShoppingCart  onClick={() => setShowSideCart(true)}  className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" />
+                        <ShoppingCart onClick={() => setShowSideCart(true)} className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" />
                         {cartItems > 0 && (
                             <span className="absolute -top-2 -right-2 text-[10px] text-white bg-[#B07B5E]  w-5 h-5 rounded-full flex items-center justify-center font-semibold"> {cartItems >= 9 ? "9+" : cartItems}  </span>
                         )}

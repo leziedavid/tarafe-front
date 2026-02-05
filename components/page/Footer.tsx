@@ -125,8 +125,8 @@ const Footer = ({ reglages }: reglagesProps) => {
 
 
     return (
-        <footer className="w-full bg-[#242078] text-background py-12 md:py-20 bootom-0">
-            <div className="container mx-auto px-6">
+        <footer className="w-full bg-[#242078] text-background py-16 md:py-24 bootom-0">
+            <div className="container mx-auto px-6 md:px-10">
                 {/* === Grid principale === */}
                 <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-start">
                     {/* === Colonne gauche === */}
@@ -158,9 +158,9 @@ const Footer = ({ reglages }: reglagesProps) => {
                             <h3 className="text-lg md:text-xl font-semibold mb-2">Contactez nous</h3>
                             <ul className="space-y-2">
                                 {contact.email && <li><a href={`mailto:${contact.email}`} className="flex items-center space-x-2 text-sm md:text-base text-white/75 hover:text-[#fd980e] transition-colors duration-200" >
-                                <Mail className="w-5 h-5 text-gray-300 hover:text-[#fd980e] transition-colors" /> <span>{contact.email}</span></a></li>}
+                                    <Mail className="w-5 h-5 text-gray-300 hover:text-[#fd980e] transition-colors" /> <span>{contact.email}</span></a></li>}
                                 {contact.phone && <li><a href={`tel:${contact.phone}`} className="flex items-center space-x-2 text-sm md:text-base text-white/75 hover:text-[#fd980e] transition-colors duration-200" >
-                                <Phone className="w-3 h-3 text-gray-300 hover:text-[#fd980e] transition-colors" /> <span>{contact.phone}</span></a></li>}
+                                    <Phone className="w-3 h-3 text-gray-300 hover:text-[#fd980e] transition-colors" /> <span>{contact.phone}</span></a></li>}
                             </ul>
                         </div>
 

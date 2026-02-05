@@ -1,44 +1,45 @@
 "use client";
 
-import ContactForm from "@/components/form/ContactForm";
-import Footer from "@/components/page/Footer";
-import Hero from "@/components/page/Hero";
-import MonthlyAd from "@/components/page/MonthlyAd";
-import Navbar from "@/components/page/Navbar";
-import ProductList from "@/components/page/ProductList";
-import { getAllRealisations } from "@/service/realisationServices";
-import { ApiResponse } from "@/types/interfaces";
 import { useEffect, useState } from "react";
+import { ApiResponse } from "@/types/interfaces";
+import { getAllRealisations } from "@/service/realisationServices";
 
+// Composants existants
+import Navbar from "@/components/page/Navbar";
+import Footer from "@/components/page/Footer";
+
+// Nouvelles sections Julaya
+import ProductCardsSection from "@/components/home/ProductCardsSection";
+import AlternatingFeaturesSection from "@/components/home/AlternatingFeaturesSection";
+import FinalCTASection from "@/components/home/FinalCTASection";
+import ContactForm from "@/components/form/ContactForm";
+import CollectionsSection from "@/components/home/ProductList";
+import Heros from "@/components/home/Heros";
 
 export default function Home() {
-
   const [response, setResponse] = useState<ApiResponse | null>(null);
 
   const getAllRealisation = async () => {
     const response = await getAllRealisations();
     if (response.statusCode === 200 && response.data) {
-      setResponse(response.data); // 👈 DONNE DIRECTEMENT ApiResponse
+      setResponse(response.data);
     }
   };
-
 
   useEffect(() => {
     getAllRealisation();
   }, []);
 
   return (
-    <main className="min-h-screen bg-white text-gray-900">
+    <main className="min-h-screen bg-julaya-gray text-gray-900">
       <Navbar />
-      <Hero />
-      {/* <CanvaClone /> */}
-      <ProductList products={response?.realisations ?? []} />
-      <MonthlyAd /> {/* 👈 Pub du mois */}
+      <Heros />
+      <ProductCardsSection />
+      <AlternatingFeaturesSection />
+      <CollectionsSection product={response?.realisations ?? []} />
       <ContactForm />
+      <FinalCTASection />
       <Footer reglages={response?.reglages ?? []} />
-      {/*
-      <Testimonial />
-      <Lifestyle /> */}
     </main>
   );
 }

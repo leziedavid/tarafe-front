@@ -5,10 +5,10 @@ import { Instagram, Twitter, Facebook } from "lucide-react";
 
 export default function MonthlyAd() {
     return (
-        <section className="max-w-7xl mx-auto px-3 md:px-6 py-10 md:py-16">
+        <section className="max-w-7xl mx-auto px-3 md:px-6 py-section md:py-section-lg">
             <div
                 className="
-                    bg-[#242078] text-white rounded-3xl overflow-hidden
+                    bg-[#242078] text-white rounded-card-lg overflow-hidden shadow-xl
                     flex flex-col md:flex-row items-stretch justify-between
                 "
             >
@@ -46,9 +46,10 @@ export default function MonthlyAd() {
                         <button
                             className="
                                 bg-[#fd980e] text-white 
-                                px-4 sm:px-6 py-1.5 sm:py-2 rounded-full 
+                                px-6 sm:px-8 py-2.5 sm:py-3 rounded-pill 
                                 font-semibold text-sm sm:text-base
-                                hover:bg-white hover:text-[#fd980e] transition-colors duration-200
+                                hover:bg-white hover:text-[#fd980e] hover:scale-105 hover:shadow-lg
+                                transition-all duration-300
                             "
                         >
                             En savoir plus
@@ -57,7 +58,7 @@ export default function MonthlyAd() {
                 </div>
 
                 {/* ==== RIGHT SIDE ==== */}
-                <div className="flex-1 relative w-full md:rounded-r-3xl overflow-hidden">
+                <div className="flex-1 relative w-full md:rounded-r-card-lg overflow-hidden">
                     <div className="relative h-[300px] sm:h-[400px] md:h-[550px] w-full">
                         <Image
                             src="/ads/fille-noir.jpg"

@@ -81,7 +81,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
       {/* <body className={`${jost.variable} antialiased`} > */}
 
-      <body className={`${roboto.className}  antialiased `}>
+      <body className={`${opensans.variable} ${poppins.variable} font-sans antialiased`}>
 
         <ThemeProvider attribute="class" enableSystem={false} defaultTheme="light" disableTransitionOnChange>
           <div className="flex flex-col min-h-screen">
@@ -107,7 +107,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               border: "1px solid #e5e7eb",
               borderRadius: "8px",
               fontSize: "14px",
-              fontFamily: "var(--font-jost)", // 👈 Jost ici aussi
+              fontFamily: "var(--font-heading)", // 👈 Use heading font
             },
             className: "sonner-toast",
           }}

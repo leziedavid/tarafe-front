@@ -19,11 +19,13 @@ const config: Config = {
     },
     extend: {
       colors: {
+        /* ===== shadcn/ui colors ===== */
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -52,12 +54,31 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+
+        /* ===== tes couleurs custom ===== */
+        "tarafe-gray": "var(--tarafe-bg-gray)",
+        "tarafe-lavender": "var(--tarafe-lavender)",
+        "tarafe-blue": "var(--tarafe-blue)",
+        "tarafe-peach": "var(--tarafe-peach)",
+        "tarafe-mint": "var(--tarafe-mint)",
+        "tarafe-black": "var(--tarafe-black)",
       },
+
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        card: "var(--radius-card)",
+        "card-lg": "var(--radius-card-lg)",
+        pill: "var(--radius-pill)",
+        tarafe: "var(--radius-tarafe)",
       },
+
+      spacing: {
+        section: "5rem",
+        "section-lg": "7.5rem",
+      },
+
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -76,13 +97,17 @@ const config: Config = {
           to: { transform: "translateY(0)" },
         },
       },
+
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "slide-in-right": "slide-in-right 0.3s ease forwards",
         "slide-in-bottom": "slide-in-bottom 0.3s ease forwards",
       },
+
       fontFamily: {
+        sans: ['var(--font-open-sans)', 'sans-serif'],
+        heading: ['var(--font-poppins)', 'sans-serif'],
         poppins: ['var(--font-poppins)'],
         raleway: ['var(--font-raleway)'],
         opensans: ['var(--font-open-sans)'],

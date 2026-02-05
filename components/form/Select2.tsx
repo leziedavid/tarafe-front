@@ -217,9 +217,9 @@ export function Select2<T>(props: ComboboxProps<T>) {
                 type="button"
                 onClick={handleOpen}
                 disabled={disabled}
-                className={`flex items-center justify-between w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 ${disabled
-                        ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                        : 'bg-white border-gray-300 hover:bg-gray-50 focus:ring-gray-500 focus:border-transparent cursor-pointer'
+                className={`flex items-center justify-between w-full px-3 py-2 text-sm border rounded-sm focus:outline-none focus:ring-2 ${disabled
+                    ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+                    : 'bg-white border-gray-300 hover:bg-gray-50 focus:ring-gray-500 focus:border-transparent cursor-pointer'
                     }`}
             >
                 <div className="flex items-center space-x-2 flex-wrap truncate flex-1">
@@ -231,7 +231,7 @@ export function Select2<T>(props: ComboboxProps<T>) {
 
             {/* Popover Content */}
             {open && !disabled && (
-                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
+                <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-sm shadow-lg">
                     {/* Search Input */}
                     <div className="p-2 border-b border-gray-200">
                         <input
@@ -239,7 +239,7 @@ export function Select2<T>(props: ComboboxProps<T>) {
                             placeholder="Rechercher..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                         />
                     </div>
 
