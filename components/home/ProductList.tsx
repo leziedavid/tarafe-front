@@ -57,8 +57,8 @@ const CollectionsSection: React.FC<ProductListProps> = ({ product, isLabel = fal
             setProducts(assignProductSizes(product));
             setLoading(false);
         }
-        // const timer = setTimeout(() => setLoading(false), 800); // simule un loader
-        // return () => clearTimeout(timer);
+        const timer = setTimeout(() => setLoading(false), 800); // simule un loader
+        return () => clearTimeout(timer);
     }, [product]);
 
     // Skeletons pour les produits (mobile + web)
@@ -75,7 +75,7 @@ const CollectionsSection: React.FC<ProductListProps> = ({ product, isLabel = fal
             {/* Header */}
             {isLabel && (
                 <div className="mb-6 sm:mb-8 md:mb-10 lg:mb-10">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight">
+                    <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-extrabold leading-tight">
                         NOS <br />
                         <span className="inline-block bg-black text-white px-3 sm:px-4 py-1 rounded-lg md:rounded-xl">
                             NOUVEAUTES
@@ -136,32 +136,26 @@ function MobileProductCard({ product }: { product: Realisation }) {
     };
 
     return (
-        <div className="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer h-[250px] sm:h-[300px]" onClick={navigateTo}  >
-            {/* Image container - prend ~70% de la hauteur */}
-            <div className="relative h-[70%] w-full">
-                <Image
-                    src={`${urlImages}/${product.images_realisations}`}
-                    alt={product.libelle_realisations || "Produit"}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw"
-                    unoptimized
-                />
+        <div className="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer h-[250px] sm:h-[300px]" onClick={navigateTo}>
+            {/* Image container - prend 100% de la hauteur */}
+            <div className="relative h-full w-full">
+                <Image src={`${urlImages}/${product.images_realisations}`} alt={product.libelle_realisations || "Produit"} fill className="object-cover" sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw" unoptimized />
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors" />
-            </div>
 
-            {/* Content container - prend ~30% de la hauteur */}
-            <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-black/20 to-transparent p-3 flex flex-col justify-end">
-                <div className="text-white">
-                    <p className="text-sm text-black font-bold line-clamp-1 mb-2">
-                        {product.libelle_realisations}
-                    </p>
-                    <button onClick={navigateTo} className="flex items-center justify-between w-full bg-white text-black px-3 py-1.5 rounded-full text-xs font-medium hover:bg-[#fd980e] hover:text-white transition-all">
-                        <span>Details</span>
-                        <span className="bg-[#fd980e] text-white rounded-full p-1">
-                            <ArrowRight size={10} />
-                        </span>
-                    </button>
+                {/* Contenu superposé sur l'image */}
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <div className="flex flex-col items-start">
+                        <p className="text-sm font-bold text-white line-clamp-1 mb-2 bg-black/10 backdrop-blur-sm px-2 py-1 rounded">
+                            {product.libelle_realisations}
+                        </p>
+                        <button onClick={(e) => { e.stopPropagation(); navigateTo(); }}
+                            className="flex items-center justify-between w-full max-w-[140px] bg-white text-black px-3 py-1.5 rounded-full text-xs font-medium hover:bg-[#fd980e] hover:text-white transition-all shadow-md" >
+                            <span>Details</span>
+                            <span className="bg-[#fd980e] text-white rounded-full p-1">
+                                <ArrowRight size={10} />
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

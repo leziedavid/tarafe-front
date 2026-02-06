@@ -39,8 +39,9 @@ export default function Home() {
       <Navbar />
       <Heros />
       <ProductCardsSection />
-      <AlternatingFeaturesSection />
       <CollectionsSection product={response?.realisations ?? []} isLabel={true} />
+
+      <AlternatingFeaturesSection />
       <ContactForm />
       <FinalCTASection />
       <Footer reglages={response?.reglages ?? []} />
