@@ -19,6 +19,7 @@ const config: Config = {
     },
     extend: {
       colors: {
+        brand: "#fd980e",
         /* ===== shadcn/ui colors ===== */
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

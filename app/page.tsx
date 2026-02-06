@@ -15,14 +15,18 @@ import FinalCTASection from "@/components/home/FinalCTASection";
 import ContactForm from "@/components/form/ContactForm";
 import CollectionsSection from "@/components/home/ProductList";
 import Heros from "@/components/home/Heros";
+import React from "react";
 
 export default function Home() {
   const [response, setResponse] = useState<ApiResponse | null>(null);
+  const [loading, setLoading] = React.useState(true);
 
   const getAllRealisation = async () => {
+    setLoading(true);
     const response = await getAllRealisations();
     if (response.statusCode === 200 && response.data) {
       setResponse(response.data);
+      setLoading(false);
     }
   };
 
@@ -36,7 +40,7 @@ export default function Home() {
       <Heros />
       <ProductCardsSection />
       <AlternatingFeaturesSection />
-      <CollectionsSection product={response?.realisations ?? []} />
+      <CollectionsSection product={response?.realisations ?? []} isLabel={true} />
       <ContactForm />
       <FinalCTASection />
       <Footer reglages={response?.reglages ?? []} />

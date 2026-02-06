@@ -54,10 +54,7 @@ export default function AlternatingFeaturesSection() {
                                 </div>
 
                                 {/* Image */}
-                                <div
-                                    className={`rounded-3xl overflow-hidden ${feature.reverse ? "md:order-1" : "md:order-2"
-                                        }`}
-                                >
+                                <div className={`rounded-xl overflow-hidden  ${feature.reverse ? "md:order-1" : "md:order-2"}`} >
                                     <Image
                                         src={feature.imageSrc}
                                         alt={feature.imageAlt}

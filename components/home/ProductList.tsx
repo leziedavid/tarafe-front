@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 
 interface ProductListProps {
     product: Realisation[];
+    isLabel?: boolean;
 }
 
 interface ProductCardProps {
@@ -43,85 +44,76 @@ function assignProductSizes(products: Realisation[]): Realisation[] {
 }
 
 // =============================
-// Data
-// =============================
-
-const categories = [
-    "All",
-    "Best Seller",
-    "Pick a Mood",
-    "Trending",
-    "New In",
-    "Accessories",
-];
-
-// =============================
 // Components
 // =============================
 
-const CollectionsSection: React.FC<ProductListProps> = ({ product }) => {
+const CollectionsSection: React.FC<ProductListProps> = ({ product, isLabel = false }) => {
+    const router = useRouter();
     const [products, setProducts] = React.useState<Realisation[]>([]);
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
         if (product && product.length > 0) {
             setProducts(assignProductSizes(product));
+            setLoading(false);
         }
-        const timer = setTimeout(() => setLoading(false), 800); // simule un loader
-        return () => clearTimeout(timer);
+        // const timer = setTimeout(() => setLoading(false), 800); // simule un loader
+        // return () => clearTimeout(timer);
     }, [product]);
 
     // Skeletons pour les produits (mobile + web)
     const renderProductSkeleton = (large?: boolean, key?: number) => (
-        <div key={key} className={`relative overflow-hidden rounded-3xl animate-pulse bg-gray-200 ${large ? "h-[250px] sm:h-[300px] lg:h-[520px]" : "h-[250px] sm:h-[300px] lg:h-[250px]"}`} />
+        <div key={key} className={`relative overflow-hidden rounded-xl animate-pulse bg-gray-200 ${large ? "h-[300px] md:h-[400px] lg:h-[520px]" : "h-[300px] md:h-[400px] lg:h-[250px]"}`} />
     );
-
-    // // Skeletons pour les catégories
-    // const renderCategorySkeleton = (key: number) => (
-    //     <div
-    //         key={key}
-    //         className="h-8 w-24 rounded-full bg-gray-200 animate-pulse"
-    //     />
-    // );
 
     const smallProducts = products.filter((p) => p.size === "small");
     const largeProducts = products.filter((p) => p.size === "large");
 
     return (
-        <section className="max-w-7xl mx-auto px-16 py-20">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 sm:py-10 md:py-14 lg:py-5">
 
             {/* Header */}
-            <div className="grid lg:grid-cols-2 gap-10 mb-14">
-                <h2 className="text-5xl font-extrabold leading-tight">
-                    NOS <br />
-                    <span className="inline-block bg-black text-white px-4 py-0 rounded-xl">
-                        NOUVEAUTES
-                    </span>
-                </h2>
+            {isLabel && (
+                <div className="mb-6 sm:mb-8 md:mb-10 lg:mb-10">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight">
+                        NOS <br />
+                        <span className="inline-block bg-black text-white px-3 sm:px-4 py-1 rounded-lg md:rounded-xl">
+                            NOUVEAUTES
+                        </span>
+                    </h2>
+                </div>
+            )}
+
+            {/* Version mobile : TOUS les produits en 2 colonnes avec design réduit */}
+            <div className="lg:hidden">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    {loading ? (
+                        // Skeleton pour mobile - affiche 4 squelettes
+                        Array(4).fill(0).map((_, i) => (
+                            <div key={i} className="relative overflow-hidden rounded-xl animate-pulse bg-gray-200 h-[250px] sm:h-[300px]" />
+                        ))
+                    ) : (
+                        // Affiche TOUS les produits en mode mobile
+                        products.map((product) => (
+                            <MobileProductCard key={product.id_realisations} product={product} />
+                        ))
+                    )}
+                </div>
             </div>
 
-            {/* Categories */}
-            {/* <div className="flex flex-wrap gap-3 mb-12">
-                {loading ? categories.map((_, i) => renderCategorySkeleton(i)) : categories.map((cat, i) => (
-                    <button key={cat} className={`px-5 py-2 rounded-full border text-sm transition ${i === 0 ? "bg-black text-white" : "border-gray-300 hover:bg-black hover:text-white"}`} >
-                        {cat}
-                    </button>
-                ))}
-            </div> */}
-
-            {/* Products grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Version desktop : layout original avec petites/grandes images */}
+            <div className="hidden lg:grid lg:grid-cols-3 lg:gap-6">
                 {/* Colonne gauche : petites cards */}
-                <div className="contents lg:flex lg:flex-col lg:gap-6 lg:col-span-1">
+                <div className="flex flex-col gap-6">
                     {loading ? Array(4).fill(0).map((_, i) => renderProductSkeleton(false, i)) : smallProducts.map((product) => (
-                        <ProductCard key={product.id_realisations} product={product} />
+                        <DesktopProductCard key={product.id_realisations} product={product} />
                     ))}
                 </div>
 
-                {/* Colonne droite : 2 images verticales */}
-                <div className="contents lg:col-span-2 lg:grid lg:grid-cols-2 lg:gap-6">
+                {/* Colonne droite : grandes cards */}
+                <div className="grid grid-cols-2 col-span-2 gap-6">
                     {loading ? Array(4).fill(0).map((_, i) => renderProductSkeleton(true, i)) : largeProducts.map((product) => (
-                        <ProductCard key={product.id_realisations} product={product} large />
+                        <DesktopProductCard key={product.id_realisations} product={product} large />
                     ))}
                 </div>
             </div>
@@ -131,10 +123,56 @@ const CollectionsSection: React.FC<ProductListProps> = ({ product }) => {
 };
 
 // =============================
-// Product Card
+// Mobile Product Card (design réduit, 2 colonnes)
 // =============================
 
-function ProductCard({ product, large = false, loading = false }: ProductCardProps) {
+function MobileProductCard({ product }: { product: Realisation }) {
+    const router = useRouter();
+    const urlImages = getImagesUrl();
+
+    const navigateTo = () => {
+        const path = product?.libelle_realisations?.replace(/ /g, "-") || "";
+        router.push("/product/" + path);
+    };
+
+    return (
+        <div className="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer h-[250px] sm:h-[300px]" onClick={navigateTo}  >
+            {/* Image container - prend ~70% de la hauteur */}
+            <div className="relative h-[70%] w-full">
+                <Image
+                    src={`${urlImages}/${product.images_realisations}`}
+                    alt={product.libelle_realisations || "Produit"}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw"
+                    unoptimized
+                />
+                <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition-colors" />
+            </div>
+
+            {/* Content container - prend ~30% de la hauteur */}
+            <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-black/20 to-transparent p-3 flex flex-col justify-end">
+                <div className="text-white">
+                    <p className="text-sm text-black font-bold line-clamp-1 mb-2">
+                        {product.libelle_realisations}
+                    </p>
+                    <button onClick={navigateTo} className="flex items-center justify-between w-full bg-white text-black px-3 py-1.5 rounded-full text-xs font-medium hover:bg-[#fd980e] hover:text-white transition-all">
+                        <span>Details</span>
+                        <span className="bg-[#fd980e] text-white rounded-full p-1">
+                            <ArrowRight size={10} />
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// =============================
+// Desktop Product Card (design original)
+// =============================
+
+function DesktopProductCard({ product, large = false, loading = false }: ProductCardProps) {
     const router = useRouter();
     const urlImages = getImagesUrl();
 
@@ -144,22 +182,28 @@ function ProductCard({ product, large = false, loading = false }: ProductCardPro
     };
 
     if (loading || !product) {
-        return (<div className={`relative overflow-hidden rounded-3xl animate-pulse bg-gray-200 ${large ? "h-[250px] sm:h-[300px] lg:h-[520px]" : "h-[250px] sm:h-[300px] lg:h-[250px]"}`} />);
+        return (<div className={`relative overflow-hidden rounded-3xl animate-pulse bg-gray-200 ${large ? "h-[520px]" : "h-[250px]"}`} />);
     }
 
-    const cardHeight = large ? "h-[250px] sm:h-[300px] lg:h-[520px]" : "h-[250px] sm:h-[300px] lg:h-[250px]";
+    const cardHeight = large ? "h-[520px]" : "h-[250px]";
 
     return (
-        <div className={`relative overflow-hidden rounded-3xl group ${cardHeight}`} onClick={navigateTo}>
-            <Image src={`${urlImages}/${product.images_realisations}`} alt={product.libelle_realisations || "Produit"} fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105" unoptimized onClick={navigateTo} />
+        <div className={`relative overflow-hidden rounded-3xl group ${cardHeight} cursor-pointer`} onClick={navigateTo}>
+            <Image
+                src={`${urlImages}/${product.images_realisations}`}
+                alt={product.libelle_realisations || "Produit"}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                unoptimized
+                sizes={large ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 1024px) 100vw, 33vw"}
+            />
 
             <div className="absolute inset-0 bg-black/10" />
 
             <div className="absolute bottom-6 left-6 right-6 text-white">
                 <p className="text-md font-bold max-w-xs leading-snug">{product.libelle_realisations}</p>
                 <div className="flex items-center justify-between mt-3">
-                    <button onClick={navigateTo} className="flex items-center gap-1 sm:gap-2 bg-white text-black px-2 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-[#fd980e] hover:text-white transition">
+                    <button onClick={navigateTo} className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-[#fd980e] hover:text-white transition">
                         Details
                         <span className="bg-[#fd980e] text-white rounded-full p-1">
                             <ArrowRight size={14} />

@@ -8,7 +8,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getRealisationsByLaballe } from "@/service/realisationServices";
 import { getImagesUrl } from "@/types/baseUrl";
 import { DetailRealisation, Images, Realisation, Reglage } from "@/types/interfaces";
-import FullPageLoader from "@/components/spinner/FullPageLoader";
 import Navbar from "@/components/page/Navbar";
 import Footer from "@/components/page/Footer";
 
@@ -22,6 +21,66 @@ interface ReadMoreProps {
     html: string;
     maxWords?: number;
 }
+
+// =============================
+// ProductSkeleton Component
+// =============================
+const ProductSkeleton = () => {
+    return (
+        <div className="w-full max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
+            {/* Left Section - Images skeleton */}
+            <div>
+                {/* Main image skeleton */}
+                <div className="relative mx-auto h-[600px] overflow-hidden bg-gray-100 rounded-xl animate-pulse">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 border-4 border-gray-200 border-t-gray-400 rounded-full animate-spin"></div>
+                    </div>
+                </div>
+
+                {/* Thumbnails skeleton */}
+                <div className="mt-4">
+                    <div className="flex gap-2 overflow-x-auto pb-2 items-center justify-start md:justify-center">
+                        {[1, 2, 3, 4].map((i) => (
+                            <div
+                                key={i}
+                                className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200 animate-pulse"
+                            />
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Right Section - Product info skeleton */}
+            <div className="space-y-6">
+                {/* Description skeleton */}
+                <div className="bg-white rounded-xl p-6">
+                    {/* Code skeleton */}
+                    <div className="h-4 w-32 bg-gray-200 rounded mb-4 animate-pulse"></div>
+
+                    {/* Title skeleton */}
+                    <div className="h-8 w-3/4 bg-gray-200 rounded mb-6 animate-pulse"></div>
+
+                    {/* Description lines skeleton */}
+                    <div className="border-t pt-4 space-y-3">
+                        <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                        <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                        <div className="h-4 w-2/3 bg-gray-200 rounded animate-pulse"></div>
+                        <div className="h-4 w-1/2 bg-gray-200 rounded animate-pulse"></div>
+                        <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+                    </div>
+                </div>
+
+                {/* Additional info skeleton */}
+                <div className="bg-gray-50 rounded-xl p-4">
+                    <div className="h-4 w-40 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+
+                {/* Button skeleton */}
+                <div className="h-12 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+            </div>
+        </div>
+    );
+};
 
 export default function Page() {
     const { id } = useParams<{ id: string }>();
@@ -131,11 +190,35 @@ export default function Page() {
         );
     };
 
-    if (loading || !realisations || realisations.length === 0) {
+    // Afficher le skeleton pendant le chargement
+    if (loading) {
         return (
-            <div className="flex justify-center items-center h-60">
-                <FullPageLoader status="Chargement du produit" />
-            </div>
+            <>
+                <Navbar />
+                <ProductSkeleton />
+                <Footer reglages={[]} />
+            </>
+        );
+    }
+
+    // Afficher un message d'erreur si pas de données
+    if (!realisations || realisations.length === 0) {
+        return (
+            <>
+                <Navbar />
+                <div className="flex justify-center items-center h-60">
+                    <div className="text-center">
+                        <p className="text-gray-500">Aucun produit trouvé</p>
+                        <button
+                            onClick={() => window.history.back()}
+                            className="mt-4 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                        >
+                            Retour
+                        </button>
+                    </div>
+                </div>
+                <Footer reglages={[]} />
+            </>
         );
     }
 
@@ -153,7 +236,14 @@ export default function Page() {
                     {/* Image principale avec boutons de slide */}
                     <div className="relative mx-auto h-[600px] overflow-hidden bg-white">
                         {activeImage && (
-                            <Image src={`${urlImages}/${activeImage.src}`} alt={realisation.libelle_realisations}fill className="object-contain" sizes="(max-width: 768px) 100vw, 50vw" unoptimized />
+                            <Image
+                                src={`${urlImages}/${activeImage.src}`}
+                                alt={realisation.libelle_realisations}
+                                fill
+                                className="object-contain"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                unoptimized
+                            />
                         )}
 
                         {/* Boutons de navigation du slider */}

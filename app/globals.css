@@ -102,11 +102,10 @@
     --font-open-sans: "Open Sans", sans-serif;
 
     /* Brand colors */
-    --brand-primary: 29 32% 53%;
-    /* #b07b5e */
-    --brand-secondary: 195 69% 27%;
-    /* #155e75 */
-
+    --brand-primary: 35 98% 52%;
+    /* #fd980e */
+    --brand-secondary: 242 60% 31%;
+    /* #242078 */
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -143,8 +142,11 @@
     --font-open-sans: "Open Sans", sans-serif;
 
     /* Optionnel : mêmes couleurs ou ajustées */
-    --brand-primary: 29 32% 53%;
-    --brand-secondary: 195 69% 35%;
+    /* Brand colors */
+    --brand-primary: 35 98% 52%;
+    /* #fd980e */
+    --brand-secondary: 242 60% 31%;
+    /* #242078 */
 
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;

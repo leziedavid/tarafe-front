@@ -21,7 +21,7 @@ export default function ProductCardsSection() {
     return (
         <section className="w-full bg-tarafe-gray">
             <div className="w-full md:max-w-[1400px] md:mx-auto px-0 md:px-6">
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="grid md:grid-cols-2 gap-1">
                     {products.map((product, index) => (
                         <div
                             key={index}
