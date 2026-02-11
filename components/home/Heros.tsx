@@ -244,8 +244,7 @@ export default function Heros({ heros }: HeroProps) {
         <section className="w-full overflow-x-hidden bg-background text-foreground relative pb-16 lg:pb-0">
 
             {/* OVERLAY */}
-            <div className="absolute inset-0 bg-black/50 z-10 pointer-events-none" />
-            <div className="absolute inset-0 bg-black/50 z-10 pointer-events-none" />
+            {/* <div className="absolute inset-0 bg-black/50 z-10 pointer-events-none" /> */}
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-2 grid lg:grid-cols-2 gap-14 items-center">
 

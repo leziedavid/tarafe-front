@@ -7,15 +7,15 @@ import { useState, useEffect } from "react";
 // Composant Skeleton
 const ServiceCardSkeleton = () => {
     return (
-        <section className="w-full bg-tarafe-gray">
+        <section className="w-full bg-gray-100">
             <div className="w-full md:max-w-[1400px] md:mx-auto px-0 md:px-6">
                 <div className="grid md:grid-cols-2 gap-1">
                     {[1, 2].map((item) => (
                         <div
                             key={item}
-                            className="bg-gray-200 rounded-tarafe p-12 md:p-16 animate-pulse"
+                            className="bg-gray-100 rounded-tarafe p-12 md:p-16 animate-pulse"
                         >
-                            <div className="h-12 md:h-14 lg:h-16 w-3/4 bg-gray-300 rounded mb-6"></div>
+                            <div className="h-12 md:h-14 lg:h-16 w-3/4 bg-gray-200 rounded mb-6"></div>
                             <div className="space-y-3 mb-8">
                                 <div className="h-4 bg-gray-300 rounded w-full"></div>
                                 <div className="h-4 bg-gray-300 rounded w-5/6"></div>
@@ -59,7 +59,7 @@ export default function ProductCardsSection({ serviceCards }: ProductCardProps) 
         <section className="w-full bg-tarafe-gray">
             <div className="w-full md:max-w-[1400px] md:mx-auto px-0 md:px-6">
                 <div className="grid md:grid-cols-2 gap-1">
-                    {activeServiceCards.map((card) => (
+                    {serviceCards.map((card) => (
                         <div  key={card.id} className={`bg-${card.bg_color || 'tarafe-gray'} rounded-tarafe p-12 md:p-16 hover:scale-[1.02] transition-transform duration-300`} >
                             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase mb-6 text-tarafe-black leading-tight">
                                 {card.title}

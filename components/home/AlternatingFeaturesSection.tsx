@@ -72,33 +72,54 @@ export default function AlternatingFeaturesSection({ feature }: FeatureProps) {
             <div className="w-full md:max-w-[1400px] md:mx-auto px-0 md:px-6">
                 <CardContainer bgColor="white" rounded="tarafe" padding="xl">
                     <div className="space-y-24">
-                        {activeFeatures.map((feat) => (
-                            <div  key={feat.id}  className="grid md:grid-cols-2 gap-12 md:gap-16 items-center"  >
-                                {/* Texte */}
-                                <div className={`space-y-6 ${feat.reverse === 1 ? "md:order-2" : "md:order-1"  }`} >
-                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase leading-tight text-tarafe-black">
-                                        {feat.title}
-                                    </h2>
-                                    <p className="text-base md:text-lg leading-relaxed text-tarafe-black/80"  dangerouslySetInnerHTML={{ __html: feat.description || 'Description à venir...' }}  />
+                        {feature.map((feat) => {
+                            // Convertit en booléen comme ton ancien code
+                            const reverse = Number(feat.reverse) === 1;
 
-                                    <Link  href={feat.link || "#"} className="underline font-semibold inline-flex items-center gap-2 text-tarafe-black hover:gap-4 transition-all duration-300" >
-                                        En savoir plus
-                                        <span>→</span>
-                                    </Link>
-                                </div>
+                            return (
+                                <div
+                                    key={feat.id}
+                                    className="grid md:grid-cols-2 gap-12 md:gap-16 items-center"
+                                >
+                                    {/* Texte */}
+                                    <div className={`space-y-6 ${reverse ? "md:order-2" : "md:order-1"}`}>
+                                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase leading-tight text-tarafe-black">
+                                            {feat.title}
+                                        </h2>
+                                        <p
+                                            className="text-base md:text-lg leading-relaxed text-tarafe-black/80"
+                                            dangerouslySetInnerHTML={{ __html: feat.description || "Description à venir..." }}
+                                        />
+                                        <Link
+                                            href={feat.link || "#"}
+                                            className="underline font-semibold inline-flex items-center gap-2 text-tarafe-black hover:gap-4 transition-all duration-300"
+                                        >
+                                            En savoir plus
+                                            <span>→</span>
+                                        </Link>
+                                    </div>
 
-                                {/* Image */}
-                                <div className={`rounded-xl overflow-hidden ${feat.reverse === 1 ? "md:order-1" : "md:order-2"  }`}  >
-                                    {feat.image ? (
-                                        <Image src={`${urlImages}/${feat.image}`}  alt={feat.title}  width={600}   height={400}  className="w-full h-auto"  unoptimized />
-                                    ) : (
-                                        <div className="w-full h-[300px] md:h-[400px] bg-tarafe-gray flex items-center justify-center">
-                                            <span className="text-tarafe-black/50">Image à venir</span>
-                                        </div>
-                                    )}
+                                    {/* Image */}
+                                    <div className={`rounded-xl overflow-hidden ${reverse ? "md:order-1" : "md:order-2"}`}>
+                                        {feat.image ? (
+                                            <Image
+                                                src={`${urlImages}/${feat.image}`}
+                                                alt={feat.title}
+                                                width={600}
+                                                height={400}
+                                                className="w-full h-auto"
+                                                unoptimized
+                                            />
+                                        ) : (
+                                            <div className="w-full h-[300px] md:h-[400px] bg-tarafe-gray flex items-center justify-center">
+                                                <span className="text-tarafe-black/50">Image à venir</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
+
                     </div>
                 </CardContainer>
             </div>
