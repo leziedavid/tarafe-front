@@ -121,7 +121,7 @@ export default function StoresPage() {
             <div className="p-4 md:p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">Stores</h1>
-                    <button onClick={() => AddStores({} as Store)} className="bg-brand-primary hover:bg-brand-secondary text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                    <button onClick={() => AddStores({} as Store)} className="bg-brand-primary2 hover:bg-brand-secondary text-white px-4 py-2 rounded-lg flex items-center gap-2">
                         <Package className="w-5 h-5" />
                         Nouveau Store
                     </button>
@@ -147,7 +147,7 @@ export default function StoresPage() {
                                     onClick={() => toggleActive(store.id)}
                                 >
                                     <div
-                                        className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${store.active ? "bg-brand-primary" : "bg-brand-secondary"
+                                        className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${store.active ? "bg-brand-primary2" : "bg-brand-secondary"
                                             }`}
                                     >
                                         <span
@@ -155,7 +155,7 @@ export default function StoresPage() {
                                                 }`}
                                         ></span>
                                     </div>
-                                    <span className={`text-sm font-medium ${store.active ? "text-brand-primary" : "text-gray-500"}`}>
+                                    <span className={`text-sm font-medium ${store.active ? "text-brand-primary2" : "text-gray-500"}`}>
                                         {store.active ? "Actif" : "Inactif"}
                                     </span>
                                 </label>

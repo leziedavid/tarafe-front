@@ -290,6 +290,7 @@ export interface ApiResponse {
     reglages: Reglage[];
     Publicites: Publicite[];
     politique: Politique[];
+    HomePageSections: HomePageSectionsResponse;
 }
 
 // Interface pour les réponses API individuelles si nécessaire
@@ -645,4 +646,61 @@ export interface AdminRealisationFilters {
     libelle?: string;
 }
 
+export interface Hero {
+    id: number;
+    title: string;
+    highlight_text?: string | null;   // wahou !
+    description?: string | null;
+    primary_button_text?: string | null;
+    primary_button_link?: string | null;
+    secondary_button_text?: string | null;
+    secondary_button_link?: string | null;
+    image?: string | null;
+    is_active: number; // 0 ou 1
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ServiceCard {
+    id: number;
+    title: string;
+    description?: string | null;
+    bg_color?: string | null;        // tarafe-blue, tarafe-peach faculktatif
+    link?: string | null;
+    position: number;                // ordre d'affichage facuktatife
+    is_active: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Feature {
+    id: number;
+    title: string;
+    description: string;
+    image?: string | null;
+    link?: string | null;
+    reverse: number;   // true = image à gauche, texte à droite
+    order: number;      // position dans la liste
+    active: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface FinalCTA {
+    id: number;
+    title: string;
+    description: string;
+    button_text?: string | null;
+    button_link?: string | null;
+    active: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface HomePageSectionsResponse {
+    heros: Hero[];
+    service_cards: ServiceCard[];
+    features: Feature[];
+    final_ctas: FinalCTA[];
+}
 

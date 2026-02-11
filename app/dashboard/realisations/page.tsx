@@ -303,7 +303,7 @@ export default function Page() {
                                             onChange={() => handleToggleActive(realisation.id_realisations, realisation.isActive)}
                                             disabled={loading}
                                         />
-                                        <div className="relative w-8 h-4 md:w-9 md:h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] md:after:top-[2px] after:start-[1px] md:after:start-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 md:after:h-4 md:after:w-4 after:transition-all peer-checked:bg-brand-primary"></div>
+                                        <div className="relative w-8 h-4 md:w-9 md:h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] md:after:top-[2px] after:start-[1px] md:after:start-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 md:after:h-4 md:after:w-4 after:transition-all peer-checked:bg-brand-primary2"></div>
                                         <span className="select-none ms-2 text-[10px] md:text-xs font-medium truncate">
                                             {String(realisation.isActive) === "1" ? "Vedette" : "Normal"}
                                         </span>
@@ -325,7 +325,7 @@ export default function Page() {
                                                         [realisation.id_realisations]: index
                                                     }));
                                                 }}
-                                                className={`relative w-8 h-8 md:w-10 md:h-10 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? 'ring-1 md:ring-2 ring-brand-primary' : 'opacity-70 hover:opacity-100'
+                                                className={`relative w-8 h-8 md:w-10 md:h-10 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? 'ring-1 md:ring-2 ring-brand-primary2' : 'opacity-70 hover:opacity-100'
                                                     }`}
                                             >
                                                 <Image
@@ -454,7 +454,7 @@ export default function Page() {
                                                 checked={String(realisation.isActive) === "1"}
                                                 onChange={() => handleToggleActive(realisation.id_realisations, realisation.isActive)}
                                                 disabled={loading} />
-                                            <div className="relative w-9 h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-primary"></div>
+                                            <div className="relative w-9 h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-primary2"></div>
                                             <span className="select-none ms-2 text-sm font-medium">
                                                 {String(realisation.isActive) === "1" ? "Vedette" : "Normal"}
                                             </span>
@@ -468,7 +468,7 @@ export default function Page() {
                                         {realisation.images?.slice(0, 4).map((image, index) => (
                                             <button key={image.id_img_realisations}
                                                 onClick={() => setActiveImageIndex(prev => ({ ...prev, [realisation.id_realisations]: index }))}
-                                                className={`relative w-10 h-10 rounded overflow-hidden ${index === currentIndex ? 'ring-2 ring-brand-primary' : 'opacity-70 hover:opacity-100'}`}  >
+                                                className={`relative w-10 h-10 rounded overflow-hidden ${index === currentIndex ? 'ring-2 ring-brand-primary2' : 'opacity-70 hover:opacity-100'}`}  >
                                                 <Image src={`${urlImages}/${image.filles_img_realisations}`}
                                                     alt={`Miniature ${index + 1}`}
                                                     fill
@@ -501,19 +501,19 @@ export default function Page() {
                         <div className="flex overflow-hidden">
                             <button
                                 onClick={() => setViewMode('grid')}
-                                className={`px-3 py-1.5 ${viewMode === 'grid' ? 'bg-brand-primary text-white' : 'bg-white text-gray-600'}`}
+                                className={`px-3 py-1.5 ${viewMode === 'grid' ? 'bg-brand-primary2 text-white' : 'bg-white text-gray-600'}`}
                             >
                                 <Grid3x3 className="w-4 h-4" />
                             </button>
                             <button
                                 onClick={() => setViewMode('list')}
-                                className={`px-3 py-1.5 ${viewMode === 'list' ? 'bg-brand-primary text-white' : 'bg-white text-gray-600'}`}
+                                className={`px-3 py-1.5 ${viewMode === 'list' ? 'bg-brand-primary2 text-white' : 'bg-white text-gray-600'}`}
                             >
                                 <List className="w-4 h-4" />
                             </button>
                         </div>
 
-                        <button onClick={() => AddProduct({} as Realisation)} className="bg-brand-primary hover:bg-brand-secondary text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-sm whitespace-nowrap flex-shrink-0">
+                        <button onClick={() => AddProduct({} as Realisation)} className="bg-brand-primary2 hover:bg-brand-secondary text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-sm whitespace-nowrap flex-shrink-0">
                             + Ajouter
                         </button>
                     </div>
@@ -521,8 +521,7 @@ export default function Page() {
 
                 {/* Affichage selon le mode sélectionné */}
                 {loading ? (
-                    <div className="text-center py-8">Chargement...</div>
-                ) : realisations.length === 0 ? (
+                    <div className="text-center py-8">Chargement...</div>) : realisations.length === 0 ? (
                     <div className="text-center py-8">Aucune réalisation trouvée</div>
                 ) : viewMode === 'grid' ? renderGridView() : renderListView()}
 

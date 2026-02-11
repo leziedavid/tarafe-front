@@ -9,7 +9,7 @@ export default function Page() {
     function StatCard({ title, value, highlight, }: { title: string; value: string; highlight?: boolean; }) {
         return (
             <div
-                className={`rounded-2xl p-6 ${highlight ? "bg-brand-primary text-white" : "bg-white"
+                className={`rounded-2xl p-6 ${highlight ? "bg-brand-primary2 text-white" : "bg-white"
                     }`}
             >
                 <div className="text-sm">{title}</div>
@@ -34,7 +34,7 @@ export default function Page() {
                     </div>
 
                     <div className="flex gap-3">
-                        <button className="bg-brand-primary text-white px-3 md:px-5 py-2 rounded-full flex items-center gap-2">
+                        <button className="bg-brand-primary2 text-white px-3 md:px-5 py-2 rounded-full flex items-center gap-2">
                             <Plus className="w-4 h-4" />
                             <span className="hidden sm:inline">Add Project</span>
                         </button>

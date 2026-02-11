@@ -515,7 +515,7 @@ export default function Page() {
 
                                 <button
                                     onClick={openImportDialog}
-                                    className="flex items-center gap-2 bg-brand-primary text-white px-4 py-2 rounded-sm text-sm font-medium hover:opacity-90 transition"
+                                    className="flex items-center gap-2 bg-brand-primary2 text-white px-4 py-2 rounded-sm text-sm font-medium hover:opacity-90 transition"
                                 >
                                     <Upload className="w-4 h-4" />
                                     <span>Importer les transactions</span>

@@ -37,13 +37,13 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-julaya-gray text-gray-900">
       <Navbar />
-      <Heros />
-      <ProductCardsSection />
+      {/* <pre>{JSON.stringify(response?.HomePageSections, null, 2)}</pre> */}
+      <Heros heros={response?.HomePageSections.heros ?? []} />
+      <ProductCardsSection serviceCards={response?.HomePageSections.service_cards ?? []} />
       <CollectionsSection product={response?.realisations ?? []} isLabel={true} />
-
-      <AlternatingFeaturesSection />
+      <AlternatingFeaturesSection feature={response?.HomePageSections.features ?? []} />
       <ContactForm />
-      <FinalCTASection />
+      <FinalCTASection  finals={response?.HomePageSections.final_ctas ?? []} />
       <Footer reglages={response?.reglages ?? []} />
     </main>
   );

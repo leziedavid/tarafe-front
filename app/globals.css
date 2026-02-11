@@ -18,6 +18,14 @@
   --color-brand-secondary-foreground: #ffffff;
 
 
+    /* Brand */
+  --color-brand-primary2: hsl(var(--brand-primary2));
+  --color-brand-secondary2: hsl(var(--brand-secondary2));
+
+  /* (optionnel) foregrounds */
+  --color-brand-primary2-foreground: #ffffff;
+  --color-brand-secondary2-foreground: #ffffff;
+
 
   /* tarafe-inspired soft backgrounds (non-brand) */
   --color-bg-soft-beige: #F8F6F2;
@@ -102,6 +110,12 @@
     --font-open-sans: "Open Sans", sans-serif;
 
     /* Brand colors */
+    --brand-primary2: 29 32% 53%;
+    /* #b07b5e */
+    --brand-secondary2: 195 69% 27%;
+    /* #155e75 */
+
+    /* Brand colors */
     --brand-primary: 35 98% 52%;
     /* #fd980e */
     --brand-secondary: 242 60% 31%;
@@ -147,6 +161,14 @@
     /* #fd980e */
     --brand-secondary: 242 60% 31%;
     /* #242078 */
+
+
+      /* Brand colors */
+    --brand-primary2: 29 32% 53%;
+    /* #b07b5e */
+    --brand-secondary2: 195 69% 27%;
+    /* #155e75 */
+
 
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -651,11 +673,21 @@
   animation: slideUp 0.6s ease-out;
 }
 
-/* Style pour les toggle switches */
-/* input:checked+label {
-  background-color: #2563eb;
-} */
 
 input:checked+label .dot {
   transform: translateX(24px);
+}
+
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.animate-shimmer {
+    animation: shimmer 2s infinite;
 }

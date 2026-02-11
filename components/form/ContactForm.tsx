@@ -37,7 +37,6 @@ export default function ContactForm() {
 
     const onSubmit = async (data: ContactFormData) => {
         setLoading(true);
-
         console.log("📤 Données envoyées :", data);
 
         setTimeout(() => {
@@ -49,9 +48,39 @@ export default function ContactForm() {
         }, 1500);
     };
 
-    // ⛔ Important : aucun rendu avant le montage client
-    if (!mounted) return null;
+    // ⛔ Aucun rendu avant le montage client
+    if (!mounted) {
+        // === Skeleton ===
+        return (
+            <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-sm-lg my-section py-10 animate-pulse gap-6">
 
+                {/* ---- Colonne gauche skeleton ---- */}
+                <div className="bg-white text-gray-900 p-10 md:p-14 flex flex-col justify-center space-y-4">
+                    <div className="h-10 w-64 bg-gray-300 rounded"></div>
+                    <div className="h-4 w-full bg-gray-200 rounded"></div>
+                    <div className="h-4 w-5/6 bg-gray-200 rounded"></div>
+                    <div className="h-4 w-4/6 bg-gray-200 rounded"></div>
+                    <div className="space-y-2 mt-4">
+                        <div className="h-3 w-3/4 bg-gray-200 rounded"></div>
+                        <div className="h-3 w-2/3 bg-gray-200 rounded"></div>
+                        <div className="h-3 w-1/2 bg-gray-200 rounded"></div>
+                        <div className="h-3 w-2/5 bg-gray-200 rounded"></div>
+                    </div>
+                </div>
+
+                {/* ---- Formulaire skeleton ---- */}
+                <div className="bg-gray-50 p-10 flex flex-col justify-center space-y-4">
+                    {[...Array(5)].map((_, idx) => (
+                        <div key={idx} className="h-10 w-full bg-gray-200 rounded"></div>
+                    ))}
+                    <div className="h-24 w-full bg-gray-200 rounded"></div>
+                    <div className="h-12 w-1/3 bg-gray-300 rounded mt-2 mx-auto"></div>
+                </div>
+            </section>
+        );
+    }
+
+    // === Formulaire réel ===
     return (
         <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-sm-lg my-section py-10">
 
@@ -94,14 +123,10 @@ export default function ContactForm() {
                                 {field.label} <span className="text-[#fd980e]">*</span>
                             </label>
 
-                            <input
-                                {...register(field.name as keyof ContactFormData)}
+                            <input  {...register(field.name as keyof ContactFormData)}
                                 type={field.type ?? "text"}
                                 placeholder={field.placeholder}
-                                className="w-full border border-gray-300 rounded-sm p-2 text-gray-800 text-sm
-                                           focus:outline-none focus:ring-1 focus:ring-[#242078]
-                                           focus:border-[#242078] hover:border-gray-400
-                                           transition-all duration-300"
+                                className="w-full border border-gray-300 rounded-sm p-2 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-[#242078] focus:border-[#242078] hover:border-gray-400 transition-all duration-300"
                             />
 
                             {error && (
@@ -122,11 +147,7 @@ export default function ContactForm() {
                         {...register("contents")}
                         rows={4}
                         placeholder="Écrivez votre message ici..."
-                        className="w-full border border-gray-300 rounded-sm p-2 text-gray-800 text-sm
-                                   focus:outline-none focus:ring-1 focus:ring-[#242078]
-                                   focus:border-[#242078] hover:border-gray-400
-                                   transition-all duration-300"
-                    />
+                        className="w-full border border-gray-300 rounded-sm p-2 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-[#242078] focus:border-[#242078] hover:border-gray-400 transition-all duration-300" />
 
                     {errors.contents && (
                         <p className="text-red-500 text-sm mt-1">
@@ -138,10 +159,7 @@ export default function ContactForm() {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="bg-[#fd980e] text-white rounded-pill py-3.5 px-8 font-semibold
-                               hover:bg-[#242078] hover:scale-105 transition-all duration-300
-                               disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
-                >
+                    className="bg-[#fd980e] text-white rounded-pill py-3.5 px-8 font-semibold hover:bg-[#242078] hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100" >
                     {loading ? "Envoi en cours..." : "Envoyer le message"}
                 </button>
 

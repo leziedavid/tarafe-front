@@ -43,6 +43,7 @@ const NAV_SECTIONS: NavSection[] = [
             { label: "Realisations", icon: ListTodo, href: "/dashboard/realisations" },
             { label: "Boutiques", icon: ListTodo, href: "/dashboard/store"},
             { label: "Liste des boutiques", icon: ListTodo, href: "/dashboard/boutiques"},
+            { label: "Management", icon: Settings, href: "/dashboard/management"},
             { label: "Configurations", icon: Settings, href: "/dashboard/configurations"},
             { label: "Calendar", icon: Calendar, href: "/dashboard/calendar" },
             { label: "Analytics", icon: BarChart3, href: "/dashboard/analytics" },
@@ -119,7 +120,7 @@ function SidebarContent({ pathname }: SidebarContentProps) {
         <>
             {/* Logo */}
             <div className="flex items-center gap-2 mb-10">
-                <div className="w-8 h-8 rounded-full bg-brand-primary" />
+                <div className="w-8 h-8 rounded-full bg-brand-primary2" />
                 <span className="font-bold text-lg">Admin</span>
             </div>
 
@@ -157,17 +158,14 @@ interface MenuItemProps {
 function MenuItem({ icon: Icon, label, href, badge, active }: MenuItemProps) {
     return (
         <Link href={href} className="block">
-            <div
-                className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition
-          ${active ? "bg-brand-primary text-white" : "text-gray-600 hover:bg-gray-100"}`}
-            >
+            <div className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition ${active ? "bg-brand-primary2 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
                 <div className="flex items-center gap-3">
                     <Icon className="w-5 h-5" />
                     <span className="text-sm font-medium">{label}</span>
                 </div>
 
                 {badge && (
-                    <span className="text-xs bg-brand-primary text-white px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-brand-primary2 text-white px-2 py-0.5 rounded-full">
                         {badge}
                     </span>
                 )}

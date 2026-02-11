@@ -299,7 +299,7 @@ export default function ProductsPage() {
                                     <span className={`text-xs font-semibold px-2 py-1 rounded-full ${product.tag === "NEW ARRIVAL" ? "bg-green-800 text-white" :
                                         product.tag === "GET OFF 20%" ? "bg-red-500 text-white" :
                                             product.tag === "BEST SELLER" ? "bg-purple-500 text-white" :
-                                                "bg-brand-primary text-white"
+                                                "bg-brand-primary2 text-white"
                                         }`}>
                                         {product.tag}
                                     </span>
@@ -410,7 +410,7 @@ export default function ProductsPage() {
                                                         [product.id]: index
                                                     }));
                                                 }}
-                                                className={`relative w-8 h-8 md:w-10 md:h-10 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? 'ring-1 md:ring-2 ring-brand-primary' : 'opacity-70 hover:opacity-100'
+                                                className={`relative w-8 h-8 md:w-10 md:h-10 rounded overflow-hidden flex-shrink-0 ${index === currentIndex ? 'ring-1 md:ring-2 ring-brand-primary2' : 'opacity-70 hover:opacity-100'
                                                     }`}
                                             >
                                                 <Image
@@ -479,7 +479,7 @@ export default function ProductsPage() {
                                             checked={product.featured === 1}
                                             onChange={() => toggleFeatured(product.id)}
                                         />
-                                        <div className="relative w-10 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-primary"></div>
+                                        <div className="relative w-10 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-primary2"></div>
                                     </label>
                                 </div>
                             </div>
@@ -610,7 +610,7 @@ export default function ProductsPage() {
                                     <span className={`text-xs font-semibold px-2 py-1 rounded-full ${product.tag === "NEW ARRIVAL" ? "bg-green-800 text-white" :
                                         product.tag === "GET OFF 20%" ? "bg-red-500 text-white" :
                                             product.tag === "BEST SELLER" ? "bg-purple-500 text-white" :
-                                                "bg-brand-primary text-white"
+                                                "bg-brand-primary2 text-white"
                                         }`}>
                                         {product.tag}
                                     </span>
@@ -640,7 +640,7 @@ export default function ProductsPage() {
                                         <label className="inline-flex items-center cursor-pointer">
                                             <input type="checkbox" className="sr-only peer" checked={product.featured === 1}
                                                 onChange={() => toggleFeatured(product.id)} />
-                                            <div className="relative w-9 h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-primary"></div>
+                                            <div className="relative w-9 h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-primary2"></div>
                                             <span className="select-none ms-2 text-sm font-medium">
                                                 {product.featured === 1 ? "Vedette" : "Normal"}
                                             </span>
@@ -654,7 +654,7 @@ export default function ProductsPage() {
                                         {product.images?.slice(0, 4).map((image, index) => (
                                             <button key={image.id}
                                                 onClick={() => setActiveImageIndex(prev => ({ ...prev, [product.id]: index }))}
-                                                className={`relative w-10 h-10 rounded overflow-hidden ${index === currentIndex ? 'ring-2 ring-brand-primary' : 'opacity-70 hover:opacity-100'}`}  >
+                                                className={`relative w-10 h-10 rounded overflow-hidden ${index === currentIndex ? 'ring-2 ring-brand-primary2' : 'opacity-70 hover:opacity-100'}`}  >
                                                 <Image src={`${urlImages}/${image.path}`}
                                                     alt={`Miniature ${index + 1}`}
                                                     fill
@@ -711,14 +711,14 @@ export default function ProductsPage() {
                             <button
                                 type="button"
                                 onClick={() => setViewMode('grid')}
-                                className={`px-2 sm:px-3 py-1 sm:py-2 ${viewMode === 'grid' ? 'bg-brand-primary text-white' : 'bg-white text-gray-600'}`}
+                                className={`px-2 sm:px-3 py-1 sm:py-2 ${viewMode === 'grid' ? 'bg-brand-primary2 text-white' : 'bg-white text-gray-600'}`}
                             >
                                 <Grid3x3 className="w-4 sm:w-5 h-4 sm:h-5" />
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setViewMode('list')}
-                                className={`px-2 sm:px-3 py-1 sm:py-2 ${viewMode === 'list' ? 'bg-brand-primary text-white' : 'bg-white text-gray-600'}`}
+                                className={`px-2 sm:px-3 py-1 sm:py-2 ${viewMode === 'list' ? 'bg-brand-primary2 text-white' : 'bg-white text-gray-600'}`}
                             >
                                 <List className="w-4 sm:w-5 h-4 sm:h-5" />
                             </button>
@@ -728,7 +728,7 @@ export default function ProductsPage() {
                         <button
                             type="button"
                             onClick={() => AddProduct({} as Product)}
-                            className="bg-brand-primary hover:bg-brand-secondary text-white px-3 sm:px-4 py-1 sm:py-2 rounded-lg font-medium flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+                            className="bg-brand-primary2 hover:bg-brand-secondary text-white px-3 sm:px-4 py-1 sm:py-2 rounded-lg font-medium flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
                         >
                             <Package className="w-4 sm:w-5 h-4 sm:h-5" />
                             <span className="truncate">Nouveau Produit</span>
@@ -758,7 +758,7 @@ export default function ProductsPage() {
                                 placeholder="Nom, SKU, description..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary2"
                             />
                         </div>
 
@@ -869,7 +869,7 @@ export default function ProductsPage() {
                                         <p className="text-sm text-gray-600">Produits totaux</p>
                                         <p className="text-2xl font-bold">{stats.total_items}</p>
                                     </div>
-                                    <Package className="w-8 h-8 text-brand-primary" />
+                                    <Package className="w-8 h-8 text-brand-primary2" />
                                 </div>
                             </div>
 
@@ -913,7 +913,7 @@ export default function ProductsPage() {
                 {/* Products Display */}
                 {loading ? (
                     <div className="text-center py-12">
-                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary"></div>
+                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary2"></div>
                         <p className="mt-2 text-gray-600">Chargement des produits...</p>
                     </div>
                 ) : products.length === 0 ? (
@@ -965,7 +965,7 @@ export default function ProductsPage() {
                                             key={pageNum}
                                             type="button"
                                             onClick={() => setCurrentPage(pageNum)}
-                                            className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm ${currentPage === pageNum ? 'bg-brand-primary text-white' : 'border border-gray-300 hover:bg-gray-50'}`}  >
+                                            className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm ${currentPage === pageNum ? 'bg-brand-primary2 text-white' : 'border border-gray-300 hover:bg-gray-50'}`}  >
                                             {pageNum}
                                         </button>
                                     );

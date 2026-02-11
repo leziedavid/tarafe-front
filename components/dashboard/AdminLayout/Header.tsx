@@ -107,7 +107,7 @@ export default function Header({ toggleMobileMenu }: { toggleMobileMenu: () => v
                         {loading ? (
                             <div className="w-9 h-9 rounded-full bg-gray-200 animate-pulse" />
                         ) : (
-                            <div className="w-9 h-9 rounded-full bg-brand-primary flex items-center justify-center text-white font-semibold">
+                            <div className="w-9 h-9 rounded-full bg-brand-primary2 flex items-center justify-center text-white font-semibold">
                                 {userInfo ? getInitials(userInfo.name) : <User className="w-5 h-5" />}
                             </div>
                         )}
@@ -144,7 +144,7 @@ export default function Header({ toggleMobileMenu }: { toggleMobileMenu: () => v
                                             {userInfo.email}
                                         </div>
                                         {userInfo.stores && userInfo.stores.length > 0 && (
-                                            <div className="text-xs text-brand-primary mt-1">
+                                            <div className="text-xs text-brand-primary2 mt-1">
                                                 {userInfo.stores.length} magasin(s)
                                             </div>
                                         )}
@@ -158,7 +158,7 @@ export default function Header({ toggleMobileMenu }: { toggleMobileMenu: () => v
                             {userInfo?.stores && userInfo.stores.length > 0 && (
                                 <div className="px-4 py-2 border-b hidden md:block">
                                     <div className="text-xs text-gray-500">Magasins</div>
-                                    <div className="text-sm font-medium text-brand-primary">
+                                    <div className="text-sm font-medium text-brand-primary2">
                                         {userInfo.stores.length} magasin(s) actif(s)
                                     </div>
                                 </div>

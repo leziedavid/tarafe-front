@@ -21,7 +21,7 @@ export default function Page() {
                     className={cn(
                         "px-4 py-2 font-medium",
                         activeTab === "categories"
-                            ? "border-b-2 border-brand-primary text-brand-primary"
+                            ? "border-b-2 border-brand-primary2 text-brand-primary2"
                             : "text-gray-500"
                     )}
                 >
@@ -33,7 +33,7 @@ export default function Page() {
                     className={cn(
                         "px-4 py-2 font-medium",
                         activeTab === "subcategories"
-                            ? "border-b-2 border-brand-primary text-brand-primary"
+                            ? "border-b-2 border-brand-primary2 text-brand-primary2"
                             : "text-gray-500"
                     )}
                 >
