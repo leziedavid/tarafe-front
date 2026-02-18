@@ -171,7 +171,7 @@ export const getTransactionDataGraphe = async (filters: Filters, category: strin
 };
 
 
-export const getAllTransactionTotals = async (filters: Filters, category: string | null, payment: string | null, selectedYears: string | null): Promise<BaseResponse<TransactionTotalsResponse>> => {
+export const getAllTransactionTotals = async (filters: Filters, category: string | null, payment: string | null, selectedYears: string | null, selectedCategorie: string | null,): Promise<BaseResponse<TransactionTotalsResponse>> => {
 
     // Construction de l'URL avec les paramètres de filtre
     const page = filters.page ?? 1;
@@ -184,6 +184,8 @@ export const getAllTransactionTotals = async (filters: Filters, category: string
     if (category) { url.searchParams.append('category', category); }
     if (payment) { url.searchParams.append('payment', payment); }
     if (selectedYears) { url.searchParams.append('selectedYears', selectedYears); }
+    if (selectedCategorie) { url.searchParams.append('selectedCategorie', selectedCategorie); }
+    
 
     const response = await fetch(url.toString(), {
         method: 'GET',

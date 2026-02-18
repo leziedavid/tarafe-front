@@ -168,7 +168,8 @@ export default function Page() {
 
     const getTransactionTotal = async () => {
         const filters: Filters = { page: currentPage, limit: 10, search: search || undefined, };
-        const response = await getAllTransactionTotals(filters, category, payment, selectedYears);
+        // const response = await getAllTransactionTotals(filters, category, payment, selectedYears);
+        const response = await getAllTransactionTotals(filters, category, payment, selectedYears, selectedCategorie);
         if (response.statusCode === 200 && response.data) {
             setTotal(response.data.totals); // Mettre à jour les commandes
 
