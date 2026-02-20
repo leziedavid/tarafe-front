@@ -466,7 +466,7 @@ export default function ProductForm({
                                         className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                                         aria-label={`Supprimer l'image ${index + 1}`}
                                     >
-                                        <X className="w-4 h-4" />
+                                        <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
                                     </button>
                                     <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2">
                                         Image {index + 1}
@@ -740,7 +740,7 @@ export default function ProductForm({
                                                 className="ml-2 text-red-500 hover:text-red-700"
                                                 aria-label={`Supprimer la couleur ${color}`}
                                             >
-                                                <X className="w-4 h-4" />
+                                                <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
                                             </button>
                                         )}
                                     </label>
@@ -818,7 +818,7 @@ export default function ProductForm({
                                                 className="ml-2 text-red-500 hover:text-red-700"
                                                 aria-label={`Supprimer la taille ${size}`}
                                             >
-                                                <X className="w-4 h-4" />
+                                                <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
                                             </button>
                                         )}
                                     </label>
@@ -834,7 +834,7 @@ export default function ProductForm({
 
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                         <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-                            <Tag className="w-5 h-5" />
+                            <Icon icon="solar:tag-bold" className="w-5 h-5" />
                             Options avancées
                         </h2>
 
@@ -918,7 +918,7 @@ export default function ProductForm({
                     {/* Description */}
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                         <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-                            <Star className="w-5 h-5" />
+                            <Icon icon="solar:star-bold" className="w-5 h-5" />
                             Description détaillée
                         </h2>
 

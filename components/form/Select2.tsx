@@ -198,8 +198,7 @@ export function Select2<T>(props: ComboboxProps<T>) {
                 <div className="flex items-center space-x-2">
                     <span className={disabled ? 'text-gray-600' : ''}>{labelExtractor(item)}</span>
                     {!disabled && (
-                        <CircleX
-                            className="cursor-pointer text-black h-4 w-4 hover:text-gray-700"
+                        <Icon icon="solar:close-circle-bold" className="cursor-pointer text-black h-4 w-4 hover:text-gray-700"
                             onClick={(e) => handleRemoveSelection(e)}
                         />
                     )}
