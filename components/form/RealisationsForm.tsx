@@ -13,6 +13,7 @@ import { createRealisation, getCategories, getCategoriesById, getCategoryById, u
 import { Select2 } from "./Select2";
 import RichTextEditor from "@/components/rich-text-editor";
 import { getImagesUrl } from "@/types/baseUrl";
+import { X } from "lucide-react";
 
 // ================= VALIDATION ZOD =================
 // Schéma de base sans validation des images
@@ -350,8 +351,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                                         unoptimized
                                     />
-                                    <button
-                                        type="button"
+                                    <button type="button"
                                         onClick={() => removeImage(index, false)}
                                         className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                                     >
