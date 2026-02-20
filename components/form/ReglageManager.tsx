@@ -13,6 +13,7 @@ import { reglageSchema, ReglageFormValues } from '@/types/schemas/reglageSchema'
 import { createReglage, deleteReglage, getAllReglagesIn, updateReglage } from '@/service/reglagesServices';
 import { Reglage } from '@/types/interfaces';
 import { getImagesUrl } from '@/types/baseUrl';
+import { X } from 'lucide-react';
 
 // Type pour les props du formulaire
 interface ReglageFormProps {
