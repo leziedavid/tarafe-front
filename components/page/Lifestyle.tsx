@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 export default function Lifestyle() {
     return (
@@ -12,7 +12,7 @@ export default function Lifestyle() {
                 </h3>
                 <p className="text-sm text-gray-500 mt-1">Lifestyle</p>
             </div>
-            <ArrowRight className="w-6 h-6 text-gray-800" />
+            <Icon icon="solar:alt-arrow-right-bold" className="w-6 h-6 text-gray-800" />
         </section>
     );
 }

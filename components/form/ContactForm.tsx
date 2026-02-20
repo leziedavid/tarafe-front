@@ -5,6 +5,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Icon } from "@iconify/react";
+
 // ✅ Validation Zod
 const contactSchema = z.object({
     nomPrenom: z.string().min(2, "Le nom complet est requis"),
@@ -96,11 +98,34 @@ export default function ContactForm() {
                     <span className="text-[#fd980e]">*</span>)
                 </p>
 
-                <div className="mt-6 space-y-6 text-gray-700 text-base">
-                    <p>📍 <span className="font-bold">Abidjan, Côte d’Ivoire</span></p>
-                    <p>📞 <span className="font-bold">+225 0747003450</span></p>
-                    <p>✉️ <span className="font-bold">contact@tarafe.com</span></p>
-                    <p>🕓 <span className="font-bold">9h à 20h (lundi au samedi)</span></p>
+                <div className="mt-6 space-y-4 text-gray-700 text-base font-medium">
+                    <div className="flex items-start gap-4">
+                        <div className="p-2.5 bg-[#f0f0f7] rounded-lg">
+                            <Icon icon="solar:map-point-bold" className="w-5 h-5 text-[#242078]" />
+                        </div>
+                        <p>Abidjan, Côte d’Ivoire</p>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                        <div className="p-2.5 bg-[#f0f0f7] rounded-lg">
+                            <Icon icon="solar:phone-calling-bold" className="w-5 h-5 text-[#242078]" />
+                        </div>
+                        <p>+225 0747003450</p>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                        <div className="p-2.5 bg-[#f0f0f7] rounded-lg">
+                            <Icon icon="solar:letter-bold" className="w-5 h-5 text-[#242078]" />
+                        </div>
+                        <p>contact@tarafe.com</p>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                        <div className="p-2.5 bg-[#f0f0f7] rounded-lg">
+                            <Icon icon="solar:clock-circle-bold" className="w-5 h-5 text-[#242078]" />
+                        </div>
+                        <p>9h à 20h (lundi au samedi)</p>
+                    </div>
                 </div>
             </div>
 
@@ -156,16 +181,14 @@ export default function ContactForm() {
                     )}
                 </div>
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-[#fd980e] text-white rounded-pill py-3.5 px-8 font-semibold hover:bg-[#242078] hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100" >
+                <button type="submit"  disabled={loading} className="bg-[#fd980e] text-white rounded-full py-3.5 px-8 font-semibold hover:bg-[#242078] hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100" >
                     {loading ? "Envoi en cours..." : "Envoyer le message"}
                 </button>
 
                 {success && (
-                    <p className="text-green-600 text-sm text-center mt-2">
-                        ✅ Message envoyé avec succès !
+                    <p className="text-green-600 text-sm flex items-center justify-center gap-2 mt-2">
+                        <Icon icon="solar:check-circle-bold" className="w-5 h-5" />
+                        Message envoyé avec succès !
                     </p>
                 )}
             </form>

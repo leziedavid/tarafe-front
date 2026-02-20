@@ -1,26 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { Icon } from "@iconify/react";
 import { usePathname } from "next/navigation";
-import {
-    LayoutDashboard,
-    ListTodo,
-    Calendar,
-    BarChart3,
-    Users,
-    Settings,
-    HelpCircle,
-    LogOut,
-    X,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 
 /* ======================================================
 TYPES
 ====================================================== */
 type NavItem = {
     label: string;
-    icon: LucideIcon;
+    icon: string;
     href: string;
     badge?: string;
 };
@@ -37,25 +26,25 @@ const NAV_SECTIONS: NavSection[] = [
     {
         title: "MENU",
         items: [
-            { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-            { label: "transactions", icon: ListTodo, href: "/dashboard/transactions" },
-            { label: "Demandes", icon: ListTodo, href: "/dashboard/demandes", badge: "12+" },
-            { label: "Realisations", icon: ListTodo, href: "/dashboard/realisations" },
-            { label: "Boutiques", icon: ListTodo, href: "/dashboard/store"},
-            { label: "Liste des boutiques", icon: ListTodo, href: "/dashboard/boutiques"},
-            { label: "Management", icon: Settings, href: "/dashboard/management"},
-            { label: "Configurations", icon: Settings, href: "/dashboard/configurations"},
-            { label: "Calendar", icon: Calendar, href: "/dashboard/calendar" },
-            { label: "Analytics", icon: BarChart3, href: "/dashboard/analytics" },
-            { label: "Team", icon: Users, href: "/dashboard/team" },
+            { label: "Dashboard", icon: "solar:widget-bold", href: "/dashboard" },
+            { label: "transactions", icon: "solar:checklist-bold", href: "/dashboard/transactions" },
+            { label: "Demandes", icon: "solar:checklist-bold", href: "/dashboard/demandes", badge: "12+" },
+            { label: "Realisations", icon: "solar:checklist-bold", href: "/dashboard/realisations" },
+            { label: "Boutiques", icon: "solar:checklist-bold", href: "/dashboard/store" },
+            { label: "Liste des boutiques", icon: "solar:checklist-bold", href: "/dashboard/boutiques" },
+            { label: "Management", icon: "solar:settings-bold", href: "/dashboard/management" },
+            { label: "Configurations", icon: "solar:settings-bold", href: "/dashboard/configurations" },
+            { label: "Calendar", icon: "solar:calendar-bold", href: "/dashboard/calendar" },
+            { label: "Analytics", icon: "solar:chart-square-bold", href: "/dashboard/analytics" },
+            { label: "Team", icon: "solar:users-group-two-rounded-bold", href: "/dashboard/team" },
         ],
     },
     {
         title: "GENERAL",
         items: [
-            { label: "Settings", icon: Settings, href: "/dashboard/settings" },
-            { label: "Help", icon: HelpCircle, href: "/help" },
-            { label: "Logout", icon: LogOut, href: "/logout" },
+            { label: "Settings", icon: "solar:settings-bold", href: "/dashboard/settings" },
+            { label: "Help", icon: "solar:question-circle-bold", href: "/help" },
+            { label: "Logout", icon: "solar:logout-3-bold", href: "/logout" },
         ],
     },
 ];
@@ -98,7 +87,7 @@ export default function Sidebar({
                         onClick={toggleMobileMenu}
                         className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200"
                     >
-                        <X className="w-5 h-5" />
+                        <Icon icon="solar:close-square-bold" className="w-5 h-5" />
                     </button>
                 </div>
 
@@ -148,19 +137,19 @@ function SidebarContent({ pathname }: SidebarContentProps) {
 MENU ITEM
 ====================================================== */
 interface MenuItemProps {
-    icon: LucideIcon;
+    icon: string;
     label: string;
     href: string;
     badge?: string;
     active?: boolean;
 }
 
-function MenuItem({ icon: Icon, label, href, badge, active }: MenuItemProps) {
+function MenuItem({ icon, label, href, badge, active }: MenuItemProps) {
     return (
         <Link href={href} className="block">
             <div className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition ${active ? "bg-brand-primary2 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
                 <div className="flex items-center gap-3">
-                    <Icon className="w-5 h-5" />
+                    <Icon icon={icon} className="w-5 h-5" />
                     <span className="text-sm font-medium">{label}</span>
                 </div>
 

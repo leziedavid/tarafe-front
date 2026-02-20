@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { ChevronLeft, ChevronRight, Edit, Plus, Save, Settings, X, Globe, Building, Mail, Phone, MapPin, Clock, Palette, Eye, Users, MessageSquare, Image as ImageIcon, Trash2 } from 'lucide-react';
+import { Icon } from "@iconify/react";
 import RichTextEditor from '../rich-text-editor';
 import Image from "next/image";
 import { reglageSchema, ReglageFormValues } from '@/types/schemas/reglageSchema';
@@ -40,7 +40,7 @@ function ImagePreview({ src, alt, onRemove, showRemove = false }: ImagePreviewPr
             </div>
             {showRemove && onRemove && (
                 <button type="button" onClick={onRemove} className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Trash2 className="h-4 w-4" />
+                    <Icon icon="solar:trash-bin-trash-bold" className="h-4 w-4" />
                 </button>
             )}
         </div>
@@ -217,7 +217,7 @@ export default function ReglageManager() {
 
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-[#B07B5E] rounded-lg">
-                        <Settings className="h-6 w-6 text-white" />
+                        <Icon icon="solar:settings-bold" className="h-6 w-6 text-white" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">Configuration du site</h1>
@@ -229,7 +229,7 @@ export default function ReglageManager() {
                     onClick={() => { setCreating(true); setEditingId(null); }}
                     className="bg-[#B07B5E] hover:bg-[#9C6B52]"
                 >
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Icon icon="solar:add-square-bold" className="h-4 w-4 mr-2" />
                     Nouvelle configuration
                 </Button>
             </div>
@@ -265,7 +265,7 @@ export default function ReglageManager() {
                             <div className="flex justify-between items-start">
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2">
-                                        <Building className="h-5 w-5 text-gray-400" />
+                                        <Icon icon="solar:buildings-bold" className="h-5 w-5 text-gray-400" />
                                         <h3 className="text-xl font-bold text-gray-900">
                                             {displayValue(reglage.entreprise_reglages)}
                                         </h3>
@@ -286,12 +286,12 @@ export default function ReglageManager() {
                                     >
                                         {editingId === reglage.id_reglages ? (
                                             <>
-                                                <X className="h-4 w-4" />
+                                                <Icon icon="solar:close-square-bold" className="h-4 w-4" />
                                                 Annuler
                                             </>
                                         ) : (
                                             <>
-                                                <Edit className="h-4 w-4" />
+                                                <Icon icon="solar:pen-new-square-bold" className="h-4 w-4" />
                                                 Modifier
                                             </>
                                         )}
@@ -313,7 +313,7 @@ export default function ReglageManager() {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <Mail className="h-4 w-4" />
+                                        <Icon icon="solar:letter-bold" className="h-4 w-4" />
                                         <span className="text-sm">Email</span>
                                     </div>
                                     <p className="font-medium">{displayValue(reglage.email_reglages)}</p>
@@ -321,7 +321,7 @@ export default function ReglageManager() {
 
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <Phone className="h-4 w-4" />
+                                        <Icon icon="solar:phone-bold" className="h-4 w-4" />
                                         <span className="text-sm">Téléphone principal</span>
                                     </div>
                                     <p className="font-medium">{displayValue(reglage.phone1_reglages)}</p>
@@ -329,7 +329,7 @@ export default function ReglageManager() {
 
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <MapPin className="h-4 w-4" />
+                                        <Icon icon="solar:map-point-bold" className="h-4 w-4" />
                                         <span className="text-sm">Localisation</span>
                                     </div>
                                     <p className="font-medium">{displayValue(reglage.localisation_reglages)}</p>
@@ -337,7 +337,7 @@ export default function ReglageManager() {
 
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <Clock className="h-4 w-4" />
+                                        <Icon icon="solar:clock-circle-bold" className="h-4 w-4" />
                                         <span className="text-sm">Horaires</span>
                                     </div>
                                     <p className="font-medium">{displayValue(reglage.ouverture_reglages)}</p>
@@ -348,7 +348,7 @@ export default function ReglageManager() {
                             {reglage.description_reglages && (
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <MessageSquare className="h-4 w-4" />
+                                        <Icon icon="solar:chat-square-bold" className="h-4 w-4" />
                                         <span className="text-sm font-medium">Description</span>
                                     </div>
                                     <p className="text-gray-700" dangerouslySetInnerHTML={{ __html: reglage.description_reglages }} />
@@ -359,7 +359,7 @@ export default function ReglageManager() {
                             {reglage.desc_footer && (
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <Globe className="h-4 w-4" />
+                                        <Icon icon="solar:global-bold" className="h-4 w-4" />
                                         <span className="text-sm font-medium">Description Footer</span>
                                     </div>
                                     <div className="text-gray-700 prose prose-sm max-w-none">
@@ -488,21 +488,21 @@ export default function ReglageManager() {
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-2 text-gray-500">
-                                            <Eye className="h-4 w-4" />
+                                            <Icon icon="solar:eye-bold" className="h-4 w-4" />
                                             <span className="text-sm">Vues site</span>
                                         </div>
                                         <p className="text-2xl font-bold text-gray-900">{displayValue(reglage.nb_views_site)}</p>
                                     </div>
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-2 text-gray-500">
-                                            <Users className="h-4 w-4" />
+                                            <Icon icon="solar:users-group-two-rounded-bold" className="h-4 w-4" />
                                             <span className="text-sm">Vues Facebook</span>
                                         </div>
                                         <p className="text-2xl font-bold text-gray-900">{displayValue(reglage.nb_views_fb)}</p>
                                     </div>
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-2 text-gray-500">
-                                            <Users className="h-4 w-4" />
+                                            <Icon icon="solar:users-group-two-rounded-bold" className="h-4 w-4" />
                                             <span className="text-sm">Vues Instagram</span>
                                         </div>
                                         <p className="text-2xl font-bold text-gray-900">{displayValue(reglage.nb_views_insta)}</p>
@@ -563,7 +563,7 @@ export default function ReglageManager() {
                                 disabled={currentPage <= 1}
                                 className="text-xs sm:text-sm"
                             >
-                                <ChevronLeft className="h-4 w-4 sm:mr-1" />
+                                <Icon icon="solar:alt-arrow-left-bold" className="h-4 w-4 sm:mr-1" />
                                 <span className="hidden sm:inline">Précédent</span>
                             </Button>
 
@@ -575,7 +575,7 @@ export default function ReglageManager() {
                                 className="text-xs sm:text-sm"
                             >
                                 <span className="hidden sm:inline">Suivant</span>
-                                <ChevronRight className="h-4 w-4 sm:ml-1" />
+                                <Icon icon="solar:alt-arrow-right-bold" className="h-4 w-4 sm:ml-1" />
                             </Button>
                         </div>
                     </div>
@@ -692,7 +692,7 @@ function ReglageFormComponent({ reglage, onSubmit, onCancel }: ReglageFormProps)
                                 onClick={() => handleRemoveImage(fieldName)}
                                 className="flex items-center gap-1"
                             >
-                                <Trash2 className="h-3 w-3" />
+                                <Icon icon="solar:trash-bin-trash-bold" className="h-3 w-3" />
                                 Supprimer
                             </Button>
                         </div>
@@ -704,7 +704,7 @@ function ReglageFormComponent({ reglage, onSubmit, onCancel }: ReglageFormProps)
                     <div className="flex items-center justify-center w-full">
                         <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                <ImageIcon className="w-8 h-8 mb-2 text-gray-500" />
+                                <Icon icon="solar:gallery-bold" className="w-8 h-8 mb-2 text-gray-500" />
                                 <p className="mb-1 text-sm text-gray-500">
                                     <span className="font-semibold">Cliquez pour upload</span>
                                 </p>
@@ -886,11 +886,11 @@ function ReglageFormComponent({ reglage, onSubmit, onCancel }: ReglageFormProps)
                                 reglage.images1_reglages,
                                 images1File
                             )}
-                            {renderImageField( 'images2_reglages',  'Image banner 2',
+                            {renderImageField('images2_reglages', 'Image banner 2',
                                 reglage.images2_reglages,
                                 images2File
                             )}
-                            {renderImageField( 'images3_reglages', 'Image banner 3 ',
+                            {renderImageField('images3_reglages', 'Image banner 3 ',
                                 reglage.images3_reglages,
                                 images3File
                             )}
@@ -1065,7 +1065,7 @@ function ReglageFormComponent({ reglage, onSubmit, onCancel }: ReglageFormProps)
                     {isSubmitting ? (
                         <>Chargement...</>
                     ) : (
-                        <> <Save className="h-4 w-4 mr-2" /> Sauvegarder  </>
+                        <> <Icon icon="solar:diskette-bold" className="h-4 w-4 mr-2" /> Sauvegarder  </>
                     )}
                 </Button>
             </div>

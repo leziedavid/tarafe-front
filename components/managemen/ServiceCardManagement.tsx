@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ServiceCard } from "@/types/interfaces";
-import { Eye, Edit, Trash2 } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { activateServiceCard, deleteServiceCard, getAllServiceCards } from "@/service/managementServices";
 import { toast } from "sonner";
 import MyModal from "../modal/MyModal";
@@ -80,7 +80,7 @@ export default function ServiceCardManagement() {
 
             <div className="space-y-6">
                 <div className="flex justify-end mb-4">
-                    <button onClick={addNewCard}  className="px-4 py-1.5 bg-brand-primary2 text-white rounded-lg font-semibold hover:bg-brand-secondary2 transition" >
+                    <button onClick={addNewCard} className="px-4 py-1.5 bg-brand-primary2 text-white rounded-lg font-semibold hover:bg-brand-secondary2 transition" >
                         + Créer un  Service
                     </button>
                 </div>
@@ -103,10 +103,10 @@ export default function ServiceCardManagement() {
                                 {/* Boutons d'action */}
                                 <div className="flex gap-2">
                                     <button className="p-1 hover:bg-gray-100 rounded" onClick={() => editCard(card)}>
-                                        <Edit className="w-4 h-4" />
+                                        <Icon icon="solar:pen-new-square-bold" className="w-4 h-4" />
                                     </button>
                                     <button className="p-1 hover:bg-gray-100 rounded" onClick={() => deleteCard(card.id)}>
-                                        <Trash2 className="w-4 h-4" />
+                                        <Icon icon="solar:trash-bin-trash-bold" className="w-4 h-4" />
                                     </button>
                                 </div>
                             </div>

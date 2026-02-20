@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Hero } from "@/types/interfaces";
-import { Edit, Trash2 } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { getImagesUrl } from "@/types/baseUrl";
 import { activateHero, getAllHeros, deleteHero as deleteHeroAPI } from "@/service/managementServices";
 import { toast } from "sonner";
@@ -81,7 +81,7 @@ export default function HeroManagement() {
         <>
             <div className="space-y-6">
                 <div className="flex justify-end mb-4">
-                    <button  onClick={addNewHero}  className="px-4 py-1.5 bg-brand-primary2 text-white rounded-lg font-semibold hover:bg-brand-secondary2 transition" >
+                    <button onClick={addNewHero} className="px-4 py-1.5 bg-brand-primary2 text-white rounded-lg font-semibold hover:bg-brand-secondary2 transition" >
                         + Créer un Hero
                     </button>
                 </div>
@@ -124,17 +124,17 @@ export default function HeroManagement() {
                                     <div>
                                         <h3 className="font-semibold text-sm md:text-base truncate">{hero.title}</h3>
                                         {hero.highlight_text && <p className="text-xs text-gray-500">{hero.highlight_text}</p>}
-                                        {hero.description && ( <p className="text-xs text-gray-500 mt-1" dangerouslySetInnerHTML={{ __html: hero.description }} />)}
+                                        {hero.description && (<p className="text-xs text-gray-500 mt-1" dangerouslySetInnerHTML={{ __html: hero.description }} />)}
 
                                     </div>
 
                                     {/* Boutons d'action */}
                                     <div className="flex gap-2">
                                         <button className="p-1 hover:bg-gray-100 rounded" onClick={() => editHero(hero)}>
-                                            <Edit className="w-4 h-4" />
+                                            <Icon icon="solar:pen-new-square-bold" className="w-4 h-4" />
                                         </button>
                                         <button className="p-1 hover:bg-gray-100 rounded" onClick={() => deleteHero(hero.id)}>
-                                            <Trash2 className="w-4 h-4" />
+                                            <Icon icon="solar:trash-bin-trash-bold" className="w-4 h-4" />
                                         </button>
                                     </div>
                                 </div>

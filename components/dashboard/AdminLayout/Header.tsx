@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Bell, Mail, Menu, User, Settings, LogOut } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -59,7 +59,7 @@ export default function Header({ toggleMobileMenu }: { toggleMobileMenu: () => v
     }, []);
 
     // Gérer la déconnexion
-    const handleLogout = () => {  logout(); toast.success('Déconnexion réussie'); };
+    const handleLogout = () => { logout(); toast.success('Déconnexion réussie'); };
 
     // Obtenir les initiales de l'utilisateur
     const getInitials = (name: string) => {
@@ -79,7 +79,7 @@ export default function Header({ toggleMobileMenu }: { toggleMobileMenu: () => v
                     onClick={toggleMobileMenu}
                     className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"
                 >
-                    <Menu className="w-5 h-5" />
+                    <Icon icon="solar:hamburger-menu-bold" className="w-5 h-5" />
                 </button>
             </div>
 
@@ -92,7 +92,7 @@ export default function Header({ toggleMobileMenu }: { toggleMobileMenu: () => v
                 {/* Icons visible seulement sur desktop */}
                 <div className="hidden md:flex items-center gap-5">
                     <IconButton>
-                        <Bell className="w-5 h-5" />
+                        <Icon icon="solar:bell-bold" className="w-5 h-5" />
                     </IconButton>
                 </div>
 
@@ -108,7 +108,7 @@ export default function Header({ toggleMobileMenu }: { toggleMobileMenu: () => v
                             <div className="w-9 h-9 rounded-full bg-gray-200 animate-pulse" />
                         ) : (
                             <div className="w-9 h-9 rounded-full bg-brand-primary2 flex items-center justify-center text-white font-semibold">
-                                {userInfo ? getInitials(userInfo.name) : <User className="w-5 h-5" />}
+                                {userInfo ? getInitials(userInfo.name) : <Icon icon="solar:user-bold" className="w-5 h-5" />}
                             </div>
                         )}
 
@@ -164,30 +164,30 @@ export default function Header({ toggleMobileMenu }: { toggleMobileMenu: () => v
                                 </div>
                             )}
 
-                            <button 
+                            <button
                                 onClick={() => {
                                     setUserMenuOpen(false);
                                     router.push('/dashboard/profile');
                                 }}
                                 className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-left"
                             >
-                                <User className="w-4 h-4" />
+                                <Icon icon="solar:user-bold" className="w-4 h-4" />
                                 <span>Mon compte</span>
                             </button>
 
-                            <button 
+                            <button
                                 onClick={() => {
                                     setUserMenuOpen(false);
                                     router.push('/dashboard/settings');
                                 }}
                                 className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-left"
                             >
-                                <Settings className="w-4 h-4" />
+                                <Icon icon="solar:settings-bold" className="w-4 h-4" />
                                 <span>Paramètres</span>
                             </button>
 
-                            <button   onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-left text-red-600" >
-                                <LogOut className="w-4 h-4" />
+                            <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-left text-red-600" >
+                                <Icon icon="solar:logout-3-bold" className="w-4 h-4" />
                                 <span>Déconnexion</span>
                             </button>
                         </div>

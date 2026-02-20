@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { HandCoins } from 'lucide-react';
+import { Icon } from "@iconify/react";
 import { CategorieTransaction, Transaction } from '@/types/interfaces';
 import { fetchCategorieTransaction, submitTransaction, updateTransaction } from '@/service/transactionServices';
 import { transactionSchema } from '@/types/schemas/transactionSchema';
@@ -218,7 +218,7 @@ export default function TransacModal({ initialValues, isOpen, onClose, fetchData
         <div className="bg-white">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                    <HandCoins className="h-6 w-6 text-green-600" />
+                    <Icon icon="solar:hand-money-bold" className="h-6 w-6 text-green-600" />
                     <h2 className="text-xl font-semibold">
                         {formData.id ? 'Modifier la transaction' : 'Nouvelle transaction'}
                     </h2>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 import Footer from "@/components/page/Footer";
 import { OptionRealisation, Realisation, Reglage } from "@/types/interfaces";
@@ -144,14 +144,14 @@ export default function AllProduits() {
 
                 {/* Header */}
                 <div className="flex mb-5 ">
-                    <h2 className="text-xl sm:text-1xl px-5 md:px-15 md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight">
+                    <h2 className="text-brand-secondary text-xl sm:text-1xl px-5 md:px-15 md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight">
                         DÉCOUVRIR NOS CRÉATIONS
                     </h2>
                 </div>
 
 
                 <div className="text-xl sm:text-1xl px-5 md:px-15 md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight space-x-2 space-y-2">
-                    <button key="all" onClick={() => { handleFilter(0); }} className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                    <button key="all" onClick={() => { handleFilter(0); }} className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
                         Tous
                     </button>
 
@@ -159,7 +159,7 @@ export default function AllProduits() {
                         <button
                             key={cat.id_option_reaalisation}
                             onClick={() => handleFilter(cat.id_option_reaalisation)}
-                            className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.id_option_reaalisation ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                            className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.id_option_reaalisation ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
                             {cat.libelleOption_reaalisation}
                         </button>
                     ))}
@@ -182,7 +182,7 @@ export default function AllProduits() {
                                 onClick={onPreviousPage}
                                 disabled={currentPage <= 1}
                             >
-                                <ChevronLeft className="h-4 w-4 mr-1" />
+                                <Icon icon="solar:alt-arrow-left-bold" className="h-4 w-4 mr-1" />
                                 Précédent
                             </button>
 
@@ -192,7 +192,7 @@ export default function AllProduits() {
                                 disabled={currentPage >= totalPages}
                             >
                                 Suivant
-                                <ChevronRight className="h-4 w-4 ml-1" />
+                                <Icon icon="solar:alt-arrow-right-bold" className="h-4 w-4 ml-1" />
                             </button>
                         </div>
                     </div>

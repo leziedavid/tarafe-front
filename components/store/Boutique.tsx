@@ -9,7 +9,7 @@ import { prepareProductParams } from "@/types/prepareProductParams";
 import { getImagesUrl } from "@/types/baseUrl";
 import { toast } from "sonner";
 import { CategoryProduct, Product, SubCategoryProduct } from "@/types/interfaces";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Icon } from "@iconify/react";
 import AddCart from "./AddCart";
 import { useAlert } from "@/contexts/AlertContext";
 
@@ -162,20 +162,20 @@ export default function Store() {
         <section className="max-w-7xl mx-auto px-6 py-2">
             <ProductHero />
 
-            <h2 className="text-3xl font-medium mb-6 mt-12">Notre boutique en ligne</h2>
+            <h2 className="text-brand-secondary text-3xl font-bold mb-6 mt-12 uppercase">Notre boutique en ligne</h2>
 
             {/* Categories */}
             <div className="flex flex-wrap gap-3 mb-6">
                 {loading ? (
                     Array(5).fill(0).map((_, i) => (<div key={i} className="w-24 h-8 bg-gray-200 rounded-full animate-pulse" />))) : (
                     <>
-                        <button  key="all"  onClick={() => {
-                                setActiveCategory("ALL");
-                                setSelectedCategory(null);
-                                setActiveSubCategory(null);
-                                setSelectedSubCategory(null);
-                            }}
-                            className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === "ALL" ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                        <button key="all" onClick={() => {
+                            setActiveCategory("ALL");
+                            setSelectedCategory(null);
+                            setActiveSubCategory(null);
+                            setSelectedSubCategory(null);
+                        }}
+                            className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === "ALL" ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
                             Tous
                         </button>
 
@@ -188,7 +188,7 @@ export default function Store() {
                                     setActiveSubCategory(null);
                                     setSelectedSubCategory(null);
                                 }}
-                                className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.name ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                                className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.name ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
                                 {cat.name}
                             </button>
                         ))}
@@ -207,7 +207,7 @@ export default function Store() {
                                 setActiveSubCategory(sub.name);
                                 setSelectedSubCategory(sub.id);
                             }}
-                            className={`px-4 py-1.5 rounded-full font-medium text-xs border transition ${activeSubCategory === sub.name ? "bg-[#c08457] text-white" : "bg-white text-gray-600"}`}  >
+                            className={`px-4 py-1.5 rounded-full font-medium text-xs border transition ${activeSubCategory === sub.name ? "bg-brand-primary text-white" : "bg-brand-secondary text-white"}`}  >
                             {sub.name}
                         </button>
                     ))
@@ -217,7 +217,7 @@ export default function Store() {
             {/* Products grid */}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0 mb-8">
                 {loading ? (
-                    Array(8).fill(0).map((_, i) => (  <div key={i} className="animate-pulse bg-gray-200 rounded-3xl h-[220px]" />  ))
+                    Array(8).fill(0).map((_, i) => (<div key={i} className="animate-pulse bg-gray-200 rounded-3xl h-[220px]" />))
                 ) : (
                     products.map((product) => {
                         const activeImage = getActiveImage(product);
@@ -237,11 +237,11 @@ export default function Store() {
                                     {/* Boutons de navigation du slider (seulement si >1 image) */}
                                     {totalImages > 1 && (
                                         <>
-                                            <button  type="button"  onClick={(e) => {   e.stopPropagation(); prevImage(product.id);  }}  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1 rounded-full hover:bg-white z-20"  >
-                                                <ChevronLeft className="w-4 h-4" />
+                                            <button type="button" onClick={(e) => { e.stopPropagation(); prevImage(product.id); }} className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1 rounded-full hover:bg-white z-20"  >
+                                                <Icon icon="solar:alt-arrow-left-bold" className="w-4 h-4" />
                                             </button>
-                                            <button type="button" onClick={(e) => { e.stopPropagation(); nextImage(product.id); }}  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1 rounded-full hover:bg-white z-20" >
-                                                <ChevronRight className="w-4 h-4" />
+                                            <button type="button" onClick={(e) => { e.stopPropagation(); nextImage(product.id); }} className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1 rounded-full hover:bg-white z-20" >
+                                                <Icon icon="solar:alt-arrow-right-bold" className="w-4 h-4" />
                                             </button>
 
                                             {/* Compteur d'images */}
@@ -352,7 +352,7 @@ export default function Store() {
                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
                         >
-                            <ChevronLeft className="h-4 w-4 mr-1" />
+                            <Icon icon="solar:alt-arrow-left-bold" className="h-4 w-4 mr-1" />
                             Précédent
                         </button>
 
@@ -390,7 +390,7 @@ export default function Store() {
                             disabled={currentPage === Math.ceil(totalItems / limit)}
                         >
                             Suivant
-                            <ChevronRight className="h-4 w-4 ml-1" />
+                            <Icon icon="solar:alt-arrow-right-bold" className="h-4 w-4 ml-1" />
                         </button>
                     </div>
                 </div>

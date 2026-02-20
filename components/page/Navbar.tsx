@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Search, ShoppingCart, Menu, User } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useState, useEffect } from "react";
@@ -44,7 +44,7 @@ export default function Navbar() {
                                         className="p-2 rounded-md hover:bg-gray-100 transition"
                                         type="button"
                                     >
-                                        <Menu className="w-5 h-5" />
+                                        <Icon icon="solar:hamburger-menu-bold" className="w-5 h-5" />
                                     </button>
                                 </SheetTrigger>
 
@@ -106,16 +106,16 @@ export default function Navbar() {
 
                 {/* ==== RIGHT : ACTIONS ==== */}
                 <div className="flex items-center space-x-4">
-                    <Search className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" />
+                    {/* <Icon icon="solar:magnifer-bold" className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" /> */}
                     {/* Panier avec badge */}
                     <div className="relative">
-                        <ShoppingCart onClick={() => setShowSideCart(true)} className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" />
+                        <Icon  icon="solar:cart-3-bold" onClick={() => setShowSideCart(true)} className="w-5 h-5 cursor-pointer text-[#23207f] hover:text-[#fd980e] transition-colors duration-200" />
                         {cartItems > 0 && (
                             <span className="absolute -top-2 -right-2 text-[10px] text-white bg-[#B07B5E]  w-5 h-5 rounded-full flex items-center justify-center font-semibold"> {cartItems >= 9 ? "9+" : cartItems}  </span>
                         )}
                     </div>
                     <Link href="/auth/login">
-                        <User className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" />
+                        <Icon icon="solar:user-bold" className="w-5 h-5 cursor-pointer text-[#23207f] hover:text-[#fd980e] transition-colors duration-200" />
                     </Link>
                 </div>
 

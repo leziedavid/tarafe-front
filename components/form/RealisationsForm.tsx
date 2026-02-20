@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { X, Upload, Package, Hash, FileText } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { Realisation } from "@/types/interfaces";
 import { createRealisation, getCategories, getCategoriesById, getCategoryById, updateRealisation } from "@/service/realisationServices";
 import { Select2 } from "./Select2";
@@ -290,7 +290,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                                <Upload className="w-5 h-5" />
+                                <Icon icon="solar:upload-minimalistic-bold" className="w-5 h-5" />
                                 Images de la réalisation
                                 {!isEditMode && <span className="text-red-500">*</span>}
                             </h3>
@@ -302,7 +302,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
                             {/* Upload Button */}
                             <label className={`relative h-32 rounded-lg border-2 border-dashed ${existingImageUrls.length + images.length >= 8 ? 'opacity-50 cursor-not-allowed' : 'border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer'} transition-colors flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900`}>
-                                <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
+                                <Icon icon="solar:upload-minimalistic-bold" className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
                                 <span className="text-xs text-gray-600 dark:text-gray-400">Ajouter une image</span>
                                 <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">JPG, PNG</span>
                                 <input
@@ -375,7 +375,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                     {/* Informations de base */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
-                            <Package className="w-5 h-5" />
+                            <Icon icon="solar:box-bold" className="w-5 h-5" />
                             Informations de base
                         </h3>
 
@@ -386,7 +386,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                     Libellé *
                                 </label>
                                 <div className="relative">
-                                    <Hash className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <Icon icon="solar:hashtag-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                     <input
                                         id="libelle"
                                         {...register("libelle")}
@@ -427,7 +427,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                     {/* Description */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
-                            <FileText className="w-5 h-5" />
+                            <Icon icon="solar:file-text-bold" className="w-5 h-5" />
                             Description détaillée
                         </h3>
 

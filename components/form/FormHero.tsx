@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { X, Upload, Tag, FileText } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { Hero } from "@/types/interfaces";
 import { getImagesUrl } from "@/types/baseUrl";
 import { createHero, deleteHeroImage, updateHero } from "@/service/managementServices";
@@ -195,7 +195,7 @@ export default function FormHero({ isOpen, onClose, heroData, fetchData }: FormH
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                                <Upload className="w-5 h-5" />
+                                <Icon icon="solar:upload-minimalistic-bold" className="w-5 h-5" />
                                 Image du Hero
                             </h3>
                             <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -206,7 +206,7 @@ export default function FormHero({ isOpen, onClose, heroData, fetchData }: FormH
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                             {/* Upload Button */}
                             <label className={`relative h-48 rounded-lg border-2 border-dashed ${images.length >= 1 ? 'opacity-50 cursor-not-allowed' : 'border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer'} transition-colors flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-700`}>
-                                <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
+                                <Icon icon="solar:upload-minimalistic-bold" className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
                                 <span className="text-xs text-gray-600 dark:text-gray-400">Ajouter une image</span>
                                 <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">JPG, PNG, WEBP</span>
                                 <input
@@ -235,7 +235,7 @@ export default function FormHero({ isOpen, onClose, heroData, fetchData }: FormH
                                         className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                                         aria-label={`Supprimer l'image ${index + 1}`}
                                     >
-                                        <X className="w-4 h-4" />
+                                        <Icon icon="solar:close-square-bold" className="w-4 h-4" />
                                     </button>
                                     <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2">
                                         Image {index + 1}
@@ -295,7 +295,7 @@ export default function FormHero({ isOpen, onClose, heroData, fetchData }: FormH
                     {/* Options avancées */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
-                            <Tag className="w-5 h-5" />
+                            <Icon icon="solar:tag-bold" className="w-5 h-5" />
                             Options avancées
                         </h2>
 
@@ -338,11 +338,11 @@ export default function FormHero({ isOpen, onClose, heroData, fetchData }: FormH
                             </div>
                         </div>
                     </div>
-                    
-                     {/* Description avec RichTextEditor */}
+
+                    {/* Description avec RichTextEditor */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
-                            <FileText className="w-5 h-5" />
+                            <Icon icon="solar:file-text-bold" className="w-5 h-5" />
                             Description détaillée
                         </h3>
 

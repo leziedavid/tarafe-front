@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { Realisation } from "@/types/interfaces";
 import { getImagesUrl } from "@/types/baseUrl";
 import { useRouter } from "next/navigation";
@@ -75,14 +75,16 @@ const CollectionsSection: React.FC<ProductListProps> = ({ product, isLabel = fal
             {/* Header */}
             {isLabel && (
                 <div className="mb-6 sm:mb-8 md:mb-10 lg:mb-10">
-                    <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-extrabold leading-tight">
-                        NOS <br />
-                        <span className="inline-block bg-black text-white px-3 sm:px-4 py-1 rounded-lg md:rounded-xl">
-                            NOUVEAUTES
-                        </span>
+
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase mb-6 text-brand-secondary leading-tight">
+                        NOS REALISATIONS
                     </h2>
+                    <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+                        Découvrez notre portfolio de réalisations, témoignant de notre expertise et de notre engagement envers l'excellence. Chaque projet reflète notre passion pour l'innovation et la satisfaction client.
+                    </p>
                 </div>
             )}
+
 
             {/* Version mobile : TOUS les produits en 2 colonnes avec design réduit */}
             <div className="lg:hidden">
@@ -148,13 +150,12 @@ function MobileProductCard({ product }: { product: Realisation }) {
                         <p className="text-sm font-bold text-white line-clamp-1 mb-2 bg-black/10 backdrop-blur-sm px-2 py-1 rounded">
                             {product.libelle_realisations}
                         </p>
-                        <button onClick={(e) => { e.stopPropagation(); navigateTo(); }}
-                            className="flex items-center justify-between w-full max-w-[140px] bg-white text-black px-3 py-1.5 rounded-full text-xs font-medium hover:bg-[#fd980e] hover:text-white transition-all shadow-md" >
+                        {/* <button onClick={(e) => { e.stopPropagation(); navigateTo(); }} className="flex items-center justify-between w-full max-w-[140px] bg-white text-black px-3 py-1.5 rounded-full text-xs font-medium hover:bg-[#fd980e] hover:text-white transition-all shadow-md" >
                             <span>Details</span>
-                            <span className="bg-[#fd980e] text-white rounded-full p-1">
-                                <ArrowRight size={10} />
+                            <span className="bg-[#fd980e] text-white rounded-full p-1 flex items-center justify-center">
+                                <Icon icon="solar:alt-arrow-right-bold" className="w-2.5 h-2.5" />
                             </span>
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
@@ -183,27 +184,20 @@ function DesktopProductCard({ product, large = false, loading = false }: Product
 
     return (
         <div className={`relative overflow-hidden rounded-3xl group ${cardHeight} cursor-pointer`} onClick={navigateTo}>
-            <Image
-                src={`${urlImages}/${product.images_realisations}`}
-                alt={product.libelle_realisations || "Produit"}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                unoptimized
-                sizes={large ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 1024px) 100vw, 33vw"}
-            />
+            <Image src={`${urlImages}/${product.images_realisations}`}  alt={product.libelle_realisations || "Produit"} fill className="object-cover transition-transform duration-500 group-hover:scale-105"  unoptimized  sizes={large ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 1024px) 100vw, 33vw"}  />
 
             <div className="absolute inset-0 bg-black/10" />
 
             <div className="absolute bottom-6 left-6 right-6 text-white">
                 <p className="text-md font-bold max-w-xs leading-snug">{product.libelle_realisations}</p>
-                <div className="flex items-center justify-between mt-3">
+                {/* <div className="flex items-center justify-between mt-3">
                     <button onClick={navigateTo} className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-[#fd980e] hover:text-white transition">
                         Details
-                        <span className="bg-[#fd980e] text-white rounded-full p-1">
-                            <ArrowRight size={14} />
+                        <span className="bg-[#fd980e] text-white rounded-full p-1 flex items-center justify-center">
+                            <Icon icon="solar:alt-arrow-right-bold" className="w-3.5 h-3.5" />
                         </span>
                     </button>
-                </div>
+                </div> */}
             </div>
         </div>
     );

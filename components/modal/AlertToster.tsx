@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, CheckCircle, AlertTriangle, Info } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export type AlertType = "success" | "warning" | "info" | "error";
@@ -33,19 +33,19 @@ export default function AlertToster({
     const colors = {
         success: {
             bg: "from-green-100 to-green-50 border-green-300",
-            icon: <CheckCircle className="h-5 w-5 text-green-600" />,
+            icon: <Icon icon="solar:check-circle-bold" className="h-5 w-5 text-green-600" />,
         },
         warning: {
             bg: "from-yellow-100 to-yellow-50 border-yellow-300",
-            icon: <AlertTriangle className="h-5 w-5 text-yellow-600" />,
+            icon: <Icon icon="solar:danger-triangle-bold" className="h-5 w-5 text-yellow-600" />,
         },
         info: {
             bg: "from-[#155e75]/20 to-[#155e75]/10 border-[#155e75]/50",
-            icon: <Info className="h-6 w-6 text-[#155e75]" />,
+            icon: <Icon icon="solar:info-circle-bold" className="h-6 w-6 text-[#155e75]" />,
         },
         error: {
             bg: "from-red-100 to-red-50 border-red-300",
-            icon: <AlertTriangle className="h-5 w-5 text-red-600" />,
+            icon: <Icon icon="solar:danger-triangle-bold" className="h-5 w-5 text-red-600" />,
         },
     }[type];
 
@@ -72,7 +72,7 @@ export default function AlertToster({
                         {/* Bouton fermer “chapeau” */}
                         <button onClick={() => { setVisible(false); onClose?.(); }}
                             className="absolute -top-3 right-3 p-1.5 rounded-full bg-white shadow border hover:bg-[#b07b5e] hover:text-white transition-all duration-300 hover:scale-105">
-                            <X className="h-4 w-4" />
+                            <Icon icon="solar:close-square-bold" className="h-4 w-4" />
                         </button>
                     </div>
                 </motion.div>

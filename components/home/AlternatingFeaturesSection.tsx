@@ -77,23 +77,14 @@ export default function AlternatingFeaturesSection({ feature }: FeatureProps) {
                             const reverse = Number(feat.reverse) === 1;
 
                             return (
-                                <div
-                                    key={feat.id}
-                                    className="grid md:grid-cols-2 gap-12 md:gap-16 items-center"
-                                >
+                                <div key={feat.id}  className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
                                     {/* Texte */}
                                     <div className={`space-y-6 ${reverse ? "md:order-2" : "md:order-1"}`}>
-                                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase leading-tight text-tarafe-black">
+                                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase leading-tight text-brand-secondary">
                                             {feat.title}
                                         </h2>
-                                        <p
-                                            className="text-base md:text-lg leading-relaxed text-tarafe-black/80"
-                                            dangerouslySetInnerHTML={{ __html: feat.description || "Description à venir..." }}
-                                        />
-                                        <Link
-                                            href={feat.link || "#"}
-                                            className="underline font-semibold inline-flex items-center gap-2 text-tarafe-black hover:gap-4 transition-all duration-300"
-                                        >
+                                        <p  className="text-base md:text-lg leading-relaxed text-tarafe-black/80" dangerouslySetInnerHTML={{ __html: feat.description || "Description à venir..." }} />
+                                        <Link  href={feat.link || "#"} className="underline font-semibold inline-flex items-center gap-2 text-brand-secondary hover:gap-4 transition-all duration-300">
                                             En savoir plus
                                             <span>→</span>
                                         </Link>
@@ -102,14 +93,7 @@ export default function AlternatingFeaturesSection({ feature }: FeatureProps) {
                                     {/* Image */}
                                     <div className={`rounded-xl overflow-hidden ${reverse ? "md:order-1" : "md:order-2"}`}>
                                         {feat.image ? (
-                                            <Image
-                                                src={`${urlImages}/${feat.image}`}
-                                                alt={feat.title}
-                                                width={600}
-                                                height={400}
-                                                className="w-full h-auto"
-                                                unoptimized
-                                            />
+                                            <Image  src={`${urlImages}/${feat.image}`}  alt={feat.title} width={600} height={400} className="w-full h-auto" unoptimized />
                                         ) : (
                                             <div className="w-full h-[300px] md:h-[400px] bg-tarafe-gray flex items-center justify-center">
                                                 <span className="text-tarafe-black/50">Image à venir</span>

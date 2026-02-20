@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { FinalCTA } from "@/types/interfaces";
 import { createFinalCTA, updateFinalCTA } from "@/service/managementServices";
-import { FileText } from "lucide-react";
+import { Icon } from "@iconify/react";
 import RichTextEditor from "../rich-text-editor";
 
 const finalCTASchema = z.object({
@@ -119,7 +119,7 @@ export default function FinalCTAForm({ isOpen, onClose, ctaData, fetchData }: Fi
                     {/* Description avec RichTextEditor */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
-                            <FileText className="w-5 h-5" />
+                            <Icon icon="solar:file-text-bold" className="w-5 h-5" />
                             Description détaillée
                         </h3>
 

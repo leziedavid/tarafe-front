@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { cn } from "@/lib/utils";
 
 interface MyModalProps {
@@ -132,7 +132,7 @@ export default function MyModal({
                     </motion.div>
 
                     {/* === Bouton X "en chapeau" (position dynamique) === */}
-                  {/* === Bouton X “en chapeau” (légèrement plus haut) === */}
+                    {/* === Bouton X “en chapeau” (légèrement plus haut) === */}
                     <motion.button
                         onClick={handleClose}
                         className={cn(
@@ -145,7 +145,7 @@ export default function MyModal({
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.25 }}
                     >
-                        <X className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                        <Icon icon="solar:close-square-bold" className="h-5 w-5 text-gray-700 dark:text-gray-300" />
                     </motion.button>
                 </>
             )}

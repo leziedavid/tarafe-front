@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Button } from '../ui/button';
-import { Trash2 } from 'lucide-react';
+import { Icon } from "@iconify/react";
 import Image from 'next/image';
 import { getImagesUrl } from '@/types/baseUrl';
 import { FilesUploader } from '../form/FilesUploader';
@@ -131,7 +131,7 @@ const ImportData: React.FC<ImportDataProps> = ({ isOpen, onClose }) => {
                                         onClick={() => handleRemoveFile(index)}
                                         className="h-8 w-8 p-0"
                                     >
-                                        <Trash2 className="h-4 w-4 text-red-500" />
+                                        <Icon icon="solar:trash-bin-trash-bold" className="h-4 w-4 text-red-500" />
                                     </Button>
                                 </div>
                             ))}
@@ -182,7 +182,7 @@ const ImportData: React.FC<ImportDataProps> = ({ isOpen, onClose }) => {
                                             onClick={() => handleDeleteImage(image.id_img_realisations)}
                                             className="h-10 w-10"
                                         >
-                                            <Trash2 className="h-5 w-5" />
+                                            <Icon icon="solar:trash-bin-trash-bold" className="h-5 w-5" />
                                         </Button>
                                     </div>
                                 </div>

@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { CalendarIcon, X } from 'lucide-react';
+import { Icon } from "@iconify/react";
 import * as React from 'react';
 import { DateRange } from 'react-day-picker';
 
@@ -50,7 +50,7 @@ export function CalendarDateRangePicker({
             )}
             disabled={isLoading}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <Icon icon="solar:calendar-bold" className="mr-2 h-4 w-4" />
             {date?.from ? (
               date.to ? (
                 <>
@@ -64,7 +64,8 @@ export function CalendarDateRangePicker({
               <span>Choisir une période</span>
             )}
             {date && (
-              <X
+              <Icon
+                icon="solar:close-square-bold"
                 className="ml-auto h-4 w-4 opacity-50 hover:opacity-100"
                 onClick={(e) => {
                   e.stopPropagation();

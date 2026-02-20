@@ -10,6 +10,7 @@ import { getAllCategoriesGallery, getAllImagesGallery } from "@/service/galleryS
 import { Filters } from "@/types/Filters";
 import { toast } from "sonner";
 import Footer from "./Footer";
+import { Icon } from "@iconify/react";
 
 interface Product {
     id: number;
@@ -19,75 +20,6 @@ interface Product {
     image: string;
     category: string;
 }
-
-const products: Product[] = [
-    {
-        id: 1,
-        name: "The Classic Knit Polo",
-        price: 12.0,
-        colors: "7 Colors available",
-        image: "/ads/Tarafe-51069Z.jpg",
-        category: "MEN'S",
-    },
-    {
-        id: 2,
-        name: "Zip Jacket",
-        price: 16.25,
-        colors: "2 Colors available",
-        image: "/ads/Tarafe-45821F.jpg",
-        category: "JACKET",
-    },
-    {
-        id: 3,
-        name: "The Utility Jacket",
-        price: 25.0,
-        colors: "3 Colors available",
-        image: "/ads/Tarafe-51069Z.jpg",
-        category: "WOMEN'S",
-    },
-    {
-        id: 4,
-        name: "The Suede Jacket",
-        price: 18.75,
-        colors: "7 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "SUITS",
-    },
-    {
-        id: 5,
-        name: "Casual Hoodie",
-        price: 14.5,
-        colors: "5 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "HOODIE",
-    },
-    {
-        id: 6,
-        name: "Urban Crewneck",
-        price: 10.99,
-        colors: "3 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "CREWNECK",
-    },
-    {
-        id: 7,
-        name: "Slim T-Shirt",
-        price: 8.75,
-        colors: "4 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "T-SHIRT",
-    },
-    {
-        id: 8,
-        name: "Elegant Dress",
-        price: 21.0,
-        colors: "2 Colors available",
-        image: "/ads/fille-noir.jpg",
-        category: "WOMEN'S",
-    },
-];
-
-// const categories = ["ALL", "WOMEN'S", "MEN'S", "T-SHIRT", "SUITS", "CREWNECK", "JACKET", "HOODIE"];
 
 export default function HomeGallerie() {
 
@@ -192,7 +124,7 @@ export default function HomeGallerie() {
             <section className="max-w-7xl mx-auto px-6 py-10">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-10">
-                    <h2 className="text-xl sm:text-1xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight ">
+                    <h2 className="text-brand-secondary text-xl sm:text-1xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight ">
                         NOS REALISATIONS
                     </h2>
                 </div>
@@ -203,7 +135,7 @@ export default function HomeGallerie() {
                     {loading ? (
                         Array(5).fill(0).map((_, i) => (<div key={i} className="w-24 h-8 bg-gray-200 rounded-full animate-pulse" />))) : (
                         <>
-                            <button key="all" onClick={() => { handleFilter(0); }} className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                            <button key="all" onClick={() => { handleFilter(0); }} className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
                                 Tous
                             </button>
 
@@ -211,21 +143,15 @@ export default function HomeGallerie() {
                                 <button
                                     key={cat.idcategories_gallery}
                                     onClick={() => handleFilter(cat.idcategories_gallery)}
-                                    className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.idcategories_gallery ? "bg-black text-white" : "bg-white text-black border-gray-300"}`}  >
+                                    className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.idcategories_gallery ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
                                     {cat.libelle}
                                 </button>
                             ))}
+
+                            <Icon onClick={resetFilters} icon="solar:backspace-bold" width="40" height="40" className="text-gray-400 hover:text-gray-500 transition-colors duration-200" />
                         </>
                     )}
                 </div>
-
-                {/* Bouton Réinitialiser visible uniquement si une catégorie est active */}
-                <div className={`flex justify-center mb-8 transition-all duration-300 ${activeCategory !== 0 ? "opacity-100 max-h-20" : "opacity-0 max-h-0 overflow-hidden"}`}>
-                    <button onClick={resetFilters} className="px-6 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium transition transform hover:scale-105">
-                        Réinitialiser
-                    </button>
-                </div>
-
 
                 {/* Product Grid ou Spinner */}
                 {loading ? (
@@ -241,11 +167,11 @@ export default function HomeGallerie() {
                                     {/* Image */}
                                     <div className="w-full h-[220px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-center bg-cover rounded-3xl" style={{ backgroundImage: `url(${urlImages}/${item.files_gallerie_images})` }} />
                                     {/* Overlay bouton Voir plus */}
-                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 sm:group-hover:opacity-100 transition">
+                                    {/* <div className="absolute inset-0 flex items-center justify-center opacity-0 sm:group-hover:opacity-100 transition">
                                         <button className="bg-[#c08457] text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold" >
                                             Voir plus
                                         </button>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         ))}

@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 export default function Hero() {
     return (
@@ -17,7 +17,7 @@ export default function Hero() {
                     </p>
 
                     <button className="mt-6 flex items-center gap-2 bg-white text-black px-6 py-2 rounded-full text-sm">
-                        Explore Product <ArrowRight size={16} />
+                        Explore Product <Icon icon="solar:alt-arrow-right-bold" className="w-4 h-4" />
                     </button>
                 </div>
             </div>

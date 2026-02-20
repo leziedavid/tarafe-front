@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Loader2 } from 'lucide-react'; // Assurez-vous d'importer Loader2 depuis lucide-react ou autre package d'icônes
+import { Icon } from "@iconify/react";
 
 interface Option {
     id_option_reaalisation: number;
@@ -30,7 +30,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ options, onFilterChange
         <div className="mb-3">
             <h4 className="text-xl font-bold mb-2">Filtrer par catégorie</h4>
             <div className="flex gap-4 flex-wrap">
-                
+
                 <button className={`p-2 rounded-full px-3 text-sm text-center me-3 ${selectedCategory === null ? 'bg-[#242078] text-white' : 'bg-gray-200'}`} onClick={() => handleCategoryChange(null)} >
                     Toutes
                 </button>
@@ -42,7 +42,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ options, onFilterChange
                         onClick={() => handleCategoryChange(option.id_option_reaalisation)}
                     >
                         {selectedCategory === option.id_option_reaalisation && loading ? (
-                            <Loader2 className="animate-spin w-5 h-5" />
+                            <Icon icon="solar:spinner-bold" className="animate-spin w-5 h-5" />
                         ) : (
                             option.libelleOption_reaalisation
                         )}

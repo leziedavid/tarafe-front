@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Instagram, Twitter, Facebook } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 export default function Hero() {
     return (
@@ -26,9 +26,9 @@ export default function Hero() {
                         {/* Partie supérieure avec icônes sociaux */}
                         <div className="flex justify-between items-start">
                             <div className="flex items-center space-x-2 sm:space-x-3">
-                                {[Instagram, Facebook, Twitter].map((Icon, index) => (
-                                    <button key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-full hover:bg-[#fd980e] hover:scale-110 transition-all duration-300 flex-shrink-0" aria-label={`Suivez-nous sur ${Icon.name}`}>
-                                        <Icon className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white" />
+                                {["solar:instagram-bold", "solar:facebook-bold", "solar:twitter-bold"].map((iconName, index) => (
+                                    <button key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-full hover:bg-[#fd980e] hover:scale-110 transition-all duration-300 flex-shrink-0" aria-label={`Suivez-nous`}>
+                                        <Icon icon={iconName} className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white" />
                                     </button>
                                 ))}
                             </div>

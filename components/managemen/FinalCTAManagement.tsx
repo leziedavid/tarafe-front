@@ -7,7 +7,7 @@ import DeleteDialog from "../modal/DeleteDialog";
 import FinalCTAForm from "../form/FinalCTAForm";
 import { activateFinalCTA, deleteFinalCTA, getAllFinalCTA } from "@/service/managementServices";
 import { toast } from "sonner";
-import { Edit, Trash2 } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 
 export default function FinalCTAManagement() {
@@ -101,20 +101,20 @@ export default function FinalCTAManagement() {
                                 {/* Boutons d'action */}
                                 <div className="flex gap-2">
                                     <button className="p-1 hover:bg-gray-100 rounded" onClick={() => editCard(cta)}>
-                                        <Edit className="w-4 h-4" />
+                                        <Icon icon="solar:pen-new-square-bold" className="w-4 h-4" />
                                     </button>
                                     <button className="p-1 hover:bg-gray-100 rounded" onClick={() => deleteCTA(cta.id)}>
-                                        <Trash2 className="w-4 h-4" />
+                                        <Icon icon="solar:trash-bin-trash-bold" className="w-4 h-4" />
                                     </button>
                                 </div>
                             </div>
 
-                           {/* Toggles */}
+                            {/* Toggles */}
                             <div className="mt-3 flex flex-wrap gap-4 items-center">
                                 {/* Statut */}
                                 <div className="flex items-center">
                                     <label className="inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" className="sr-only peer" checked={String(cta.active) === "1"}  onChange={() => handleToggleActive(cta.id, cta.active)}/>
+                                        <input type="checkbox" className="sr-only peer" checked={String(cta.active) === "1"} onChange={() => handleToggleActive(cta.id, cta.active)} />
                                         <div className="relative w-9 h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-800"></div>
                                         <span className="select-none ms-2 text-sm font-medium">
                                             {String(cta.active) === "1" ? "Actif" : "Inactif"}

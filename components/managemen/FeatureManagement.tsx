@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Feature } from "@/types/interfaces";
-import { Eye, Edit, Trash2 } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { getImagesUrl } from "@/types/baseUrl";
 import { activateFeature, deleteFeature, getAllFeatures } from "@/service/managementServices";
 import { toast } from "sonner";
@@ -87,7 +87,7 @@ export default function FeatureManagement() {
 
             <div className="space-y-6">
                 <div className="flex justify-end mb-4">
-                    <button onClick={addNewFeature}  className="px-4 py-1.5 bg-brand-primary2 text-white rounded-lg font-semibold hover:bg-brand-secondary2 transition" >
+                    <button onClick={addNewFeature} className="px-4 py-1.5 bg-brand-primary2 text-white rounded-lg font-semibold hover:bg-brand-secondary2 transition" >
                         + Créer une caractéristique
                     </button>
                 </div>
@@ -132,10 +132,10 @@ export default function FeatureManagement() {
                                     {/* Boutons d'action */}
                                     <div className="flex gap-2">
                                         <button className="p-1 hover:bg-gray-100 rounded" onClick={() => editFeature(feature)}>
-                                            <Edit className="w-4 h-4" />
+                                            <Icon icon="solar:pen-new-square-bold" className="w-4 h-4" />
                                         </button>
                                         <button className="p-1 hover:bg-gray-100 rounded" onClick={() => deleteFeatureAPI(feature.id)}>
-                                            <Trash2 className="w-4 h-4" />
+                                            <Icon icon="solar:trash-bin-trash-bold" className="w-4 h-4" />
                                         </button>
                                     </div>
                                 </div>

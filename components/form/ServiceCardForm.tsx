@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { ServiceCard } from "@/types/interfaces";
 import { createServiceCard, updateServiceCard } from "@/service/managementServices";
-import { FileText, Tag } from "lucide-react";
+import { Icon } from "@iconify/react";
 import RichTextEditor from "../rich-text-editor";
 
 // ================= ZOD VALIDATION =================
@@ -120,7 +120,7 @@ export default function ServiceCardForm({ isOpen, onClose, cardData, fetchData }
                     {/* Options avancées */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
-                            <Tag className="w-5 h-5" />
+                            <Icon icon="solar:tag-bold" className="w-5 h-5" />
                             Options avancées
                         </h2>
 
@@ -159,7 +159,7 @@ export default function ServiceCardForm({ isOpen, onClose, cardData, fetchData }
                     {/* Description avec RichTextEditor */}
                     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-6">
-                            <FileText className="w-5 h-5" />
+                            <Icon icon="solar:file-text-bold" className="w-5 h-5" />
                             Description détaillée
                         </h3>
 
@@ -167,10 +167,10 @@ export default function ServiceCardForm({ isOpen, onClose, cardData, fetchData }
                             <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Description
                             </label>
-                            <Controller  name="description"
+                            <Controller name="description"
                                 control={control}
                                 render={({ field }) => (
-                                    <RichTextEditor  content={field.value || ""}  onChange={field.onChange} editable={true} />
+                                    <RichTextEditor content={field.value || ""} onChange={field.onChange} editable={true} />
                                 )}
                             />
                             {errors.description && (

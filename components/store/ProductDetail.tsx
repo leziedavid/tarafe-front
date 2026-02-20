@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Product } from '@/types/interfaces';
-import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
+import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { useCart } from '@/app/context/CartProvider';
 
@@ -16,12 +16,12 @@ interface ProductDetailProps {
     imageBaseUrl?: string;
 }
 
-const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNegotiate,  onOrder,  imageBaseUrl = '' }) => {
+const ProductDetail: React.FC<ProductDetailProps> = ({ product, onBack, onNegotiate, onOrder, imageBaseUrl = '' }) => {
     // États pour le slider d'images
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const { updateCart } = useCart();
-    
+
     // Si pas de produit, afficher un état de chargement ou message d'erreur
     if (!product) {
         return (
@@ -36,41 +36,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNego
                                     onClick={onBack}
                                     className="p-2 -ml-2 mb-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
                                 >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="lucide lucide-arrow-left w-5 h-5 text-slate-600 dark:text-slate-400"
-                                    >
-                                        <path d="m12 19-7-7 7-7"></path>
-                                        <path d="M19 12H5"></path>
-                                    </svg>
+                                    <Icon icon="solar:alt-arrow-left-bold" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                                 </button>
 
                                 {/* Message d'erreur */}
                                 <div className="text-center py-12">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="48"
-                                        height="48"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="text-slate-400 mx-auto"
-                                    >
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                    </svg>
+                                    <Icon icon="solar:info-circle-bold" className="text-slate-400 mx-auto w-12 h-12" />
                                     <h2 className="mt-4 text-xl font-semibold text-slate-900 dark:text-white">
                                         Produit non trouvé
                                     </h2>
@@ -101,18 +72,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNego
         return (
             <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                    <svg
+                    <Icon
                         key={i}
+                        icon="solar:star-bold"
                         className={`w-5 h-5 ${i < Math.floor(numericRating)
-                            ? 'text-amber-500 fill-amber-500'
+                            ? 'text-amber-500'
                             : 'text-slate-300 dark:text-slate-600'
                             }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
+                    />
                 ))}
                 <span className="ml-2 text-sm text-slate-600 dark:text-slate-400">
                     {numericRating.toFixed(1)} ({product.review_count} avis)
@@ -227,45 +194,32 @@ const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNego
                     <div className="pt-2">
                         <div className="pb-28">
                             {/* Bouton retour */}
-                            <button   type="button"   onClick={onBack}  className="p-2 -ml-2 mb-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="lucide lucide-arrow-left w-5 h-5 text-slate-600 dark:text-slate-400" >
-                                    <path d="m12 19-7-7 7-7"></path>
-                                    <path d="M19 12H5"></path>
-                                </svg>
+                            <button type="button" onClick={onBack} className="p-2 -ml-2 mb-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" >
+                                <Icon icon="solar:alt-arrow-left-bold" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                             </button>
 
                             {/* Section Image avec Slider */}
                             <div className="relative aspect-square rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800">
                                 {currentImage ? (
                                     <>
-                                        <img src={`${imageBaseUrl}/${currentImage.path}`}   alt={`${product.name} - Image ${currentImageIndex + 1}`} className="w-full h-full object-cover cursor-pointer"   onClick={() => setIsFullscreen(true)} />
+                                        <img src={`${imageBaseUrl}/${currentImage.path}`} alt={`${product.name} - Image ${currentImageIndex + 1}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setIsFullscreen(true)} />
 
                                         {/* Bouton plein écran */}
-                                        <button  type="button" onClick={() => setIsFullscreen(true)}  className="absolute top-4 right-4 bg-white/80 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700 p-2 rounded-full transition-colors z-20"  >
-                                            <Maximize2 className="w-4 h-4 text-slate-700 dark:text-slate-300" />
+                                        <button type="button" onClick={() => setIsFullscreen(true)} className="absolute top-4 right-4 bg-white/80 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700 p-2 rounded-full transition-colors z-20"  >
+                                            <Icon icon="solar:full-screen-bold" className="w-4 h-4 text-slate-700 dark:text-slate-300" />
                                         </button>
 
                                         {/* Contrôles du slider (si plus d'une image) */}
                                         {totalImages > 1 && (
                                             <>
                                                 {/* Bouton précédent */}
-                                                <button  type="button"  onClick={(e) => {e.stopPropagation();  prevImage();}}  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700 p-2 rounded-full transition-colors z-20" >
-                                                    <ChevronLeft className="w-5 h-5 text-slate-700 dark:text-slate-300" />
+                                                <button type="button" onClick={(e) => { e.stopPropagation(); prevImage(); }} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700 p-2 rounded-full transition-colors z-20" >
+                                                    <Icon icon="solar:alt-arrow-left-bold" className="w-5 h-5 text-slate-700 dark:text-slate-300" />
                                                 </button>
 
                                                 {/* Bouton suivant */}
-                                                <button  type="button" onClick={(e) => {  e.stopPropagation();  nextImage();  }} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700 p-2 rounded-full transition-colors z-20" >
-                                                    <ChevronRight className="w-5 h-5 text-slate-700 dark:text-slate-300" />
+                                                <button type="button" onClick={(e) => { e.stopPropagation(); nextImage(); }} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700 p-2 rounded-full transition-colors z-20" >
+                                                    <Icon icon="solar:alt-arrow-right-bold" className="w-5 h-5 text-slate-700 dark:text-slate-300" />
                                                 </button>
 
                                                 {/* Compteur d'images */}
@@ -277,22 +231,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNego
                                     </>
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-slate-400">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            className="w-20 h-20"
-                                        >
-                                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-                                            <circle cx="9" cy="9" r="2"></circle>
-                                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-                                        </svg>
+                                        <Icon icon="solar:gallery-bold" className="w-20 h-20 text-slate-400" />
                                     </div>
                                 )}
 
@@ -406,33 +345,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNego
                                 {/* Livraison et paiement */}
                                 <div className="text-sm text-slate-600 dark:text-slate-400 space-y-2">
                                     <p className="flex items-center gap-2">
-                                        <svg   xmlns="http://www.w3.org/2000/svg"   width="16"  height="16"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            className="lucide lucide-truck" >
-                                            <path d="M5 18H3c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v11" />
-                                            <path d="M14 9h4l4 4v4c0 .6-.4 1-1 1h-2" />
-                                            <circle cx="7" cy="18" r="2" />
-                                            <path d="M15 18H9" />
-                                            <circle cx="17" cy="18" r="2" />
-                                        </svg>
+                                        <Icon icon="solar:delivery-bold" className="w-4 h-4" />
                                         🚚 Livraison disponible
                                     </p>
                                     <p className="flex items-center gap-2">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="16"
-                                            height="16"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            className="lucide lucide-shield-check"
-                                        >
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-                                            <path d="m9 12 2 2 4-4" />
-                                        </svg>
+                                        <Icon icon="solar:shield-check-bold" className="w-4 h-4" />
                                         Paiement sécurisé
                                     </p>
                                 </div>
@@ -522,11 +439,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNego
                             {/* Boutons d'action fixés en bas */}
                             <div className="fixed bottom-0 left-0 right-0 p-4 pb-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
                                 <div className="flex gap-3 max-w-md mx-auto">
-                                    <button  onClick={() => onNegotiate?.(product)}  disabled={!isAvailable}   className="inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 dark:focus-visible:ring-slate-300 border bg-white dark:bg-slate-800 shadow-none hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-50 h-12 px-4 flex-1 py-6 rounded-2xl text-base font-medium border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"  type="button"  >
+                                    <button onClick={() => onNegotiate?.(product)} disabled={!isAvailable} className="inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 dark:focus-visible:ring-slate-300 border bg-white dark:bg-slate-800 shadow-none hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-50 h-12 px-4 flex-1 py-6 rounded-2xl text-base font-medium border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed" type="button"  >
                                         Négocier
                                     </button>
-                                    <button  onClick={() => updateCart(product, 1)}  disabled={!isAvailable || product.stock <= 0} className={`inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 dark:focus-visible:ring-slate-300 shadow-none h-12 px-4 flex-[2] py-6 rounded-2xl text-base font-medium ${!isAvailable || product.stock <= 0  ? 'bg-slate-400 dark:bg-slate-700 cursor-not-allowed'  : 'bg-slate-900 dark:bg-blue-900 hover:bg-slate-800 dark:hover:bg-blue-800 text-white dark:text-slate-50'  }`}  type="button"  >
-                                        {!isAvailable ? 'Indisponible' :   product.stock <= 0 ? 'Rupture de stock' : 'Commander →'}
+                                    <button onClick={() => updateCart(product, 1)} disabled={!isAvailable || product.stock <= 0} className={`inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 dark:focus-visible:ring-slate-300 shadow-none h-12 px-4 flex-[2] py-6 rounded-2xl text-base font-medium ${!isAvailable || product.stock <= 0 ? 'bg-slate-400 dark:bg-slate-700 cursor-not-allowed' : 'bg-slate-900 dark:bg-blue-900 hover:bg-slate-800 dark:hover:bg-blue-800 text-white dark:text-slate-50'}`} type="button"  >
+                                        {!isAvailable ? 'Indisponible' : product.stock <= 0 ? 'Rupture de stock' : 'Commander →'}
                                     </button>
                                 </div>
                             </div>
@@ -537,18 +454,18 @@ const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNego
 
             {/* Modal plein écran */}
             {isFullscreen && currentImage && (
-                <div  className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4"  onClick={() => setIsFullscreen(false)}  >
+                <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4" onClick={() => setIsFullscreen(false)}  >
                     <div className="relative w-full max-w-4xl max-h-[90vh]">
-                        <Image src={`${imageBaseUrl}/${currentImage.path}`} alt={`${product.name} - Plein écran`} width={1200} height={800} priority  className="w-full h-full object-contain max-h-[80vh]" unoptimized/>
+                        <Image src={`${imageBaseUrl}/${currentImage.path}`} alt={`${product.name} - Plein écran`} width={1200} height={800} priority className="w-full h-full object-contain max-h-[80vh]" unoptimized />
                         {/* Contrôles du slider en plein écran */}
                         {totalImages > 1 && (
                             <>
-                                <button  type="button"  onClick={(e) => {  e.stopPropagation(); prevImage();  }}  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 p-3 rounded-full transition-colors"  >
-                                    <ChevronLeft className="w-6 h-6 text-white" />
+                                <button type="button" onClick={(e) => { e.stopPropagation(); prevImage(); }} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 p-3 rounded-full transition-colors"  >
+                                    <Icon icon="solar:alt-arrow-left-bold" className="w-6 h-6 text-white" />
                                 </button>
 
-                                <button  type="button"  onClick={(e) => {  e.stopPropagation();  nextImage();   }}  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 p-3 rounded-full transition-colors"  >
-                                    <ChevronRight className="w-6 h-6 text-white" />
+                                <button type="button" onClick={(e) => { e.stopPropagation(); nextImage(); }} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 p-3 rounded-full transition-colors"  >
+                                    <Icon icon="solar:alt-arrow-right-bold" className="w-6 h-6 text-white" />
                                 </button>
 
                                 {/* Compteur d'images plein écran */}
@@ -560,8 +477,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNego
                                 <div className="absolute bottom-4 left-0 right-0">
                                     <div className="flex justify-center gap-2 overflow-x-auto px-4">
                                         {allImages.map((image, index) => (
-                                            <button  key={image.id || index}   type="button"  onClick={(e) => {  e.stopPropagation();  setCurrentImageIndex(index); }}  className={`relative flex-shrink-0 w-12 h-12 rounded overflow-hidden border-2 transition-all ${index === currentImageIndex  ? 'border-blue-500'  : 'border-transparent hover:border-white'  }`}  >
-                                                <Image src={`${imageBaseUrl}/${image.path}`}  alt={`Miniature ${index + 1}`} fill className="object-cover" unoptimized />
+                                            <button key={image.id || index} type="button" onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }} className={`relative flex-shrink-0 w-12 h-12 rounded overflow-hidden border-2 transition-all ${index === currentImageIndex ? 'border-blue-500' : 'border-transparent hover:border-white'}`}  >
+                                                <Image src={`${imageBaseUrl}/${image.path}`} alt={`Miniature ${index + 1}`} fill className="object-cover" unoptimized />
                                             </button>
                                         ))}
                                     </div>
@@ -575,21 +492,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({  product,  onBack, onNego
                             onClick={() => setIsFullscreen(false)}
                             className="absolute top-4 left-4 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="w-5 h-5"
-                            >
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
+                            <Icon icon="solar:close-square-bold" className="w-5 h-5" />
                         </button>
                     </div>
                 </div>

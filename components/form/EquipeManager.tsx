@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { ChevronLeft, ChevronRight, Edit, Plus, Save, Users, X, Mail, Briefcase, User, Image as ImageIcon, Trash2, Calendar, Clock } from 'lucide-react';
+import { Icon } from "@iconify/react";
 import Image from "next/image";
 import { equipeSchema, EquipeFormValues } from '@/types/schemas/equipeSchema';
 import { createEquipe, deleteEquipe, getAllEquipes, updateEquipe } from '@/service/reglagesServices';
@@ -50,7 +50,7 @@ function ImagePreview({ src, alt, onRemove, showRemove = false }: ImagePreviewPr
                     onClick={onRemove}
                     className="absolute top-1 right-1/2 translate-x-1/2 sm:right-2 sm:translate-x-0 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                 >
-                    <Trash2 className="h-4 w-4" />
+                    <Icon icon="solar:trash-bin-trash-bold" className="h-4 w-4" />
                 </button>
             )}
         </div>
@@ -203,7 +203,7 @@ export default function EquipeManager() {
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-[#B07B5E] rounded-lg">
-                        <Users className="h-6 w-6 text-white" />
+                        <Icon icon="solar:users-group-two-rounded-bold" className="h-6 w-6 text-white" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">Gestion des Équipes</h1>
@@ -214,7 +214,7 @@ export default function EquipeManager() {
                     onClick={() => { setCreating(true); setEditingId(null); }}
                     className="bg-[#B07B5E] hover:bg-[#9C6B52]"
                 >
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Icon icon="solar:add-square-bold" className="h-4 w-4 mr-2" />
                     Nouveau membre
                 </Button>
             </div>
@@ -257,7 +257,7 @@ export default function EquipeManager() {
                                     {/* Conteneur texte */}
                                     <div className="flex-1 pl-4 space-y-2">
                                         <div className="flex items-center gap-2">
-                                            <User className="h-5 w-5 text-gray-400" />
+                                            <Icon icon="solar:user-bold" className="h-5 w-5 text-gray-400" />
                                             <h3 className="text-xl font-bold text-gray-900 truncate">
                                                 {displayValue(equipe.nomPren_equipe)}
                                             </h3>
@@ -265,7 +265,7 @@ export default function EquipeManager() {
 
                                         <div className="space-y-1">
                                             <div className="flex items-center gap-2 text-gray-500">
-                                                <Briefcase className="h-4 w-4" />
+                                                <Icon icon="solar:case-bold" className="h-4 w-4" />
                                                 <span className="text-sm">Fonction</span>
                                             </div>
                                             <p className="font-medium text-gray-700 truncate">
@@ -285,12 +285,12 @@ export default function EquipeManager() {
                                     >
                                         {editingId === equipe.id_equipe ? (
                                             <>
-                                                <X className="h-4 w-4" />
+                                                <Icon icon="solar:close-square-bold" className="h-4 w-4" />
                                                 Annuler
                                             </>
                                         ) : (
                                             <>
-                                                <Edit className="h-4 w-4" />
+                                                <Icon icon="solar:pen-new-square-bold" className="h-4 w-4" />
                                                 Modifier
                                             </>
                                         )}
@@ -302,7 +302,7 @@ export default function EquipeManager() {
                                         onClick={() => handleDelete(equipe.id_equipe)}
                                         className="flex items-center gap-2"
                                     >
-                                        <Trash2 className="h-4 w-4" />
+                                        <Icon icon="solar:trash-bin-trash-bold" className="h-4 w-4" />
                                         Supprimer
                                     </Button>
                                 </div>
@@ -313,7 +313,7 @@ export default function EquipeManager() {
                                 {/* Email */}
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <Mail className="h-4 w-4" />
+                                        <Icon icon="solar:letter-bold" className="h-4 w-4" />
                                         <span className="text-sm font-medium">Email</span>
                                     </div>
                                     {equipe.email_equipe ? (
@@ -331,7 +331,7 @@ export default function EquipeManager() {
                                 {/* Informations système */}
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <Calendar className="h-4 w-4" />
+                                        <Icon icon="solar:calendar-bold" className="h-4 w-4" />
                                         <span className="text-sm font-medium">Dates</span>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 text-sm">
@@ -377,7 +377,7 @@ export default function EquipeManager() {
                                 disabled={currentPage <= 1}
                                 className="text-xs sm:text-sm"
                             >
-                                <ChevronLeft className="h-4 w-4 sm:mr-1" />
+                                <Icon icon="solar:alt-arrow-left-bold" className="h-4 w-4 sm:mr-1" />
                                 <span className="hidden sm:inline">Précédent</span>
                             </Button>
 
@@ -389,7 +389,7 @@ export default function EquipeManager() {
                                 className="text-xs sm:text-sm"
                             >
                                 <span className="hidden sm:inline">Suivant</span>
-                                <ChevronRight className="h-4 w-4 sm:ml-1" />
+                                <Icon icon="solar:alt-arrow-right-bold" className="h-4 w-4 sm:ml-1" />
                             </Button>
                         </div>
                     </div>
@@ -398,14 +398,14 @@ export default function EquipeManager() {
                 {/* Message si vide - placé après la boucle */}
                 {equipes.length === 0 && !creating && (
                     <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-                        <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                        <Icon icon="solar:users-group-two-rounded-bold" className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                         <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun membre d'équipe</h3>
                         <p className="text-gray-500 mb-4">Commencez par ajouter les membres fondateurs de votre entreprise.</p>
                         <Button
                             onClick={() => setCreating(true)}
                             className="bg-[#B07B5E] hover:bg-[#9C6B52]"
                         >
-                            <Plus className="h-4 w-4 mr-2" />
+                            <Icon icon="solar:add-square-bold" className="h-4 w-4 mr-2" />
                             Ajouter un membre
                         </Button>
                     </div>
@@ -531,7 +531,7 @@ function EquipeFormComponent({ equipe, onSubmit, onCancel }: EquipeFormProps) {
                                             onClick={handleRemovePhoto}
                                             className="flex items-center gap-1"
                                         >
-                                            <Trash2 className="h-3 w-3" />
+                                            <Icon icon="solar:trash-bin-trash-bold" className="h-3 w-3" />
                                             Supprimer la photo
                                         </Button>
                                     </div>
@@ -544,7 +544,7 @@ function EquipeFormComponent({ equipe, onSubmit, onCancel }: EquipeFormProps) {
                             <div className="flex items-center justify-center w-full">
                                 <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <ImageIcon className="w-12 h-12 mb-3 text-gray-400" />
+                                        <Icon icon="solar:gallery-bold" className="w-12 h-12 mb-3 text-gray-400" />
                                         <p className="mb-2 text-sm text-gray-500">
                                             <span className="font-semibold">Cliquez pour upload une photo</span>
                                         </p>
@@ -615,7 +615,7 @@ function EquipeFormComponent({ equipe, onSubmit, onCancel }: EquipeFormProps) {
                         <>Chargement...</>
                     ) : (
                         <>
-                            <Save className="h-4 w-4 mr-2" />
+                            <Icon icon="solar:diskette-bold" className="h-4 w-4 mr-2" />
                             Sauvegarder
                         </>
                     )}

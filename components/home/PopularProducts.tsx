@@ -1,4 +1,4 @@
-import { Heart } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 export default function PopularProducts() {
     return (
@@ -10,7 +10,7 @@ export default function PopularProducts() {
                     <div key={i}>
                         <div className="relative rounded-2xl overflow-hidden">
                             <img src={`/product-${i}.jpg`} className="w-full h-72 object-cover" />
-                            <Heart className="absolute top-3 right-3 text-white" />
+                            <Icon icon="solar:heart-bold" className="absolute top-3 right-3 text-white w-6 h-6" />
                         </div>
 
                         <p className="mt-2">Product name</p>

@@ -6,7 +6,7 @@ import { PubliciteFormValues, publiciteSchema } from '@/types/schemas/publiciteS
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { ChevronLeft, ChevronRight, Edit, FileText, Plus, Save, Settings, Trash2, X, Image as ImageIcon, Link, Tag } from 'lucide-react';
+import { Icon } from "@iconify/react";
 import { Publicite } from '@/types/interfaces';
 import { createPublicite, deletePublicite, getAllPublicites, updatePublicite } from '@/service/reglagesServices';
 import Image from "next/image";
@@ -172,7 +172,7 @@ export default function PubliciteManager() {
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-[#B07B5E] rounded-lg">
-                        <FileText className="h-6 w-6 text-white" />
+                        <Icon icon="solar:file-text-bold" className="h-6 w-6 text-white" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">Gestion des Publicités</h1>
@@ -183,7 +183,7 @@ export default function PubliciteManager() {
                     onClick={() => { setCreating(true); setEditingId(null); }}
                     className="bg-[#B07B5E] hover:bg-[#9C6B52]"
                 >
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Icon icon="solar:add-square-bold" className="h-4 w-4 mr-2" />
                     Nouvelle publicité
                 </Button>
             </div>
@@ -213,7 +213,7 @@ export default function PubliciteManager() {
                             <div className="flex justify-between items-start">
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2">
-                                        <Settings className="h-5 w-5 text-gray-400" />
+                                        <Icon icon="solar:settings-bold" className="h-5 w-5 text-gray-400" />
                                         <h3 className="text-xl font-bold text-gray-900">
                                             {displayValue(publicite.libelle_publicite1)}
                                         </h3>
@@ -241,12 +241,12 @@ export default function PubliciteManager() {
                                     >
                                         {editingId === publicite.id_publicite ? (
                                             <>
-                                                <X className="h-4 w-4" />
+                                                <Icon icon="solar:close-square-bold" className="h-4 w-4" />
                                                 Annuler
                                             </>
                                         ) : (
                                             <>
-                                                <Edit className="h-4 w-4" />
+                                                <Icon icon="solar:pen-new-square-bold" className="h-4 w-4" />
                                                 Modifier
                                             </>
                                         )}
@@ -258,7 +258,7 @@ export default function PubliciteManager() {
                                         onClick={() => handleDelete(publicite.id_publicite)}
                                         className="flex items-center gap-2"
                                     >
-                                        <Trash2 className="h-4 w-4" />
+                                        <Icon icon="solar:trash-bin-trash-bold" className="h-4 w-4" />
                                         Supprimer
                                     </Button>
                                 </div>
@@ -268,7 +268,7 @@ export default function PubliciteManager() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <Tag className="h-4 w-4" />
+                                        <Icon icon="solar:tag-bold" className="h-4 w-4" />
                                         <span className="text-sm">Libellé 1</span>
                                     </div>
                                     <p className="font-medium">{displayValue(publicite.libelle_publicite1)}</p>
@@ -276,7 +276,7 @@ export default function PubliciteManager() {
 
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <Tag className="h-4 w-4" />
+                                        <Icon icon="solar:tag-bold" className="h-4 w-4" />
                                         <span className="text-sm">Libellé 2</span>
                                     </div>
                                     <p className="font-medium">{displayValue(publicite.libelle_publicite2)}</p>
@@ -287,7 +287,7 @@ export default function PubliciteManager() {
                             {(publicite.link1 || publicite.link2 || publicite.link3) && (
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <Link className="h-4 w-4" />
+                                        <Icon icon="solar:link-bold" className="h-4 w-4" />
                                         <span className="text-sm font-medium">Liens</span>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -371,7 +371,7 @@ export default function PubliciteManager() {
                             {(publicite.files_publicite1 || publicite.files_publicite2 || publicite.files_publicite3) && (
                                 <div className="space-y-3 pt-4 border-t border-gray-200">
                                     <div className="flex items-center gap-2 text-gray-500">
-                                        <ImageIcon className="h-4 w-4" />
+                                        <Icon icon="solar:gallery-bold" className="h-4 w-4" />
                                         <span className="text-sm font-medium">Images Publicitaires</span>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -464,7 +464,7 @@ export default function PubliciteManager() {
                                 disabled={currentPage <= 1}
                                 className="text-xs sm:text-sm"
                             >
-                                <ChevronLeft className="h-4 w-4 sm:mr-1" />
+                                <Icon icon="solar:alt-arrow-left-bold" className="h-4 w-4 sm:mr-1" />
                                 <span className="hidden sm:inline">Précédent</span>
                             </Button>
 
@@ -476,7 +476,7 @@ export default function PubliciteManager() {
                                 className="text-xs sm:text-sm"
                             >
                                 <span className="hidden sm:inline">Suivant</span>
-                                <ChevronRight className="h-4 w-4 sm:ml-1" />
+                                <Icon icon="solar:alt-arrow-right-bold" className="h-4 w-4 sm:ml-1" />
                             </Button>
                         </div>
                     </div>
@@ -540,7 +540,7 @@ function PubliciteFormComponent({ publicite, onSubmit, onCancel }: PubliciteForm
                 <label className="block text-sm font-medium text-gray-700">
                     {label}
                 </label>
-                
+
                 {/* Aperçu de l'image existante ou nouvelle */}
                 {(hasExistingImage || hasNewFile) && (
                     <div className="mb-2">
@@ -563,7 +563,7 @@ function PubliciteFormComponent({ publicite, onSubmit, onCancel }: PubliciteForm
                                 />
                             ) : null}
                         </div>
-                        
+
                         {/* Bouton pour supprimer l'image */}
                         <div className="mt-2 flex justify-end">
                             <Button
@@ -573,7 +573,7 @@ function PubliciteFormComponent({ publicite, onSubmit, onCancel }: PubliciteForm
                                 onClick={() => handleRemoveImage(fieldName)}
                                 className="flex items-center gap-1"
                             >
-                                <Trash2 className="h-3 w-3" />
+                                <Icon icon="solar:trash-bin-trash-bold" className="h-3 w-3" />
                                 Supprimer
                             </Button>
                         </div>
@@ -585,7 +585,7 @@ function PubliciteFormComponent({ publicite, onSubmit, onCancel }: PubliciteForm
                     <div className="flex items-center justify-center w-full">
                         <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                <ImageIcon className="w-8 h-8 mb-2 text-gray-500" />
+                                <Icon icon="solar:gallery-bold" className="w-8 h-8 mb-2 text-gray-500" />
                                 <p className="mb-1 text-sm text-gray-500">
                                     <span className="font-semibold">Cliquez pour upload</span>
                                 </p>
@@ -794,7 +794,7 @@ function PubliciteFormComponent({ publicite, onSubmit, onCancel }: PubliciteForm
                         <>Chargement...</>
                     ) : (
                         <>
-                            <Save className="h-4 w-4 mr-2" />
+                            <Icon icon="solar:diskette-bold" className="h-4 w-4 mr-2" />
                             Sauvegarder
                         </>
                     )}

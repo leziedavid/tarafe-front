@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { Realisation } from "@/types/interfaces";
 import FullPageLoader from "../spinner/FullPageLoader";
 import { getImagesUrl } from "@/types/baseUrl";
@@ -169,10 +169,10 @@ const ProductList = ({ products }: ProductListProps) => {
                                         {totalImages > 1 && (
                                             <>
                                                 <button onClick={(e) => prevImage(e, product.id_realisations)} className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1.5 rounded-full hover:bg-white transition-all z-20"  >
-                                                    <ChevronLeft className="w-4 h-4" />
+                                                    <Icon icon="solar:alt-arrow-left-bold" className="w-4 h-4" />
                                                 </button>
                                                 <button onClick={(e) => nextImage(e, product.id_realisations)} className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 p-1.5 rounded-full hover:bg-white transition-all z-20">
-                                                    <ChevronRight className="w-4 h-4" />
+                                                    <Icon icon="solar:alt-arrow-right-bold" className="w-4 h-4" />
                                                 </button>
 
                                                 {/* Compteur d'images */}

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from "react";
-import { Check, ChevronsUpDown, CircleX } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 // Interfaces
 interface BaseComboboxProps<T> {
@@ -166,7 +166,8 @@ export function Select2<T>(props: ComboboxProps<T>) {
                         >
                             <span>{labelExtractor(item)}</span>
                             {!disabled && (
-                                <CircleX
+                                <Icon
+                                    icon="solar:close-circle-bold"
                                     className="cursor-pointer text-gray-500 h-3 w-3 ml-1 hover:text-gray-700"
                                     onClick={(e) => handleRemoveSelection(e, valueExtractor(item))}
                                 />
@@ -179,7 +180,8 @@ export function Select2<T>(props: ComboboxProps<T>) {
                         </span>
                     )}
                     {!disabled && selectedItems.length > 0 && (
-                        <CircleX
+                        <Icon
+                            icon="solar:close-circle-bold"
                             className="cursor-pointer text-black h-4 w-4 hover:text-gray-700"
                             onClick={(e) => handleRemoveSelection(e)}
                         />
@@ -225,7 +227,7 @@ export function Select2<T>(props: ComboboxProps<T>) {
                 <div className="flex items-center space-x-2 flex-wrap truncate flex-1">
                     {renderSelectedDisplay()}
                 </div>
-                <ChevronsUpDown className={`h-4 w-4 ml-2 flex-shrink-0 ${disabled ? 'opacity-30' : 'opacity-50'
+                <Icon icon="solar:double-alt-arrow-down-bold" className={`h-4 w-4 ml-2 flex-shrink-0 ${disabled ? 'opacity-30' : 'opacity-50'
                     }`} />
             </button>
 
@@ -264,7 +266,8 @@ export function Select2<T>(props: ComboboxProps<T>) {
                                         <span className={selected ? 'font-medium' : ''}>
                                             {label}
                                         </span>
-                                        <Check
+                                        <Icon
+                                            icon="solar:check-read-bold"
                                             className={`h-4 w-4 transition-opacity ${selected ? 'opacity-100' : 'opacity-0'
                                                 }`}
                                         />

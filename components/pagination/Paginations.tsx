@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { motion, AnimatePresence } from "framer-motion";
 import React from "react";
 
@@ -42,7 +42,7 @@ export default function PaginationDots({
                 aria-label="Page précédente"
                 className={`p-2 rounded-full border transition ${page === 0 ? "opacity-40 cursor-not-allowed" : "hover:bg-gray-100 active:scale-95"}`}
             >
-                <ChevronLeft className="w-5 h-5 text-gray-600" />
+                <Icon icon="solar:alt-arrow-left-bold" className="w-5 h-5 text-gray-600" />
             </button>
 
             <div className="flex gap-2 relative min-w-[80px] justify-center">
@@ -76,7 +76,7 @@ export default function PaginationDots({
                 aria-label="Page suivante"
                 className={`p-2 rounded-full border transition ${page === totalPages - 1 ? "opacity-40 cursor-not-allowed" : "hover:bg-gray-100 active:scale-95"}`}
             >
-                <ChevronRight className="w-5 h-5 text-gray-600" />
+                <Icon icon="solar:alt-arrow-right-bold" className="w-5 h-5 text-gray-600" />
             </button>
         </div>
     );

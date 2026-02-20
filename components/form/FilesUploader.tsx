@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Trash2, File, FileText, Image as ImageIcon } from "lucide-react"; // Importation des icônes
+import { Icon } from "@iconify/react";
 import { toast } from "sonner";  // Pour les notifications de succès ou d'erreur
 
 // Définir le type des props attendues par le composant
@@ -26,7 +26,7 @@ export function FilesUploader({
 
         if (files && files.length > 0) {
             const newFiles = Array.from(files); // Convertir FileList en tableau
-            
+
             // Vérification des formats de fichier
             const invalidFiles = newFiles.filter((file) => {
                 const extension = file.name.split(".").pop()?.toLowerCase();
@@ -54,11 +54,11 @@ export function FilesUploader({
     const getFileIcon = (file: File) => {
         const extension = file.name.split(".").pop()?.toLowerCase();
         if (extension === "csv") {
-            return <File size={24} color="#4CAF50" />;
+            return <Icon icon="solar:file-bold" className="w-6 h-6" style={{ color: "#4CAF50" }} />;
         } else if (extension === "xlsx") {
-            return <FileText size={24} color="#2196F3" />;
+            return <Icon icon="solar:file-text-bold" className="w-6 h-6" style={{ color: "#2196F3" }} />;
         } else {
-            return <ImageIcon size={24} color="#555" />;
+            return <Icon icon="solar:gallery-bold" className="w-6 h-6" style={{ color: "#555" }} />;
         }
     };
 
@@ -85,7 +85,7 @@ export function FilesUploader({
                         {/* Icône de suppression */}
                         <button onClick={() => removeFile(idx)} // Supprimer le fichier au clic
                             className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md hover:bg-gray-100">
-                            <Trash2 size={16} color="red" /> {/* Icône poubelle */}
+                            <Icon icon="solar:trash-bin-trash-bold" className="w-4 h-4" style={{ color: "red" }} /> {/* Icône poubelle */}
                         </button>
                     </div>
                 ))}

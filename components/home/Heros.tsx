@@ -15,10 +15,9 @@ function highlightTextInTitle(title: string, highlight?: string | null) {
     if (!title) return null;
     return (
         <>
-            {title}
+            <p className="text-brand-secondary font-bold">{title}</p>
             {highlight && (
-                <> <br />  <span className="text-transparent bg-brand-primary bg-clip-text">  {highlight}  </span>
-                </>
+                <> <span className="text-transparent bg-brand-primary bg-clip-text">  {highlight}  </span> </>
             )}
         </>
     );
@@ -137,13 +136,10 @@ function SliderIndicator({ total, current }: { total: number; current: number })
     return (
         <div className="flex justify-center items-center gap-2 mt-8 lg:mt-0 lg:absolute lg:bottom-6 lg:left-1/2 lg:-translate-x-1/2">
             {Array.from({ length: total }).map((_, index) => (
-                <div
-                    key={index}
+                <div  key={index}
                     className={`
                         h-1.5 rounded-full transition-all duration-300
-                        ${index === current
-                            ? 'w-8 bg-brand-primary'
-                            : 'w-4 bg-muted-foreground/30'
+                        ${index === current ? 'w-8 bg-brand-primary'  : 'w-4 bg-muted-foreground/30'
                         }
                     `}
                 />
@@ -216,8 +212,8 @@ export default function Heros({ heros }: HeroProps) {
                                     </Link>
                                 )}
                                 {hero.secondary_button_text && hero.secondary_button_link && (
-                                    <Link href={hero.secondary_button_link}  className="border border-border bg-card text-foreground px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:bg-muted transition"  >
-                                        {hero.secondary_button_text}
+                                    <Link href={hero.secondary_button_link}  className="border border-border bg-card text-brand-secondary px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:bg-muted transition"  >
+                                        {hero.secondary_button_text} 
                                     </Link>
                                 )}
                             </div>
@@ -264,18 +260,12 @@ export default function Heros({ heros }: HeroProps) {
                     {(currentHero.primary_button_text || currentHero.secondary_button_text) && (
                         <div className="flex flex-wrap gap-4">
                             {currentHero.primary_button_text && currentHero.primary_button_link && (
-                                <Link
-                                    href={currentHero.primary_button_link}
-                                    className="bg-brand-primary text-white px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:opacity-90 transition"
-                                >
+                                <Link  href={currentHero.primary_button_link}  className="bg-brand-primary text-white px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:opacity-90 transition"  >
                                     {currentHero.primary_button_text}
                                 </Link>
                             )}
                             {currentHero.secondary_button_text && currentHero.secondary_button_link && (
-                                <Link
-                                    href={currentHero.secondary_button_link}
-                                    className="border border-border bg-card text-foreground px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:bg-muted transition"
-                                >
+                                <Link  href={currentHero.secondary_button_link} className="border border-border bg-card text-brand-secondary px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:bg-muted transition"  >
                                     {currentHero.secondary_button_text}
                                 </Link>
                             )}

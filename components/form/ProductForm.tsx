@@ -7,7 +7,7 @@ import Image from "next/image";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { X, Upload, Package, Tag, DollarSign, Layers, Palette, Ruler, Star, Hash, HandCoins } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { CategoryProduct, SubCategoryProduct, Product } from "@/types/interfaces";
 import { Select2 } from "./Select2";
 import { getSubCategoriesbyCategory } from "@/service/categoryServices";
@@ -425,7 +425,7 @@ export default function ProductForm({
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                                <Upload className="w-5 h-5" />
+                                <Icon icon="solar:upload-minimalistic-bold" className="w-5 h-5" />
                                 Images du produit
                             </h2>
                             <span className="text-sm text-gray-500">
@@ -436,7 +436,7 @@ export default function ProductForm({
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-4">
                             {/* Upload Button */}
                             <label className={`relative h-48 rounded-lg border-2 border-dashed ${images.length >= 8 ? 'opacity-50 cursor-not-allowed' : 'border-gray-300 hover:border-brand-primary cursor-pointer'} transition-colors flex flex-col items-center justify-center bg-gray-50`}>
-                                <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                                <Icon icon="solar:upload-minimalistic-bold" className="w-8 h-8 text-gray-400 mb-2" />
                                 <span className="text-xs text-gray-600">Ajouter une image</span>
                                 <span className="text-xs text-gray-400 mt-1">JPG, PNG, WEBP</span>
                                 <input
@@ -483,7 +483,7 @@ export default function ProductForm({
                     {/* Informations de base */}
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                         <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-                            <Package className="w-5 h-5" />
+                            <Icon icon="solar:box-bold" className="w-5 h-5" />
                             Informations de base
                         </h2>
 
@@ -511,7 +511,7 @@ export default function ProductForm({
                                     Référence (SKU) *
                                 </label>
                                 <div className="relative">
-                                    <Hash className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <Icon icon="solar:hashtag-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                     <input
                                         id="sku"
                                         type="text"
@@ -531,7 +531,7 @@ export default function ProductForm({
                                     Prix de vente *
                                 </label>
                                 <div className="relative">
-                                    <HandCoins className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <Icon icon="solar:hand-money-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                     <input
                                         id="price"
                                         type="number"
@@ -555,7 +555,7 @@ export default function ProductForm({
                                     Ancien prix (optionnel)
                                 </label>
                                 <div className="relative">
-                                    <HandCoins className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <Icon icon="solar:hand-money-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                     <input
                                         id="oldPrice"
                                         type="number"
@@ -609,7 +609,7 @@ export default function ProductForm({
                     {/* Catégories */}
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                         <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-                            <Layers className="w-5 h-5" />
+                            <Icon icon="solar:layers-bold" className="w-5 h-5" />
                             Catégories
                         </h2>
 
@@ -658,7 +658,7 @@ export default function ProductForm({
                     {/* Variantes */}
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                         <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-6">
-                            <Palette className="w-5 h-5" />
+                            <Icon icon="solar:palette-bold" className="w-5 h-5" />
                             Variantes
                         </h2>
 

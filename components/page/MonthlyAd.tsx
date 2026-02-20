@@ -1,7 +1,7 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import Image from "next/image";
-import { Instagram, Twitter, Facebook } from "lucide-react";
 
 export default function MonthlyAd() {
     return (
@@ -16,9 +16,10 @@ export default function MonthlyAd() {
                 <div className="flex-1 p-6 sm:p-10 md:p-16 flex flex-col justify-center">
                     {/* Social Icons */}
                     <div className="flex items-center space-x-3 sm:space-x-4 mb-4 sm:mb-6">
-                        {[Instagram, Facebook, Twitter].map((Icon, index) => (
+                        {["solar:camera-bold", "solar:share-circle-bold", "solar:bird-bold"].map((iconName, index) => (
                             <Icon
                                 key={index}
+                                icon={iconName}
                                 className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300 hover:text-[#fd980e] cursor-pointer transition-colors duration-200"
                             />
                         ))}

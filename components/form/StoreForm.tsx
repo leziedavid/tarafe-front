@@ -5,7 +5,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { X, Upload } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { FormSwitch } from "./FormSwitch";
 import RichTextEditor from "../rich-text-editor";
 import { getImagesUrl } from "@/types/baseUrl";
@@ -154,11 +154,11 @@ export default function StoreForm({ initialValue, onSubmit, isSubmitting, onClos
                     {/* Logo */}
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
                         <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
-                            <Upload className="w-5 h-5" /> Logo du store
+                            <Icon icon="solar:upload-minimalistic-bold" className="w-5 h-5" /> Logo du store
                         </h2>
                         <div className="flex items-center gap-4">
                             <label className="relative h-32 w-32 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer bg-gray-50">
-                                <Upload className="w-6 h-6 text-gray-400" />
+                                <Icon icon="solar:upload-minimalistic-bold" className="w-6 h-6 text-gray-400" />
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -174,7 +174,7 @@ export default function StoreForm({ initialValue, onSubmit, isSubmitting, onClos
                                         onClick={removeLogo}
                                         className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
                                     >
-                                        <X className="w-4 h-4" />
+                                        <Icon icon="solar:close-square-bold" className="w-4 h-4" />
                                     </button>
                                 </div>
                             )}
