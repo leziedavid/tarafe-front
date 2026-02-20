@@ -20,9 +20,11 @@ const typeOperationOptions = [
     { label: 'MTN MONEY', value: 'MTN MONEY' },
     { label: 'WAVE', value: 'WAVE' },
     { label: 'BANQUE', value: 'BANQUE' },
-    { label: 'NSP', value: 'NSP' }
+    { label: 'CHÈQUE', value: 'CHÈQUE' },
+    { label: 'VIREMENT', value: 'VIREMENT' },
+    { label: 'NSP', value: 'NSP' },
+    { label: 'ESPECES', value: 'ESPECES' },
 ];
-
 const transactionTypeOptions = [
     { label: 'Entrée caisse', value: 'entree_caisse' },
     { label: 'Entrée banque', value: 'entree_banque' },

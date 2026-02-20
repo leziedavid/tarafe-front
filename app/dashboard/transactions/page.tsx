@@ -84,12 +84,15 @@ export default function Page() {
 
     // Types de paiement possibles
     const paymentTypes = [
-        { value: 'wave', label: 'Wave' },
-        { value: 'orange Money', label: 'Orange money' },
-        { value: 'moov Money', label: 'Moov money' },
-        { value: 'espèces', label: 'Espèces' },
-        { value: 'chèque', label: 'Chèque' },
-        { value: 'virement', label: 'Virement' }
+        { label: 'MOOV MONEY', value: 'MOOV MONEY' },
+        { label: 'ORANGE MONEY', value: 'ORANGE MONEY' },
+        { label: 'MTN MONEY', value: 'MTN MONEY' },
+        { label: 'WAVE', value: 'WAVE' },
+        { label: 'BANQUE', value: 'BANQUE' },
+        { label: 'CHÈQUE', value: 'CHÈQUE' },
+        { label: 'VIREMENT', value: 'VIREMENT' },
+        { label: 'NSP', value: 'NSP' },
+        { label: 'ESPECES', value: 'ESPECES' },
     ];
 
 
