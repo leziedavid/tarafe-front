@@ -136,9 +136,9 @@ export interface Blog {
 }
 
 export interface Partenaire {
-    id_partenaires: string;
+    id: string;
     libelle_partenaires: string;
-    Path_partenaires: string;
+    path_partenaires: string | null;
     status_partenaires: string;
     created_at: string | null;
     updated_at: string | null;
@@ -291,6 +291,7 @@ export interface ApiResponse {
     Publicites: Publicite[];
     politique: Politique[];
     HomePageSections: HomePageSectionsResponse;
+    pricing: Pricing[];
 }
 
 // Interface pour les réponses API individuelles si nécessaire
@@ -702,5 +703,18 @@ export interface HomePageSectionsResponse {
     service_cards: ServiceCard[];
     features: Feature[];
     final_ctas: FinalCTA[];
+    pricing: Pricing[];
 }
 
+
+export interface Pricing {
+    id: number;
+    product_name: string;
+    quantity: string | number;
+    unit_price: string;
+    description?: string | null;
+    is_active: number;
+    created_at: string;
+    updated_at: string;
+    reglages?: Reglage[] | null;
+}

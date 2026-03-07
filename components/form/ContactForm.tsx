@@ -78,17 +78,18 @@ export default function ContactForm() {
                     <div className="h-24 w-full bg-gray-200 rounded"></div>
                     <div className="h-12 w-1/3 bg-gray-300 rounded mt-2 mx-auto"></div>
                 </div>
+
             </section>
         );
     }
 
     // === Formulaire réel ===
     return (
-        <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-sm-lg my-section py-10">
+        <section className=" max-w-10xl mx-auto grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-sm-lg my-section py-10">
 
             {/* ---- COLONNE GAUCHE ---- */}
             <div className="bg-white text-gray-900 p-10 md:p-14 flex flex-col justify-center space-y-6">
-                <h2 className="text-4xl font-bold text-[#242078] uppercase">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase mb-6 text-brand-secondary leading-tight">
                     Contactez-nous
                 </h2>
 
@@ -181,7 +182,7 @@ export default function ContactForm() {
                     )}
                 </div>
 
-                <button type="submit"  disabled={loading} className="bg-[#fd980e] text-white rounded-full py-3.5 px-8 font-semibold hover:bg-[#242078] hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100" >
+                <button type="submit" disabled={loading} className="bg-[#fd980e] text-white rounded-full py-3.5 px-8 font-semibold hover:bg-[#242078] hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100" >
                     {loading ? "Envoi en cours..." : "Envoyer le message"}
                 </button>
 
@@ -192,6 +193,7 @@ export default function ContactForm() {
                     </p>
                 )}
             </form>
+
         </section>
     );
 }

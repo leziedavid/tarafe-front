@@ -11,7 +11,7 @@ const baseUrl = getBaseUrl();
  * Connexion utilisateur (email ou téléphone)
  * Retourne user, token et stores
  */
-export const login = async (identifier: string, password: string): Promise<BaseResponse<{ user: User; token: string; stores: any[]}>> => {
+export const login = async (identifier: string, password: string): Promise<BaseResponse<{ user: User; token: string; stores: any[] }>> => {
     try {
         const response = await fetch(`${baseUrl}/auth/login`, {
             method: "POST",
@@ -38,7 +38,7 @@ export const login = async (identifier: string, password: string): Promise<BaseR
  * Rafraîchir le token
  * Le token actuel est passé en paramètre
  */
-export const refreshTokens = async (currentToken: string ): Promise<BaseResponse<{ user: User; token: string }>> => {
+export const refreshTokens = async (currentToken: string): Promise<BaseResponse<{ user: User; token: string }>> => {
     try {
         const response = await fetch(`${baseUrl}/auth/refresh-token`, {
             method: "POST",
@@ -125,7 +125,7 @@ export const deleteUser = async (id: number): Promise<BaseResponse<User>> => {
 
 // get userdata via fetchWithAuth
 
-export const getUserAllData = async (): Promise<BaseResponse<{ user: User;stores: any[] }>> => {
+export const getUserAllData = async (): Promise<BaseResponse<{ user: User; stores: any[] }>> => {
     const token = getTokenFromLocalStorage()
     if (!token) return { statusCode: 401, message: 'Non authentifié' }
     const response = await fetchWithAuth(`${baseUrl}/auth/me`, {

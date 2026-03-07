@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 // Interfaces
-import { Hero, ServiceCard, Feature, FinalCTA } from "@/types/interfaces";
+import { Hero, ServiceCard, Feature, FinalCTA, Partenaire, Pricing } from "@/types/interfaces";
 import HeroManagement from "@/components/managemen/HeroManagement";
 import ServiceCardManagement from "@/components/managemen/ServiceCardManagement";
 import FeatureManagement from "@/components/managemen/FeatureManagement";
 import FinalCTAManagement from "@/components/managemen/FinalCTAManagement";
+import PartnersManagement from "@/components/managemen/PartnersManagement";
+import PricingManagement from "@/components/managemen/PricingManagement";
 import AdminLayout from "@/components/dashboard/AdminLayout/AdminLayout";
 // Composants spécifiques pour chaque section
 
@@ -16,6 +18,8 @@ interface HomePageSections {
     service_cards: ServiceCard[];
     features: Feature[];
     final_ctas: FinalCTA[];
+    partenaires: Partenaire[];
+    pricing: Pricing[];
 }
 
 export default function ManagementPage() {
@@ -25,6 +29,8 @@ export default function ManagementPage() {
         service_cards: [],
         features: [],
         final_ctas: [],
+        partenaires: [],
+        pricing: [],
     });
     const [loading, setLoading] = useState(true);
 
@@ -41,6 +47,8 @@ export default function ManagementPage() {
                     service_cards: data.HomePageSections.service_cards || [],
                     features: data.HomePageSections.features || [],
                     final_ctas: data.HomePageSections.final_ctas || [],
+                    partenaires: data.HomePageSections.partenaires || [],
+                    pricing: data.HomePageSections.pricing || [],
                 });
             } catch (error) {
                 // console.error("Erreur lors de la récupération des sections :", error);
@@ -58,6 +66,8 @@ export default function ManagementPage() {
         { key: "service_cards", label: "Service" },
         { key: "features", label: "Caractéristiques" },
         { key: "final_ctas", label: "Final CTAs" },
+        { key: "partenaires" as any, label: "Partenaires" },
+        { key: "pricing" as any, label: "Tarifs" },
     ];
 
     return (
@@ -78,10 +88,12 @@ export default function ManagementPage() {
 
                 {/* Contenu du tab actif */}
                 <div className="bg-white p-6">
-                    {activeTab === "heros" && <HeroManagement/>}
+                    {activeTab === "heros" && <HeroManagement />}
                     {activeTab === "service_cards" && <ServiceCardManagement />}
                     {activeTab === "features" && <FeatureManagement />}
                     {activeTab === "final_ctas" && <FinalCTAManagement />}
+                    {activeTab === ("partenaires" as any) && <PartnersManagement />}
+                    {activeTab === ("pricing" as any) && <PricingManagement />}
                 </div>
             </div>
 

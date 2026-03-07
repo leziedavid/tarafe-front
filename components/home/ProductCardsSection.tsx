@@ -60,14 +60,14 @@ export default function ProductCardsSection({ serviceCards }: ProductCardProps) 
             <div className="w-full md:max-w-[1400px] md:mx-auto px-0 md:px-6">
                 <div className="grid md:grid-cols-2 gap-1">
                     {serviceCards.map((card) => (
-                        <div  key={card.id} className={`bg-${card.bg_color || 'tarafe-gray'} rounded-tarafe p-12 md:p-16 hover:scale-[1.02] transition-transform duration-300`} >
+                        <div key={card.id} className={`bg-${card.bg_color || 'tarafe-gray'} rounded-tarafe p-12 md:p-16 hover:scale-[1.02] transition-transform duration-300`} >
                             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase mb-6 text-brand-secondary leading-tight">
                                 {card.title}
                             </h2>
 
                             <p className="text-sm sm:text-lg text-muted-foreground max-w-xl leading-relaxed" dangerouslySetInnerHTML={{ __html: card.description || 'Description à venir...' }} />
 
-                            <Link  href={card.link || '#'}  className="underline font-semibold inline-flex items-center gap-2 text-brand-secondary hover:gap-4 transition-all duration-300"  >
+                            <Link href={card.link || '#'} className="underline font-semibold inline-flex items-center gap-2 text-brand-secondary hover:gap-4 transition-all duration-300"  >
                                 En savoir plus
                                 <span>→</span>
                             </Link>

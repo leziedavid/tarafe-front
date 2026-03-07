@@ -1,6 +1,6 @@
 import { BaseResponse } from "@/types/BaseResponse";
 import { getBaseUrl } from "@/types/baseUrl";
-import { Hero, ServiceCard, Feature, FinalCTA } from "@/types/interfaces";
+import { Hero, ServiceCard, Feature, FinalCTA, Partenaire, Pricing } from "@/types/interfaces";
 import { Pagination as PaginationType } from "@/types/pagination";
 
 const baseUrl = getBaseUrl();
@@ -77,13 +77,13 @@ export const deleteHeroImage = async (id: number): Promise<BaseResponse<Hero>> =
 
 
 
-export const activateHero = async (id: number,state: number): Promise<BaseResponse<Hero>> => {
+export const activateHero = async (id: number, state: number): Promise<BaseResponse<Hero>> => {
     // sécuriser la valeur (0 ou 1)
     const validState = state ? 1 : 0;
     const response = await fetch(`${baseUrl}/heros/${id}/${validState}/activate`,
         {
             method: 'PUT', // ✅ correction ici
-            headers: { 'Content-Type': 'application/json',  },
+            headers: { 'Content-Type': 'application/json', },
             credentials: 'include',
         }
     );
@@ -148,13 +148,13 @@ export const deleteServiceCard = async (id: number): Promise<BaseResponse<Servic
     return response.json();
 };
 
-export const activateServiceCard = async (id: number,state: number): Promise<BaseResponse<ServiceCard>> => {
+export const activateServiceCard = async (id: number, state: number): Promise<BaseResponse<ServiceCard>> => {
     // sécuriser la valeur (0 ou 1)
     const validState = state ? 1 : 0;
     const response = await fetch(`${baseUrl}/service-cards/${id}/${validState}/activate`,
         {
             method: 'PUT', // ✅ correction ici
-            headers: { 'Content-Type': 'application/json',  },
+            headers: { 'Content-Type': 'application/json', },
             credentials: 'include',
         }
     );
@@ -217,13 +217,13 @@ export const deleteFeature = async (id: number): Promise<BaseResponse<Feature>> 
     return response.json();
 };
 
-export const activateFeature = async (id: number,state: number): Promise<BaseResponse<Feature>> => {
+export const activateFeature = async (id: number, state: number): Promise<BaseResponse<Feature>> => {
     // sécuriser la valeur (0 ou 1)
     const validState = state ? 1 : 0;
     const response = await fetch(`${baseUrl}/features/${id}/${validState}/activate`,
         {
             method: 'PUT', // ✅ correction ici
-            headers: { 'Content-Type': 'application/json',  },
+            headers: { 'Content-Type': 'application/json', },
             credentials: 'include',
         }
     );
@@ -295,13 +295,13 @@ export const deleteFinalCTA = async (id: number): Promise<BaseResponse<FinalCTA>
     return response.json();
 };
 
-export const activateFinalCTA = async (id: number,state: number): Promise<BaseResponse<FinalCTA>> => {
+export const activateFinalCTA = async (id: number, state: number): Promise<BaseResponse<FinalCTA>> => {
     // sécuriser la valeur (0 ou 1)
     const validState = state ? 1 : 0;
     const response = await fetch(`${baseUrl}/final-cta/${id}/${validState}/activate`,
         {
             method: 'PUT', // ✅ correction ici
-            headers: { 'Content-Type': 'application/json',  },
+            headers: { 'Content-Type': 'application/json', },
             credentials: 'include',
         }
     );
@@ -312,6 +312,113 @@ export const deleteFinalCTAImage = async (id: number): Promise<BaseResponse<Fina
     const response = await fetch(`${baseUrl}/final-cta/${id}/image`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
+    });
+    return response.json();
+};
+
+/* ---------------------------- PARTENARES --------------------------- */
+
+export const getAllPartners = async (params?: GetAllParams): Promise<BaseResponse<PaginationType<Partenaire>>> => {
+    const query = new URLSearchParams(params as any).toString();
+    const response = await fetch(`${baseUrl}/partenaires?${query}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+    });
+    return response.json();
+};
+
+export const createPartner = async (data: FormData): Promise<BaseResponse<Partenaire>> => {
+    const response = await fetch(`${baseUrl}/partenaires`, {
+        method: 'POST',
+        body: data,
+        credentials: 'include',
+    });
+    return response.json();
+};
+
+export const updatePartner = async (id: number, data: FormData): Promise<BaseResponse<Partenaire>> => {
+    data.append('_method', 'PUT');
+    const response = await fetch(`${baseUrl}/partenaires/${id}`, {
+        method: 'POST',
+        body: data,
+        credentials: 'include',
+    });
+    return response.json();
+};
+
+export const deletePartner = async (id: number): Promise<BaseResponse<Partenaire>> => {
+    const response = await fetch(`${baseUrl}/partenaires/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+    });
+    return response.json();
+};
+
+export const activatePartner = async (id: number, state: number): Promise<BaseResponse<Partenaire>> => {
+    const validState = state ? 1 : 0;
+    const response = await fetch(`${baseUrl}/partenaires/${id}/${validState}/activate`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+    });
+    return response.json();
+};
+
+export const deletePartnerImage = async (id: number): Promise<BaseResponse<Partenaire>> => {
+    const response = await fetch(`${baseUrl}/partenaires/${id}/image`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+    });
+    return response.json();
+};
+
+/* ----------------------------- PRICING ----------------------------- */
+
+export const getAllPricing = async (params?: GetAllParams): Promise<BaseResponse<PaginationType<Pricing>>> => {
+    const query = new URLSearchParams(params as any).toString();
+    const response = await fetch(`${baseUrl}/pricing?${query}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+    });
+    return response.json();
+};
+
+export const createPricing = async (data: any): Promise<BaseResponse<Pricing>> => {
+    const response = await fetch(`${baseUrl}/pricing`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'include',
+    });
+    return response.json();
+};
+
+export const updatePricing = async (id: number, data: any): Promise<BaseResponse<Pricing>> => {
+    const response = await fetch(`${baseUrl}/pricing/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'include',
+    });
+    return response.json();
+};
+
+export const deletePricing = async (id: number): Promise<BaseResponse<Pricing>> => {
+    const response = await fetch(`${baseUrl}/pricing/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+    });
+    return response.json();
+};
+
+export const activatePricing = async (id: number, state: number): Promise<BaseResponse<Pricing>> => {
+    const validState = state ? 1 : 0;
+    const response = await fetch(`${baseUrl}/pricing/${id}/${validState}/activate`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
     });
     return response.json();
 };

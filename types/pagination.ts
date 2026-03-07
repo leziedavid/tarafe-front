@@ -1,3 +1,5 @@
+import { Reglage } from "./interfaces"
+
 export interface Pagination<T> {
     status: boolean
     total: number
@@ -5,4 +7,5 @@ export interface Pagination<T> {
     page: number
     limit: number
     data: T[]
+    reglages?: Reglage[]
 }

@@ -100,14 +100,7 @@ export default function HeroManagement() {
                             {/* Image */}
                             <div className="relative w-full sm:w-32 h-32 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                                 {hero.image && (
-                                    <Image
-                                        src={`${urlImages}/${hero.image}`}
-                                        alt={hero.title}
-                                        fill
-                                        className="object-cover"
-                                        sizes="(max-width: 640px) 100vw, 128px"
-                                        unoptimized
-                                    />
+                                    <Image src={`${urlImages}/${hero.image}`} alt={hero.title} fill className="object-cover" sizes="(max-width: 640px) 100vw, 128px" unoptimized />
                                 )}
                                 {isActive && (
                                     <div className="absolute top-2 left-2">

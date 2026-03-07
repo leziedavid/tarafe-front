@@ -6,8 +6,8 @@
 const BASE_URL = process.env.NEXT_PUBLIC_SERVEUR_URL || 'https://security.tarafe.com/api/v1';
 const IMAGES_SERVEURURL = process.env.IMAGES_SERVEUR_URL || 'https://security.tarafe.com';
 
-const BASE_URL_SITE_PROD ='https://security.tarafe.com/catalogue';
-const BASE_URL_SITE ='https://tarafe.com/catalogue';
+const BASE_URL_SITE_PROD = 'https://security.tarafe.com/catalogue';
+const BASE_URL_SITE = 'https://tarafe.com/catalogue';
 
 export const getBaseUrl = (): string => {
     return BASE_URL;

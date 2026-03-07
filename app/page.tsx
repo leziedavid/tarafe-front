@@ -15,6 +15,7 @@ import FinalCTASection from "@/components/home/FinalCTASection";
 import ContactForm from "@/components/form/ContactForm";
 import CollectionsSection from "@/components/home/ProductList";
 import Heros from "@/components/home/Heros";
+import PartnersList from "@/components/home/PartnersList";
 import React from "react";
 
 export default function Home() {
@@ -43,7 +44,8 @@ export default function Home() {
       <CollectionsSection product={response?.realisations ?? []} isLabel={true} />
       <AlternatingFeaturesSection feature={response?.HomePageSections.features ?? []} />
       <ContactForm />
-      <FinalCTASection  finals={response?.HomePageSections.final_ctas ?? []} />
+      <PartnersList partners={response?.partenaires ?? []} isPaginate={true} isLoading={loading} />
+      <FinalCTASection finals={response?.HomePageSections.final_ctas ?? []} />
       <Footer reglages={response?.reglages ?? []} />
     </main>
   );

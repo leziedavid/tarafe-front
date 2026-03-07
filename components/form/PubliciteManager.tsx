@@ -233,12 +233,7 @@ export default function PubliciteManager() {
                                 </div>
 
                                 <div className="flex items-center gap-3">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => setEditingId(editingId === publicite.id_publicite ? null : publicite.id_publicite)}
-                                        className="flex items-center gap-2"
-                                    >
+                                    <Button variant="outline" size="sm" onClick={() => setEditingId(editingId === publicite.id_publicite ? null : publicite.id_publicite)} className="flex items-center gap-2"  >
                                         {editingId === publicite.id_publicite ? (
                                             <>
                                                 <Icon icon="solar:close-square-bold" className="h-4 w-4" />
@@ -252,12 +247,7 @@ export default function PubliciteManager() {
                                         )}
                                     </Button>
 
-                                    <Button
-                                        variant="destructive"
-                                        size="sm"
-                                        onClick={() => handleDelete(publicite.id_publicite)}
-                                        className="flex items-center gap-2"
-                                    >
+                                    <Button variant="destructive" size="sm" onClick={() => handleDelete(publicite.id_publicite)} className="flex items-center gap-2"  >
                                         <Icon icon="solar:trash-bin-trash-bold" className="h-4 w-4" />
                                         Supprimer
                                     </Button>
@@ -526,12 +516,8 @@ function PubliciteFormComponent({ publicite, onSubmit, onCancel }: PubliciteForm
     };
 
     // Fonction pour rendre un champ d'image
-    const renderImageField = (
-        fieldName: keyof PubliciteFormValues,
-        label: string,
-        existingImage?: string,
-        currentFile?: any
-    ) => {
+    const renderImageField = (fieldName: keyof PubliciteFormValues, label: string, existingImage?: string, currentFile?: any) => {
+
         const hasExistingImage = existingImage && typeof existingImage === 'string' && existingImage.trim() !== '';
         const hasNewFile = currentFile && currentFile instanceof FileList && currentFile.length > 0;
 
@@ -547,32 +533,16 @@ function PubliciteFormComponent({ publicite, onSubmit, onCancel }: PubliciteForm
                         <div className="relative w-full h-48 border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
                             {hasNewFile ? (
                                 // Aperçu du nouveau fichier
-                                <img
-                                    src={URL.createObjectURL(currentFile[0])}
-                                    alt={`Aperçu ${label}`}
-                                    className="w-full h-full object-cover"
-                                />
+                                <img src={URL.createObjectURL(currentFile[0])} alt={`Aperçu ${label}`} className="w-full h-full object-cover" />
                             ) : hasExistingImage ? (
                                 // Image existante
-                                <Image
-                                    src={`${urlImages}/${existingImage}`}
-                                    alt={label}
-                                    fill
-                                    className="object-cover"
-                                    unoptimized
-                                />
+                                <Image src={`${urlImages}/${existingImage}`} alt={label} fill className="object-cover" unoptimized />
                             ) : null}
                         </div>
 
                         {/* Bouton pour supprimer l'image */}
                         <div className="mt-2 flex justify-end">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleRemoveImage(fieldName)}
-                                className="flex items-center gap-1"
-                            >
+                            <Button type="button" variant="outline" size="sm" onClick={() => handleRemoveImage(fieldName)} className="flex items-center gap-1"  >
                                 <Icon icon="solar:trash-bin-trash-bold" className="h-3 w-3" />
                                 Supprimer
                             </Button>
@@ -655,11 +625,7 @@ function PubliciteFormComponent({ publicite, onSubmit, onCancel }: PubliciteForm
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Libellé publicité 1
                         </label>
-                        <Input
-                            {...register('libelle_publicite1')}
-                            placeholder="Titre principal"
-                            className={errors.libelle_publicite1 ? 'border-red-500' : ''}
-                        />
+                        <Input   {...register('libelle_publicite1')} placeholder="Titre principal" className={errors.libelle_publicite1 ? 'border-red-500' : ''} />
                         {errors.libelle_publicite1 && (
                             <p className="text-red-500 text-sm mt-1">{errors.libelle_publicite1.message}</p>
                         )}
@@ -669,10 +635,7 @@ function PubliciteFormComponent({ publicite, onSubmit, onCancel }: PubliciteForm
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Libellé publicité 2
                         </label>
-                        <Input
-                            {...register('libelle_publicite2')}
-                            placeholder="Sous-titre"
-                        />
+                        <Input  {...register('libelle_publicite2')} placeholder="Sous-titre" />
                     </div>
                 </div>
             </div>

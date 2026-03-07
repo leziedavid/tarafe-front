@@ -54,19 +54,20 @@ export default function FinalCTASection({ finals }: FinalCTASectionProps) {
         return <FinalCTASkeleton />;
     }
 
+
     return (
-        <section className="w-full bg-tarafe-gray py-section-lg">
-            <div className="max-w-[1800px] mx-auto px-2">
+        <section className="w-full bg-tarafe-gray">
+            <div className="w-full md:max-w-[1400px] md:mx-auto px-0 md:px-6">
                 {/* Grand conteneur CTA */}
                 {finals.map((cta) => (
 
                     <div key={cta.id} className="bg-gradient-to-br from-tarafe-lavender to-tarafe-blue rounded-tarafe p-12 md:p-20 text-center">
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase mb-6 text-tarafe-black leading-tight max-w-3xl mx-auto">
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase mb-6 text-brand-secondary leading-tight">
                             {cta.title || "PRÊT À TRANSFORMER VOTRE STYLE ?"}
                         </h2>
-                        <p className=" text-base md:text-lg lg:text-xl leading-relaxed mb-10 text-tarafe-black/80 max-w-2xl text-left md:text-center mx-0 md:mx-auto " dangerouslySetInnerHTML={{ __html:cta.description || 'Rejoignez plus de 10 000 professionnels et particuliers qui font confiance à Tarafé pour leurs besoins en mode et personnalisation.', }}/>
+                        <p className=" text-base md:text-lg lg:text-xl leading-relaxed mb-10 text-tarafe-black/80 max-w-2xl text-left md:text-center mx-0 md:mx-auto " dangerouslySetInnerHTML={{ __html: cta.description || 'Rejoignez plus de 10 000 professionnels et particuliers qui font confiance à Tarafé pour leurs besoins en mode et personnalisation.', }} />
                         <div className="flex flex-wrap gap-4 justify-center">
-                            <Link href={cta?.button_link || "/contact"} className="bg-transparent border-2 border-tarafe-black text-tarafe-black px-10 py-2 rounded-full font-bold text-base md:text-lg hover:bg-tarafe-black hover:text-[#fd980e] transition-all duration-300" >
+                            <Link href={cta?.button_link || "/contact"} className="bg-transparent border-2 border-tarafe-black font-bold text-[#242078] px-10 py-2 rounded-full font-bold text-base md:text-lg hover:bg-tarafe-black hover:text-[#fd980e] transition-all duration-300" >
                                 {cta?.button_text || "Nous contacter"}
                             </Link>
                         </div>

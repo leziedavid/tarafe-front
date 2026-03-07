@@ -70,42 +70,39 @@ export default function AlternatingFeaturesSection({ feature }: FeatureProps) {
     return (
         <section className="w-full bg-tarafe-gray">
             <div className="w-full md:max-w-[1400px] md:mx-auto px-0 md:px-6">
-                <CardContainer bgColor="white" rounded="tarafe" padding="xl">
-                    <div className="space-y-24">
-                        {feature.map((feat) => {
-                            // Convertit en booléen comme ton ancien code
-                            const reverse = Number(feat.reverse) === 1;
+                <div className="space-y-24 p-4 md:p-14">
+                    {feature.map((feat) => {
+                        // Convertit en booléen comme ton ancien code
+                        const reverse = Number(feat.reverse) === 1;
 
-                            return (
-                                <div key={feat.id}  className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-                                    {/* Texte */}
-                                    <div className={`space-y-6 ${reverse ? "md:order-2" : "md:order-1"}`}>
-                                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase leading-tight text-brand-secondary">
-                                            {feat.title}
-                                        </h2>
-                                        <p  className="text-base md:text-lg leading-relaxed text-tarafe-black/80" dangerouslySetInnerHTML={{ __html: feat.description || "Description à venir..." }} />
-                                        <Link  href={feat.link || "#"} className="underline font-semibold inline-flex items-center gap-2 text-brand-secondary hover:gap-4 transition-all duration-300">
-                                            En savoir plus
-                                            <span>→</span>
-                                        </Link>
-                                    </div>
-
-                                    {/* Image */}
-                                    <div className={`rounded-xl overflow-hidden ${reverse ? "md:order-1" : "md:order-2"}`}>
-                                        {feat.image ? (
-                                            <Image  src={`${urlImages}/${feat.image}`}  alt={feat.title} width={600} height={400} className="w-full h-auto" unoptimized />
-                                        ) : (
-                                            <div className="w-full h-[300px] md:h-[400px] bg-tarafe-gray flex items-center justify-center">
-                                                <span className="text-tarafe-black/50">Image à venir</span>
-                                            </div>
-                                        )}
-                                    </div>
+                        return (
+                            <div key={feat.id} className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+                                {/* Texte */}
+                                <div className={`space-y-6 ${reverse ? "md:order-2" : "md:order-1"}`}>
+                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase leading-tight text-brand-secondary">
+                                        {feat.title}
+                                    </h2>
+                                    <p className="text-base md:text-lg leading-relaxed text-tarafe-black/80" dangerouslySetInnerHTML={{ __html: feat.description || "Description à venir..." }} />
+                                    <Link href={feat.link || "#"} className="underline font-semibold inline-flex items-center gap-2 text-brand-secondary hover:gap-4 transition-all duration-300">
+                                        En savoir plus
+                                        <span>→</span>
+                                    </Link>
                                 </div>
-                            );
-                        })}
 
-                    </div>
-                </CardContainer>
+                                {/* Image */}
+                                <div className={`rounded-xl overflow-hidden ${reverse ? "md:order-1" : "md:order-2"}`}>
+                                    {feat.image ? (
+                                        <Image src={`${urlImages}/${feat.image}`} alt={feat.title} width={600} height={400} className="w-full h-auto" unoptimized />
+                                    ) : (
+                                        <div className="w-full h-[300px] md:h-[400px] bg-tarafe-gray flex items-center justify-center">
+                                            <span className="text-tarafe-black/50">Image à venir</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         </section>
     );
