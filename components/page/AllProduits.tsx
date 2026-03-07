@@ -150,8 +150,8 @@ export default function AllProduits() {
                 </div>
 
 
-                <div className="text-xl sm:text-1xl px-5 md:px-15 md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight space-x-2 space-y-2">
-                    <button key="all" onClick={() => { handleFilter(0); }} className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
+                <div className="flex flex-nowrap sm:flex-wrap items-center gap-3 mb-8 overflow-x-auto hide-scrollbar pb-2 sm:pb-0 px-5 md:px-15">
+                    <button key="all" onClick={() => { handleFilter(0); }} className={`shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
                         Tous
                     </button>
 
@@ -159,7 +159,7 @@ export default function AllProduits() {
                         <button
                             key={cat.id_option_reaalisation}
                             onClick={() => handleFilter(cat.id_option_reaalisation)}
-                            className={`px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.id_option_reaalisation ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
+                            className={`shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.id_option_reaalisation ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
                             {cat.libelleOption_reaalisation}
                         </button>
                     ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import CartProvider from "@/app/context/CartProvider";
+import { CartProvider } from "@/components/providers/CartProvider";
 import { FC, ReactNode } from "react";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Providers: FC<Props> = ({ children }) => {
-  return ( <CartProvider>{children}</CartProvider> );
+  return (<CartProvider>{children}</CartProvider>);
 };
 
 export default Providers;

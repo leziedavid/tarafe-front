@@ -15,12 +15,21 @@ const GrilleTarifaire = () => {
     // getAllPricing
 
     useEffect(() => {
+        setLoading(true);
         getAllPricing().then((response) => {
             if (response.statusCode === 200 && response.data) {
+                console.log(response);
                 setPricingList(response.data.data);
-                setLoading(false);
+            } else {
+                setPricingList([]);
             }
-        });
+        })
+            .catch(() => {
+                setPricingList([]);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
 
     return (

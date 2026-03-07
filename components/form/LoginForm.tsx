@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import { Role } from '@/types/interfaces';
 import { login } from '@/service/security';
 import { setTokenToLocalStorage, setUserDataToLocalStorage } from '@/app/middleware';
-import { useCart } from '@/app/context/CartProvider';
+import { useCart } from '@/components/providers/CartProvider';
 
 
 const loginSchema = z.object({
@@ -25,8 +25,8 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
-    const { countAllItems } = useCart();
-    const cartItems = countAllItems();
+    const { totalItems } = useCart();
+    const cartItems = totalItems;
 
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, reset, } = useForm<LoginFormValues>({ resolver: zodResolver(loginSchema), });

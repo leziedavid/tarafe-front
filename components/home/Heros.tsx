@@ -260,12 +260,12 @@ export default function Heros({ heros }: HeroProps) {
                     {(currentHero.primary_button_text || currentHero.secondary_button_text) && (
                         <div className="flex flex-wrap gap-4">
                             {currentHero.primary_button_text && currentHero.primary_button_link && (
-                                <Link href={currentHero.primary_button_link} className="bg-brand-primary text-white px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:opacity-90 transition"  >
+                                <Link href={currentHero.primary_button_link} className="bg-brand-primary text-white px-5 sm:px-7 py-2 sm:py-3 rounded-full font-semibold hover:opacity-90 transition"  >
                                     {currentHero.primary_button_text}
                                 </Link>
                             )}
                             {currentHero.secondary_button_text && currentHero.secondary_button_link && (
-                                <Link href={currentHero.secondary_button_link} className="border border-border bg-card text-brand-secondary px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:bg-muted transition"  >
+                                <Link href={currentHero.secondary_button_link} className="border border-border bg-card text-brand-secondary px-5 sm:px-7 py-2 sm:py-3 rounded-full font-semibold hover:bg-muted transition"  >
                                     {currentHero.secondary_button_text}
                                 </Link>
                             )}

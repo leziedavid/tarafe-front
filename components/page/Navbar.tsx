@@ -7,7 +7,8 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import SideCart from "./SideCart";
-import { useCart } from "@/app/context/CartProvider";
+import { useCart } from "@/components/providers/CartProvider";
+import CartDetailModal from "../store/CartDetailModal";
 
 const NAV_LINKS = [
     { label: "Accueil", href: "/" },
@@ -22,8 +23,9 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false); // ← important
     const [showSideCart, setShowSideCart] = useState(false);
-    const { countAllItems } = useCart();
-    const cartItems = countAllItems();
+    const { totalItems } = useCart();
+    const cartItems = totalItems;
+    const [isCartModalOpen, setIsCartModalOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true); // active le rendu client-only
@@ -109,10 +111,8 @@ export default function Navbar() {
                     {/* <Icon icon="solar:magnifer-bold" className="w-5 h-5 cursor-pointer hover:text-[#fd980e] transition-colors duration-200" /> */}
                     {/* Panier avec badge */}
                     <div className="relative">
-                        <Icon  icon="solar:cart-3-bold" onClick={() => setShowSideCart(true)} className="w-5 h-5 cursor-pointer text-[#23207f] hover:text-[#fd980e] transition-colors duration-200" />
-                        {cartItems > 0 && (
-                            <span className="absolute -top-2 -right-2 text-[10px] text-white bg-[#B07B5E]  w-5 h-5 rounded-full flex items-center justify-center font-semibold"> {cartItems >= 9 ? "9+" : cartItems}  </span>
-                        )}
+                        <Icon icon="solar:cart-3-bold" onClick={() => setIsCartModalOpen(true)} className="w-5 h-5 cursor-pointer text-[#23207f] hover:text-[#fd980e] transition-colors duration-200" />
+                        {cartItems > 0 && (<span className="absolute -top-2 -right-2 text-[10px] text-white bg-[#B07B5E]  w-5 h-5 rounded-full flex items-center justify-center font-semibold"> {cartItems >= 9 ? "9+" : cartItems}  </span>)}
                     </div>
                     <Link href="/auth/login">
                         <Icon icon="solar:user-bold" className="w-5 h-5 cursor-pointer text-[#23207f] hover:text-[#fd980e] transition-colors duration-200" />
@@ -121,7 +121,7 @@ export default function Navbar() {
 
             </nav>
 
-            <SideCart visible={showSideCart} onRequestClose={() => setShowSideCart(false)} />
+            <CartDetailModal isOpen={isCartModalOpen} onClose={() => setIsCartModalOpen(false)} />
         </>
     );
 }

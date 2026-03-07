@@ -552,6 +552,7 @@ export interface Store {
     name: string;
     slug: string;
     logo: string | null;
+    phone?: string; // Ajout du téléphone pour WhatsApp
     description: string;
     active: number; // 0 | 1
     added_by: number;
@@ -707,6 +708,14 @@ export interface HomePageSectionsResponse {
 }
 
 
+export interface Pricing_files {
+    id: number;
+    pricing_id: number;
+    file_path: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface Pricing {
     id: number;
     product_name: string;
@@ -716,5 +725,6 @@ export interface Pricing {
     is_active: number;
     created_at: string;
     updated_at: string;
+    files?: Pricing_files[];
     reglages?: Reglage[] | null;
 }

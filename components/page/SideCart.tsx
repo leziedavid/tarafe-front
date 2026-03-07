@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import Image from "next/image";
-import { useCart } from "@/app/context/CartProvider";
+import { useCart } from "@/components/providers/CartProvider";
 import { useEffect, useState } from "react";
 import { getUserAllData } from "@/service/security";
 import { getImagesUrl } from "@/types/baseUrl";
@@ -20,21 +20,19 @@ const SideCart: React.FC<Props> = ({ visible, onRequestClose }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const getIsAuthenticated = async () => {
-
     const res = await getUserAllData()
     if (res.statusCode === 200 && res.data?.user) {
       setIsAuthenticated(true)
     } else {
       setIsAuthenticated(false);
     }
-
   };
 
   useEffect(() => {
     getIsAuthenticated();
   }, []);
 
-  const { items: cartItems, updateCart, removeFromCart, countTotalPrice, clearCart } = useCart();
+  const { cart: cartItems, updateQuantity, removeFromCart, totalAmount, clearCart } = useCart();
   const router = useRouter();
 
   return (
@@ -58,43 +56,41 @@ const SideCart: React.FC<Props> = ({ visible, onRequestClose }) => {
           </div>
         ) : (
           cartItems.map((cartItem) => (
-            <div key={cartItem.product.id} className="p-4 flex space-x-4 border-b">
+            <div key={cartItem.id} className="p-4 flex space-x-4 border-b">
               {/* Image */}
-              <Image src={ cartItem.product.image ? `${urlImages}/${cartItem.product.image}` : "/astronaut-grey-scale.svg" } alt="" className="rounded object-cover" width={60} height={60} unoptimized/>
+              <div className="relative w-[60px] h-[60px] flex-shrink-0">
+                <Image src={cartItem.image ? `${urlImages}/${cartItem.image}` : "/astronaut-grey-scale.svg"} alt={cartItem.name} fill className="rounded object-cover" unoptimized />
+              </div>
 
               {/* Infos produit */}
               <div className="flex-1">
-                <h2 className="font-semibold">{cartItem.product.name}</h2>
+                <h2 className="font-semibold line-clamp-1">{cartItem.name}</h2>
                 <div className="flex text-gray-400 text-sm space-x-1">
-                  <span>{cartItem.count}</span>
+                  <span>{cartItem.quantity}</span>
                   <span>x</span>
-                  <span className="font-bold text-sm">{cartItem.count * Number(cartItem.product.price)} Fcfa</span>
+                  <span className="font-bold text-sm">{(cartItem.quantity * Number(cartItem.price)).toLocaleString()} Fcfa</span>
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="ml-auto">
+              <div className="ml-auto flex flex-col items-end">
                 <button
-                  onClick={() => removeFromCart(cartItem.product)}
-                  className="text-xs text-black font-bold hover:underline"
+                  onClick={() => removeFromCart(cartItem.id)}
+                  className="text-xs text-red-500 font-bold hover:underline mb-2"
                 >
                   Retirer
                 </button>
 
-                <div className="flex items-center justify-between mt-2 space-x-2">
-                  <button onClick={() => updateCart(cartItem.product, -1)} className="text-lg">
+                <div className="flex items-center space-x-2">
+                  <button onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)} className="w-6 h-6 flex items-center justify-center border rounded-full hover:bg-gray-100">
                     -
                   </button>
 
-                  {/* Input modifiable */}
-                  <input type="number"  min={0}  className="w-14 text-center border rounded text-sm"  value={cartItem.count}
-                    onChange={(e) => {
-                      const newQty = parseInt(e.target.value) || 0;
-                      const diff = newQty - cartItem.count; // on calcule la différence
-                      updateCart(cartItem.product, diff); // on ajuste avec le contexte
-                    }}  />
+                  <span className="w-8 text-center text-sm font-bold">{cartItem.quantity}</span>
 
-                  <button onClick={() => updateCart(cartItem.product, 1)} className="text-lg">  +  </button>
+                  <button onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)} className="w-6 h-6 flex items-center justify-center border rounded-full hover:bg-gray-100">
+                    +
+                  </button>
                 </div>
               </div>
             </div>
@@ -106,7 +102,7 @@ const SideCart: React.FC<Props> = ({ visible, onRequestClose }) => {
           <div className="py-4">
             <h1 className="font-bold text-black text-xl uppercase">Total</h1>
             <p className="font-semibold">
-              <span className="text-gray-400 text-black font-normal">Montant total:</span> {countTotalPrice()} Fcfa
+              <span className="text-gray-400 text-black font-normal">Montant total:</span> {totalAmount.toLocaleString()} Fcfa
             </p>
           </div>
 
@@ -116,7 +112,7 @@ const SideCart: React.FC<Props> = ({ visible, onRequestClose }) => {
               if (onRequestClose) onRequestClose();
             }
           }}
-            disabled={!isAuthenticated} className={`border py-2 w-full rounded uppercase mt-4 ${!isAuthenticated ? "bg-[#B07B5E]/50 text-gray-500 cursor-not-allowed" : "bg-[#B07B5E] hover:bg-[#B07B5E]/50"}`}  >
+            disabled={!isAuthenticated || cartItems.length === 0} className={`border py-2 w-full rounded uppercase mt-4 ${!isAuthenticated ? "bg-[#B07B5E]/50 text-gray-500 cursor-not-allowed" : "bg-[#B07B5E] hover:bg-[#B07B5E]/50"}`}  >
             Passer au paiement
           </Button>
 

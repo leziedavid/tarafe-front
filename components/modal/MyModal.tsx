@@ -29,8 +29,7 @@ export default function MyModal({
     children,
     className,
     mode = "default",
-    typeModal = "normal",
-}: MyModalProps) {
+    typeModal = "normal", }: MyModalProps) {
     const [isOpen, setIsOpen] = React.useState(open);
     const startY = React.useRef<number | null>(null);
     const deltaY = React.useRef<number>(0);
@@ -135,16 +134,11 @@ export default function MyModal({
                     {/* === Bouton X “en chapeau” (légèrement plus haut) === */}
                     <motion.button
                         onClick={handleClose}
-                        className={cn(
-                            "fixed z-[10000] p-2 rounded-full bg-white dark:bg-neutral-900 shadow-lg border border-gray-200 dark:border-gray-700",
-                            "right-4 top-[calc(5vh-22px)] sm:top-[calc(50%-255px)]", // 🔼 légèrement plus haut
-                            "hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-                        )}
+                        className={cn("fixed z-[10000] p-2 rounded-full bg-white dark:bg-neutral-900 shadow-lg border border-gray-200 dark:border-gray-700", "right-4 top-[calc(5vh-22px)] sm:top-[calc(50%-255px)]", "hover:bg-gray-100 dark:hover:bg-gray-800 transition")}
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.25 }}
-                    >
+                        transition={{ duration: 0.25 }}>
                         <Icon icon="solar:close-square-bold" className="h-5 w-5 text-gray-700 dark:text-gray-300" />
                     </motion.button>
                 </>

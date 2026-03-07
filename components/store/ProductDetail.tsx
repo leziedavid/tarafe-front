@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Product } from '@/types/interfaces';
 import { Icon } from "@iconify/react";
 import Image from "next/image";
-import { useCart } from '@/app/context/CartProvider';
+import { useCart } from '@/components/providers/CartProvider';
 
 
 interface ProductDetailProps {
@@ -20,7 +20,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onBack, onNegoti
     // États pour le slider d'images
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const { updateCart } = useCart();
+    const { addToCart } = useCart();
 
     // Si pas de produit, afficher un état de chargement ou message d'erreur
     if (!product) {
@@ -442,7 +442,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onBack, onNegoti
                                     <button onClick={() => onNegotiate?.(product)} disabled={!isAvailable} className="inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 dark:focus-visible:ring-slate-300 border bg-white dark:bg-slate-800 shadow-none hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-50 h-12 px-4 flex-1 py-6 rounded-2xl text-base font-medium border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed" type="button"  >
                                         Négocier
                                     </button>
-                                    <button onClick={() => updateCart(product, 1)} disabled={!isAvailable || product.stock <= 0} className={`inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 dark:focus-visible:ring-slate-300 shadow-none h-12 px-4 flex-[2] py-6 rounded-2xl text-base font-medium ${!isAvailable || product.stock <= 0 ? 'bg-slate-400 dark:bg-slate-700 cursor-not-allowed' : 'bg-slate-900 dark:bg-blue-900 hover:bg-slate-800 dark:hover:bg-blue-800 text-white dark:text-slate-50'}`} type="button"  >
+                                    <button onClick={() => addToCart(product, 1)} disabled={!isAvailable || product.stock <= 0} className={`inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 dark:focus-visible:ring-slate-300 shadow-none h-12 px-4 flex-[2] py-6 rounded-2xl text-base font-medium ${!isAvailable || product.stock <= 0 ? 'bg-slate-400 dark:bg-slate-700 cursor-not-allowed' : 'bg-slate-900 dark:bg-blue-900 hover:bg-slate-800 dark:hover:bg-blue-800 text-white dark:text-slate-50'}`} type="button"  >
                                         {!isAvailable ? 'Indisponible' : product.stock <= 0 ? 'Rupture de stock' : 'Commander →'}
                                     </button>
                                 </div>

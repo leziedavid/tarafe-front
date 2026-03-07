@@ -385,21 +385,20 @@ export const getAllPricing = async (params?: GetAllParams): Promise<BaseResponse
     return response.json();
 };
 
-export const createPricing = async (data: any): Promise<BaseResponse<Pricing>> => {
+export const createPricing = async (data: FormData): Promise<BaseResponse<Pricing>> => {
     const response = await fetch(`${baseUrl}/pricing`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: data,
         credentials: 'include',
     });
     return response.json();
 };
 
-export const updatePricing = async (id: number, data: any): Promise<BaseResponse<Pricing>> => {
+export const updatePricing = async (id: number, data: FormData): Promise<BaseResponse<Pricing>> => {
+    data.append('_method', 'PUT');
     const response = await fetch(`${baseUrl}/pricing/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        method: 'POST',
+        body: data,
         credentials: 'include',
     });
     return response.json();
@@ -419,6 +418,14 @@ export const activatePricing = async (id: number, state: number): Promise<BaseRe
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
+    });
+    return response.json();
+};
+
+export const deletePricingImage = async (id: number): Promise<BaseResponse<Pricing>> => {
+    const response = await fetch(`${baseUrl}/pricing/${id}/image`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
     });
     return response.json();
 };
