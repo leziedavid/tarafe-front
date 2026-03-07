@@ -26,6 +26,7 @@ const GrilleTarifaire = () => {
     return (
         <>
             <Navbar />
+            {/* <pre>{JSON.stringify(pricingList, null, 2)}</pre> */}
             <PricingSection pricing={pricingList} isLoading={loading} />
 
         </>

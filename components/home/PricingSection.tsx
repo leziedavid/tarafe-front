@@ -31,6 +31,8 @@ export default function PricingSection({ pricing, isLoading = false }: PricingSe
         <section className="py-12 px-4 md:px-8 bg-white dark:bg-gray-950">
             <div className="max-w-5xl mx-auto">
 
+                {/* <pre>{JSON.stringify(activePricing, null, 2)}</pre> */}
+
                 {/* Pricing Table Section - Compact Header */}
                 <div className="mb-8">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase mb-6 text-brand-secondary leading-tight">
@@ -60,8 +62,8 @@ export default function PricingSection({ pricing, isLoading = false }: PricingSe
                                         <SkeletonRow />
                                         <SkeletonRow />
                                     </>
-                                ) : activePricing.length > 0 ? (
-                                    activePricing.map((item) => (
+                                ) : pricing.length > 0 ? (
+                                    pricing.map((item) => (
                                         <tr key={item.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-900/20 transition-colors group">
                                             <td className="px-5 py-4">
                                                 <div className="font-bold text-gray-900 dark:text-white">{item.product_name}</div>
@@ -74,7 +76,7 @@ export default function PricingSection({ pricing, isLoading = false }: PricingSe
                                             </td>
                                             <td className="px-5 py-4 text-right">
                                                 <div className="text-base font-bold text-[#242078] dark:text-[#4a45b1]">
-                                                    {item.unit_price}
+                                                    {item.unit_price} XOF
                                                 </div>
                                             </td>
                                         </tr>
