@@ -6,7 +6,6 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, } from "@/c
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import SideCart from "./SideCart";
 import { useCart } from "@/components/providers/CartProvider";
 import CartDetailModal from "../store/CartDetailModal";
 
@@ -22,7 +21,6 @@ export default function Navbar() {
 
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false); // ← important
-    const [showSideCart, setShowSideCart] = useState(false);
     const { totalItems } = useCart();
     const cartItems = totalItems;
     const [isCartModalOpen, setIsCartModalOpen] = useState(false);
@@ -42,18 +40,12 @@ export default function Navbar() {
                         {mounted && ( // ← rendu seulement après montage
                             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                                 <SheetTrigger asChild>
-                                    <button
-                                        className="p-2 rounded-md hover:bg-gray-100 transition"
-                                        type="button"
-                                    >
+                                    <button className="p-2 rounded-md hover:bg-gray-100 transition" type="button">
                                         <Icon icon="solar:hamburger-menu-bold" className="w-5 h-5" />
                                     </button>
                                 </SheetTrigger>
 
-                                <SheetContent
-                                    side="top"
-                                    className="w-full p-6 bg-white text-[#242078] rounded-b-2xl shadow-md border-none text-left"
-                                >
+                                <SheetContent side="top" className="w-full p-6 bg-white text-[#242078] rounded-b-2xl shadow-md border-none text-left">
                                     <SheetHeader>
                                         <SheetTitle>
                                             <VisuallyHidden>Navigation Menu</VisuallyHidden>
@@ -64,11 +56,7 @@ export default function Navbar() {
                                     <ul className="flex flex-col space-y-4 text-lg font-semibold mt-2 uppercase">
                                         {NAV_LINKS.map((link) => (
                                             <li key={link.label}>
-                                                <a
-                                                    href={link.href}
-                                                    className="transition-colors duration-200 hover:text-[#fd980e] block py-2"
-                                                    onClick={() => setIsOpen(false)}
-                                                >
+                                                <a href={link.href} className="transition-colors duration-200 hover:text-[#fd980e] block py-2" onClick={() => setIsOpen(false)} >
                                                     {link.label}
                                                 </a>
                                             </li>
