@@ -57,7 +57,7 @@ export default function LoginForm() {
 
                 if (role !== Role.ADMIN && cartItems > 0) {
                     toast.success("Finalisez votre paiement 🛒");
-                    router.push('/checkout');
+                    // router.push('/checkout');
                     return;
                 }
 
