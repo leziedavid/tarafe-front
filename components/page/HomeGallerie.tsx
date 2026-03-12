@@ -12,6 +12,7 @@ import { Icon } from "@iconify/react";
 import ImagePreview from "../shared/ImagePreview";
 import MyModal from "../modal/MyModal";
 import { Skeleton } from "@/components/ui/skeleton";
+import ProductHero, { HeroSlide } from "../store/ProductHero";
 
 export default function HomeGallerie() {
     const [gallery, setGallery] = useState<GallerieImage[]>([]);
@@ -104,9 +105,27 @@ export default function HomeGallerie() {
         </div>
     );
 
+    const heroSlides: HeroSlide[] = [
+        {
+            id: 1,
+            image: "/ads/images.jpg",
+            titleLines: [
+                "Tarafé est une plateforme digitale de personnalisation",
+                "des produits mode, accessoires et déco, avec une touche africaine,",
+                "pour les entreprises et les particuliers. Bienvenue !"
+            ],
+        },
+    ];
+
+
     return (
         <>
             <section className="max-w-7xl mx-auto px-6 py-10  mt-12 md:mt-0">
+
+                <div className="mb-10">
+                    <ProductHero data={heroSlides} />
+                </div>
+
                 {/* Header */}
                 <div className="flex items-center justify-between mb-10">
                     <h2 className="text-brand-secondary text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">

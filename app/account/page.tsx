@@ -14,6 +14,7 @@ import { getMyAllorders } from "@/service/orders";
 import { updateUser } from "@/service/security";
 import { Order, OrderStatus } from "@/types/interfaces";
 import { Pagination } from "@/types/pagination";
+import HeaderCard from "@/components/account/HeaderCard";
 
 type TabType = "Commandes" | "Mon compte";
 
@@ -128,150 +129,114 @@ export default function AccountPage() {
 
     return (
         <>
+
             <main className="min-h-screen bg-background text-foreground pb-24 relative overflow-x-hidden">
+
                 <Navbar />
 
-                <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-16 pb-10 md:pb-16 flex-1 md:mt-8">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-
-                        {/* Desktop Sidebar */}
-                        <aside className="hidden md:block md:col-span-4 lg:col-span-3">
-                            <div className="bg-card rounded-3xl shadow-xl border border-border p-6 sticky top-32">
-                                <div className="flex flex-col items-center mb-8">
-                                    <div className="w-20 h-20 rounded-full bg-brand-primary/10 flex items-center justify-center text-3xl font-bold text-brand-primary border-4 border-brand-primary/20">
-                                        {user?.name?.charAt(0) || "U"}
+                <HeaderCard
+                    user={user}
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    handleLogout={handleLogout}
+                >
+                    {activeTab === "Commandes" && (
+                        <div className="space-y-4">
+                            {isLoadingOrders ? (
+                                <div className="grid gap-4">
+                                    {[1, 2, 3].map(i => (
+                                        <div key={i} className="h-32 bg-muted animate-pulse rounded-3xl" />
+                                    ))}
+                                </div>
+                            ) : orders.length > 0 ? (
+                                <>
+                                    <div className="grid gap-4">
+                                        {orders.map((order) => (
+                                            <div key={order.id} className="bg-card border border-border p-6 rounded-3xl group hover:border-brand-primary/30 transition-all duration-300">
+                                                <div className="flex flex-wrap items-center justify-between gap-4">
+                                                    <div className="space-y-1">
+                                                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Commande #{order.id}</p>
+                                                        <h3 className="text-lg font-bold">Total: {order.total?.toLocaleString()} FCFA</h3>
+                                                        <p className="text-sm text-muted-foreground">Passée le {new Date(order.created_at).toLocaleDateString("fr-FR")}</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">
+                                                        <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase ${getStatusColor(order.status)}`}>
+                                                            {order.status}
+                                                        </span>
+                                                        <Button variant="outline" size="sm" className="rounded-xl border-border hover:bg-muted font-bold">
+                                                            Détails
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                    <h2 className="mt-4 font-bold text-xl">{user?.name || "Utilisateur"}</h2>
-                                    <p className="text-sm text-muted-foreground">{user?.email}</p>
-                                </div>
 
-                                <nav className="space-y-2">
-                                    <button onClick={() => setActiveTab("Commandes")} className={`w-full flex items-center gap-3 p-4 rounded-2xl text-sm font-bold transition-all ${activeTab === "Commandes" ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25" : "hover:bg-muted text-muted-foreground"}`} >
-                                        <Icon icon="solar:cart-large-2-bold-duotone" width={20} />
-                                        Commandes
-                                    </button>
-                                    <button onClick={() => setActiveTab("Mon compte")} className={`w-full flex items-center gap-3 p-4 rounded-2xl text-sm font-bold transition-all ${activeTab === "Mon compte" ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25" : "hover:bg-muted text-muted-foreground"}`} >
-                                        <Icon icon="solar:user-bold-duotone" width={20} />
-                                        Mon compte
-                                    </button>
-                                </nav>
-
-                                <div className="mt-8 pt-6 border-t border-border">
-                                    <button onClick={handleLogout} className="w-full flex items-center gap-3 p-4 rounded-2xl text-sm font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all" >
-                                        <Icon icon="solar:logout-bold-duotone" width={20} />
-                                        Déconnexion
-                                    </button>
-                                </div>
-                            </div>
-                        </aside>
-
-                        {/* Main Content */}
-                        <section className="md:col-span-8 lg:col-span-9">
-                            <div className="flex items-center gap-3 mb-8">
-                                <div className="p-3 bg-brand-primary/10 rounded-2xl">
-                                    <Icon icon={activeTab === "Commandes" ? "solar:cart-large-2-bold-duotone" : "solar:user-bold-duotone"} className="text-brand-primary w-6 h-6" />
-                                </div>
-                                <h1 className="text-3xl font-bold">{activeTab}</h1>
-                            </div>
-
-                            {activeTab === "Commandes" && (
-                                <div className="space-y-4">
-                                    {isLoadingOrders ? (
-                                        <div className="grid gap-4">
-                                            {[1, 2, 3].map(i => (
-                                                <div key={i} className="h-32 bg-muted animate-pulse rounded-3xl" />
+                                    {/* Pagination Simple */}
+                                    {orderPagination && orderPagination.last_page > 1 && (
+                                        <div className="mt-10 flex items-center justify-center gap-2">
+                                            {Array.from({ length: orderPagination.last_page }, (_, i) => i + 1).map(p => (
+                                                <button key={p} onClick={() => setOrderPage(p)} className={`w-10 h-10 rounded-xl font-bold transition-all ${orderPage === p ? "bg-brand-primary text-white" : "bg-card border border-border text-muted-foreground hover:border-brand-primary"}`} >
+                                                    {p}
+                                                </button>
                                             ))}
                                         </div>
-                                    ) : orders.length > 0 ? (
-                                        <>
-                                            <div className="grid gap-4">
-                                                {orders.map((order) => (
-                                                    <div key={order.id} className="bg-card border border-border p-6 rounded-3xl group hover:border-brand-primary/30 transition-all duration-300">
-                                                        <div className="flex flex-wrap items-center justify-between gap-4">
-                                                            <div className="space-y-1">
-                                                                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Commande #{order.id}</p>
-                                                                <h3 className="text-lg font-bold">Total: {order.total?.toLocaleString()} FCFA</h3>
-                                                                <p className="text-sm text-muted-foreground">Passée le {new Date(order.created_at).toLocaleDateString("fr-FR")}</p>
-                                                            </div>
-                                                            <div className="flex items-center gap-3">
-                                                                <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase ${getStatusColor(order.status)}`}>
-                                                                    {order.status}
-                                                                </span>
-                                                                <Button variant="outline" size="sm" className="rounded-xl border-border hover:bg-muted font-bold">
-                                                                    Détails
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            {/* Pagination Simple */}
-                                            {orderPagination && orderPagination.last_page > 1 && (
-                                                <div className="mt-10 flex items-center justify-center gap-2">
-                                                    {Array.from({ length: orderPagination.last_page }, (_, i) => i + 1).map(p => (
-                                                        <button key={p} onClick={() => setOrderPage(p)} className={`w-10 h-10 rounded-xl font-bold transition-all ${orderPage === p ? "bg-brand-primary text-white" : "bg-card border border-border text-muted-foreground hover:border-brand-primary"}`} >
-                                                            {p}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <div className="py-20 flex flex-col items-center justify-center text-center bg-card rounded-3xl border border-dashed border-border">
-                                            <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center text-muted-foreground mb-6">
-                                                <Icon icon="solar:box-bold-duotone" width={48} />
-                                            </div>
-                                            <h3 className="text-xl font-bold mb-2">Aucune commande</h3>
-                                            <p className="text-muted-foreground max-w-xs">Vous n'avez pas encore passé de commande sur Tarafé.</p>
-                                            <Button onClick={() => router.push("/boutique")} className="mt-8 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-2xl px-8 py-6 font-bold" >
-                                                Découvrir la boutique
-                                            </Button>
-                                        </div>
                                     )}
-                                </div>
-                            )}
-
-                            {activeTab === "Mon compte" && (
-                                <div className="bg-card border border-border rounded-3xl p-8 max-w-2xl">
-                                    <div className="flex items-center justify-between mb-8">
-                                        <div className="space-y-1">
-                                            <h2 className="text-xl font-bold italic">Informations personnelles</h2>
-                                            <p className="text-sm text-muted-foreground">Gérez vos coordonnées pour vos prochaines commandes.</p>
-                                        </div>
-                                        {!isEditingProfile && (
-                                            <Button onClick={() => setIsEditingProfile(true)} variant="outline" className="rounded-2xl border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-bold" >
-                                                Modifier
-                                            </Button>
-                                        )}
+                                </>
+                            ) : (
+                                <div className="py-20 flex flex-col items-center justify-center text-center bg-card rounded-3xl border border-dashed border-border">
+                                    <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center text-muted-foreground mb-6">
+                                        <Icon icon="solar:box-bold-duotone" width={48} />
                                     </div>
-
-                                    <form onSubmit={handleUpdateProfile} className="space-y-6">
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-muted-foreground ml-1">Nom complet</label>
-                                            <Input value={profileName} onChange={(e) => setProfileName(e.target.value)} readOnly={!isEditingProfile} className={`rounded-2xl h-14 bg-background border-border focus:ring-2 focus:ring-brand-primary/20 ${!isEditingProfile && "opacity-70 cursor-not-allowed"}`} />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-muted-foreground ml-1">Email</label>
-                                            <Input value={profileEmail} onChange={(e) => setProfileEmail(e.target.value)} readOnly={!isEditingProfile} type="email" className={`rounded-2xl h-14 bg-background border-border focus:ring-2 focus:ring-brand-primary/20 ${!isEditingProfile && "opacity-70 cursor-not-allowed"}`} />
-                                        </div>
-
-                                        {isEditingProfile && (
-                                            <div className="flex items-center gap-4 pt-4">
-                                                <Button type="submit" disabled={isSavingProfile} className="flex-1 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-2xl h-14 font-bold shadow-lg shadow-brand-primary/25">
-                                                    {isSavingProfile ? "Enregistrement..." : "Sauvegarder"}
-                                                </Button>
-                                                <Button type="button" onClick={() => { setIsEditingProfile(false); setProfileName(user?.name || ""); setProfileEmail(user?.email || ""); }} variant="ghost" className="rounded-2xl h-14 font-bold">
-                                                    Annuler
-                                                </Button>
-                                            </div>
-                                        )}
-                                    </form>
+                                    <h3 className="text-xl font-bold mb-2">Aucune commande</h3>
+                                    <p className="text-muted-foreground max-w-xs">Vous n'avez pas encore passé de commande sur Tarafé.</p>
+                                    <Button onClick={() => router.push("/boutique")} className="mt-8 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-2xl px-8 py-6 font-bold" >
+                                        Découvrir la boutique
+                                    </Button>
                                 </div>
                             )}
-                        </section>
-                    </div>
-                </div>
+                        </div>
+                    )}
+
+                    {activeTab === "Mon compte" && (
+                        <div className="bg-card border border-border rounded-3xl p-8 max-w-2xl">
+                            <div className="flex items-center justify-between mb-8">
+                                <div className="space-y-1">
+                                    <h2 className="text-xl font-bold italic">Informations personnelles</h2>
+                                    <p className="text-sm text-muted-foreground">Gérez vos coordonnées pour vos prochaines commandes.</p>
+                                </div>
+                                {!isEditingProfile && (
+                                    <Button onClick={() => setIsEditingProfile(true)} variant="outline" className="rounded-2xl border-brand-primary text-brand-primary hover:bg-brand-primary/5 font-bold" >
+                                        Modifier
+                                    </Button>
+                                )}
+                            </div>
+
+                            <form onSubmit={handleUpdateProfile} className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-muted-foreground ml-1">Nom complet</label>
+                                    <Input value={profileName} onChange={(e) => setProfileName(e.target.value)} readOnly={!isEditingProfile} className={`rounded-2xl h-14 bg-background border-border focus:ring-2 focus:ring-brand-primary/20 ${!isEditingProfile && "opacity-70 cursor-not-allowed"}`} />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-muted-foreground ml-1">Email</label>
+                                    <Input value={profileEmail} onChange={(e) => setProfileEmail(e.target.value)} readOnly={!isEditingProfile} type="email" className={`rounded-2xl h-14 bg-background border-border focus:ring-2 focus:ring-brand-primary/20 ${!isEditingProfile && "opacity-70 cursor-not-allowed"}`} />
+                                </div>
+
+                                {isEditingProfile && (
+                                    <div className="flex items-center gap-4 pt-4">
+                                        <Button type="submit" disabled={isSavingProfile} className="flex-1 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-2xl h-14 font-bold shadow-lg shadow-brand-primary/25">
+                                            {isSavingProfile ? "Enregistrement..." : "Sauvegarder"}
+                                        </Button>
+                                        <Button type="button" onClick={() => { setIsEditingProfile(false); setProfileName(user?.name || ""); setProfileEmail(user?.email || ""); }} variant="ghost" className="rounded-2xl h-14 font-bold">
+                                            Annuler
+                                        </Button>
+                                    </div>
+                                )}
+                            </form>
+                        </div>
+                    )}
+                </HeaderCard>
+
             </main>
 
             {/* Mobile Bottom Floating Menu (Akwaba style) */}

@@ -47,7 +47,7 @@ export default function Page() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background text-foreground transition-colors duration-500">
+    <main className="min-h-screen bg-background text-foreground transition-colors duration-500 mt-12 md:mt-0">
       <Navbar />
 
       {/* Hero Section */}
@@ -57,7 +57,7 @@ export default function Page() {
             {/* Left Side - Text Content */}
             <div className="flex-1 flex flex-col justify-center">
               <div className="max-w-2xl">
-                <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight text-foreground">  A propos de Tarafé  </h1>
+                <h1 className="text-3xl md:text-4xl font-bold mb-6  text-brand-secondary uppercase">  A propos de Tarafé  </h1>
                 <p className="text-md text-muted-foreground mb-8 leading-relaxed">
 
                   Tarafé est une plateforme digitale de personnalisation des produits mode, accessoires et déco, avec une touche africaine, pour les entreprises et les particuliers. Notre mission est de valoriser les savoir-faire et le patrimoine textile local.
@@ -76,10 +76,8 @@ export default function Page() {
                 {/* Carousel Container */}
                 <div className="relative w-full h-full">
                   {/* Slides avec images en background */}
-                  <div
-                    className="flex transition-transform duration-500 ease-in-out h-full"
-                    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-                  >
+
+                  <div className="flex transition-transform duration-500 ease-in-out h-full" style={{ transform: `translateX(-${currentSlide * 100}%)` }} >
                     {equipeData.map((membre, index) => (
                       <div key={membre.id_equipe} className="w-full h-full flex-shrink-0 relative">
                         {/* Image de fond */}
@@ -90,14 +88,7 @@ export default function Page() {
                               <div className="text-6xl mb-4">👤</div>
                               {/* <p>Photo de {membre.nomPren_equipe}</p> */}
                               {/* Décommentez pour utiliser les vraies images */}
-                              <Image
-                                src={membre.photo_equipe}
-                                alt={membre.nomPren_equipe}
-                                fill
-                                className="object-cover"
-                                priority
-                              />
-
+                              <Image src={membre.photo_equipe} alt={membre.nomPren_equipe} fill className="object-cover" priority unoptimized />
                             </div>
                           </div>
                         </div>
@@ -147,30 +138,21 @@ export default function Page() {
                   </div>
 
                   {/* Boutons de navigation */}
-                  <button
-                    onClick={prevSlide}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-colors shadow-lg"
-                  >
+                  <button onClick={prevSlide} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-colors shadow-lg" >
                     <ChevronLeft size={24} className="text-white" />
                   </button>
-                  <button
-                    onClick={nextSlide}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-colors shadow-lg"
-                  >
+
+                  <button onClick={nextSlide} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-colors shadow-lg"  >
                     <ChevronRight size={24} className="text-white" />
                   </button>
 
                   {/* Indicateurs de slide */}
                   <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3">
                     {equipeData.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentSlide(index)}
-                        className={`w-3 h-3 rounded-full transition-colors ${index === currentSlide ? 'bg-white' : 'bg-white/50'
-                          }`}
-                      />
+                      <button key={index} onClick={() => setCurrentSlide(index)} className={`w-3 h-3 rounded-full transition-colors ${index === currentSlide ? 'bg-white' : 'bg-white/50'}`} />
                     ))}
                   </div>
+
                 </div>
               </div>
             </div>

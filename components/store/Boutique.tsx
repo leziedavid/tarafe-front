@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import ProductHero from "./ProductHero";
+import ProductHero, { HeroSlide } from "./ProductHero";
 import { getAllCategoriesIn, getSubCategoriesbyCategory } from "@/service/categoryServices";
 import { getAllProducts } from "@/service/productsServices";
 import { prepareProductParams } from "@/types/prepareProductParams";
@@ -135,7 +135,21 @@ export default function Store() {
         ))
     );
 
+
+    const heroSlides: HeroSlide[] = [
+        {
+            id: 1,
+            image: "/ads/images.jpg",
+            titleLines: [
+                "Tarafé est une plateforme digitale de personnalisation",
+                "des produits mode, accessoires et déco, avec une touche africaine,",
+                "pour les entreprises et les particuliers. Bienvenue !"
+            ],
+        },
+    ];
+
     return (
+
         <div className="relative min-h-screen bg-background  mt-12 md:mt-0">
             {/* Store Navigation Indicator (Floating Cart) */}
             <div className="fixed bottom-8 right-8 z-[900]">
@@ -153,7 +167,7 @@ export default function Store() {
             </div>
 
             <section className="max-w-7xl mx-auto px-6 py-8 pb-32">
-                <ProductHero />
+                <ProductHero data={heroSlides} />
 
                 <div className="mt-16 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
                     <div className="space-y-2">
@@ -333,5 +347,6 @@ export default function Store() {
                 onClose={() => setIsCartModalOpen(false)}
             />
         </div>
+
     );
 }

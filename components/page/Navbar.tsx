@@ -8,6 +8,7 @@ import { useCart } from "@/components/providers/CartProvider";
 import CartDetailModal from "../store/CartDetailModal";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 
 const NAV_LINKS = [
     { label: "Accueil", href: "/" },
@@ -18,12 +19,15 @@ const NAV_LINKS = [
 ];
 
 export default function Navbar() {
+    const { resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
     const pathname = usePathname();
     const { totalItems } = useCart();
     const [isCartModalOpen, setIsCartModalOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
         };
@@ -36,14 +40,21 @@ export default function Navbar() {
         return pathname.startsWith(tabPath);
     };
 
+    const currentTheme = mounted ? resolvedTheme : "light";
+    const logoSrc = (currentTheme === "dark")
+        ? "/ads/Logo_blanc.png"
+        : (isScrolled || pathname !== "/")
+            ? "/ads/logos2.png"
+            : "/ads/Logo_blanc.png";
+
     return (
         <>
             {/* Mobile Header (Logo Only) */}
-            <div className="fixed top-6 left-6 z-50 md:hidden pointer-events-none">
+            <div className={`fixed top-6 left-6 z-50 md:hidden pointer-events-none transition-all duration-500 ${isScrolled ? "opacity-0 -translate-y-10" : "opacity-100 translate-y-0"}`}>
                 <Link href="/" className="pointer-events-auto block transition-transform active:scale-95">
                     <div className="relative w-40 h-12">
                         <Image
-                            src={(isScrolled || pathname !== "/") ? "/ads/logos2.png" : "/ads/Logo_blanc.png"}
+                            src={logoSrc}
                             alt="Tarafe Logo"
                             fill
                             className="object-contain"
@@ -55,17 +66,12 @@ export default function Navbar() {
 
             {/* Desktop Navbar */}
             <header className="fixed top-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-[1600px] flex items-center justify-center hidden md:flex pointer-events-none px-12">
+
                 {/* Left: Logo (Simple & Responsive) */}
-                <div className="absolute left-12 top-1/2 -translate-y-1/2">
+                <div className={`absolute left-12 top-1/2 -translate-y-1/2 transition-all duration-500 ${isScrolled ? "opacity-0 -translate-x-10 pointer-events-none" : "opacity-100 translate-x-0"}`}>
                     <Link href="/" className="pointer-events-auto block transition-transform duration-300 hover:scale-105 active:scale-95 origin-left">
                         <div className="relative w-36 h-10 md:w-48 md:h-12">
-                            <Image
-                                src={(isScrolled || pathname !== "/") ? "/ads/logos2.png" : "/ads/Logo_blanc.png"}
-                                alt="Tarafe Logo"
-                                fill
-                                className="object-contain"
-                                priority
-                            />
+                            <Image src={logoSrc} alt="Tarafe Logo" fill className="object-contain" priority unoptimized />
                         </div>
                     </Link>
                 </div>
@@ -107,6 +113,7 @@ export default function Navbar() {
 
             {/* Mobile Bottom Navigation (Inspired by in-seach) */}
             <nav className="fixed md:hidden bottom-6 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-[500px] bg-background/80 dark:bg-black/60 backdrop-blur-2xl border border-border/50 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.12)] px-4 py-2 flex items-center gap-2 overflow-x-auto hide-scrollbar transition-all duration-500">
+
                 <div className="flex items-center flex-1">
                     {NAV_LINKS.map((link) => {
                         const active = isTabActive(link.href);
@@ -121,8 +128,7 @@ export default function Navbar() {
                         return (
                             <Link key={link.label} href={link.href} className={`flex flex-col items-center justify-center p-3 rounded-full transition-all shrink-0 ${active ? "text-brand-primary bg-brand-primary/10 scale-110" : "text-muted-foreground hover:text-foreground"}`} >
                                 <Icon icon={icon} className="w-6 h-6" />
-                            </Link>
-                        );
+                            </Link>);
                     })}
                 </div>
 
@@ -144,14 +150,13 @@ export default function Navbar() {
                         <Icon icon="solar:user-bold" className="w-6 h-6" />
                     </Link>
                 </div>
+
             </nav>
 
             {/* Spacing spacer for pages where navbar shouldn't overlap content directly (non-hero pages) */}
-            {pathname !== "/" && (
-                <div className="hidden md:block h-32 w-full" />
-            )}
-
+            {pathname !== "/" && (<div className="hidden md:block h-32 w-full" />)}
             <CartDetailModal isOpen={isCartModalOpen} onClose={() => setIsCartModalOpen(false)} />
+
         </>
     );
 }

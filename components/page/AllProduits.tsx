@@ -9,6 +9,7 @@ import Footer from "@/components/page/Footer";
 import { OptionRealisation, Realisation, Reglage } from "@/types/interfaces";
 import { getAllRealisationsByFilter } from "@/service/realisationServices";
 import CollectionsSection from "../home/ProductList";
+import ProductHero, { HeroSlide } from "../store/ProductHero";
 
 // Interface pour les images
 interface ImageRealisation {
@@ -138,9 +139,26 @@ export default function AllProduits() {
         <div key={key} className={`relative overflow-hidden rounded-xl animate-pulse bg-gray-200 ${large ? "h-[300px] md:h-[400px] lg:h-[520px]" : "h-[300px] md:h-[400px] lg:h-[250px]"}`} />
     );
 
+    const heroSlides: HeroSlide[] = [
+        {
+            id: 1,
+            image: "/ads/images.jpg",
+            titleLines: [
+                "Tarafé est une plateforme digitale de personnalisation",
+                "des produits mode, accessoires et déco, avec une touche africaine,",
+                "pour les entreprises et les particuliers. Bienvenue !"
+            ],
+        },
+    ];
+
     return (
         <>
             <section className="max-w-7xl mx-auto px-1 pt-4 pb-10 mt-12 md:mt-0">
+
+                <div className="mb-10">
+                    <ProductHero data={heroSlides} />
+                </div>
+
 
                 {/* Header */}
                 <div className="flex mb-5 ">
