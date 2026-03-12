@@ -140,7 +140,7 @@ export default function AllProduits() {
 
     return (
         <>
-            <section className="max-w-7xl mx-auto px-1 py-10">
+            <section className="max-w-7xl mx-auto px-1 pt-4 pb-10 mt-12 md:mt-0">
 
                 {/* Header */}
                 <div className="flex mb-5 ">
@@ -151,7 +151,7 @@ export default function AllProduits() {
 
 
                 <div className="flex flex-nowrap sm:flex-wrap items-center gap-3 mb-8 overflow-x-auto hide-scrollbar pb-2 sm:pb-0 px-5 md:px-15">
-                    <button key="all" onClick={() => { handleFilter(0); }} className={`shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
+                    <button key="all" onClick={() => { handleFilter(0); }} className={`shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-brand-primary text-white border-brand-primary shadow-lg shadow-brand-primary/20" : "bg-background text-foreground border-border"}`}  >
                         Tous
                     </button>
 
@@ -159,7 +159,7 @@ export default function AllProduits() {
                         <button
                             key={cat.id_option_reaalisation}
                             onClick={() => handleFilter(cat.id_option_reaalisation)}
-                            className={`shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.id_option_reaalisation ? "bg-brand-primary text-white" : "bg-white text-brand-secondary border-gray-300"}`}  >
+                            className={`shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.id_option_reaalisation ? "bg-brand-primary text-white border-brand-primary shadow-lg shadow-brand-primary/20" : "bg-background text-foreground border-border"}`}  >
                             {cat.libelleOption_reaalisation}
                         </button>
                     ))}
@@ -171,14 +171,14 @@ export default function AllProduits() {
                 {realisations.length > 0 && (
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-6 gap-4 mt-8">
                         {/* Texte de la page */}
-                        <div className="text-gray-600 text-sm sm:text-base text-center sm:text-left">
+                        <div className="text-muted-foreground text-sm sm:text-base text-center sm:text-left">
                             Page {currentPage} sur {totalPages || 1}
                         </div>
 
                         {/* Boutons Précédent / Suivant */}
                         <div className="flex gap-2 justify-center">
                             <button
-                                className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
+                                className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
                                 onClick={onPreviousPage}
                                 disabled={currentPage <= 1}
                             >
@@ -187,7 +187,7 @@ export default function AllProduits() {
                             </button>
 
                             <button
-                                className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
+                                className="px-4 py-2 border border-border rounded-lg text-sm hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
                                 onClick={onNextPage}
                                 disabled={currentPage >= totalPages}
                             >

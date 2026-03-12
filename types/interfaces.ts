@@ -79,7 +79,6 @@ export interface User {
     updated_at?: string; // ISO string
 }
 
-
 export interface Category {
     id_categories_produits: string;
     libelle_categories_produits: string;
@@ -253,6 +252,7 @@ export interface DataReglage {
     equipes: Equipe[];
     visits: Visit[];
 }
+
 export interface Publicite {
     id_publicite: string;
     typesCard1: string;
@@ -440,7 +440,6 @@ export interface Product {
     updated_at: string;
 }
 
-
 // Définir l'interface pour l'image dans la galerie
 export interface GallerieImage {
     id_gallerie_images: string; // Identifiant de l'image
@@ -514,7 +513,6 @@ export interface Demande {
     files: string
 };
 
-
 export interface Transaction {
     id: string;
     date: string; // format YYYY-MM-DD
@@ -558,6 +556,35 @@ export interface Store {
     added_by: number;
     created_at: string;
     updated_at: string;
+}
+
+
+// types/orders.ts
+
+export interface OrderItem {
+    id: number;
+    order_id: number;
+    product_id: number;
+    quantity: number;
+    price: number;
+    color?: string | null;
+    size?: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+
+export interface Order {
+    id: number;
+    user_id: number;      // client
+    store_id: number;
+    total: number;
+    comment?: string | null;
+    status: OrderStatus;
+    added_by: number;      // utilisateur qui a ajouté la commande
+    created_at: string;
+    updated_at: string;
+    items?: OrderItem[];   // optionnel : les items de la commande
 }
 
 export interface TransactionDataGraphe {

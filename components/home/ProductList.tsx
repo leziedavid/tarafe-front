@@ -63,7 +63,7 @@ const CollectionsSection: React.FC<ProductListProps> = ({ product, isLabel = fal
 
     // Skeletons pour les produits (mobile + web)
     const renderProductSkeleton = (large?: boolean, key?: number) => (
-        <div key={key} className={`relative overflow-hidden rounded-xl animate-pulse bg-gray-200 ${large ? "h-[300px] md:h-[400px] lg:h-[520px]" : "h-[300px] md:h-[400px] lg:h-[250px]"}`} />
+        <div key={key} className={`relative overflow-hidden rounded-xl animate-pulse bg-muted ${large ? "h-[300px] md:h-[400px] lg:h-[520px]" : "h-[300px] md:h-[400px] lg:h-[250px]"}`} />
     );
 
     const smallProducts = products.filter((p) => p.size === "small");
@@ -92,7 +92,7 @@ const CollectionsSection: React.FC<ProductListProps> = ({ product, isLabel = fal
                     {loading ? (
                         // Skeleton pour mobile - affiche 4 squelettes
                         Array(4).fill(0).map((_, i) => (
-                            <div key={i} className="relative overflow-hidden rounded-xl animate-pulse bg-gray-200 h-[250px] sm:h-[300px]" />
+                            <div key={i} className="relative overflow-hidden rounded-xl animate-pulse bg-muted h-[250px] sm:h-[300px]" />
                         ))
                     ) : (
                         // Affiche TOUS les produits en mode mobile
@@ -138,7 +138,7 @@ function MobileProductCard({ product }: { product: Realisation }) {
     };
 
     return (
-        <div className="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer h-[250px] sm:h-[300px]" onClick={navigateTo}>
+        <div className="group relative overflow-hidden rounded-xl bg-card shadow-sm hover:shadow-md transition-shadow cursor-pointer h-[250px] sm:h-[300px]" onClick={navigateTo}>
             {/* Image container - prend 100% de la hauteur */}
             <div className="relative h-full w-full">
                 <Image src={`${urlImages}/${product.images_realisations}`} alt={product.libelle_realisations || "Produit"} fill className="object-cover" sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw" unoptimized />
@@ -177,14 +177,14 @@ function DesktopProductCard({ product, large = false, loading = false }: Product
     };
 
     if (loading || !product) {
-        return (<div className={`relative overflow-hidden rounded-3xl animate-pulse bg-gray-200 ${large ? "h-[520px]" : "h-[250px]"}`} />);
+        return (<div className={`relative overflow-hidden rounded-3xl animate-pulse bg-muted ${large ? "h-[520px]" : "h-[250px]"}`} />);
     }
 
     const cardHeight = large ? "h-[520px]" : "h-[250px]";
 
     return (
         <div className={`relative overflow-hidden rounded-3xl group ${cardHeight} cursor-pointer`} onClick={navigateTo}>
-            <Image src={`${urlImages}/${product.images_realisations}`}  alt={product.libelle_realisations || "Produit"} fill className="object-cover transition-transform duration-500 group-hover:scale-105"  unoptimized  sizes={large ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 1024px) 100vw, 33vw"}  />
+            <Image src={`${urlImages}/${product.images_realisations}`} alt={product.libelle_realisations || "Produit"} fill className="object-cover transition-transform duration-500 group-hover:scale-105" unoptimized sizes={large ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 1024px) 100vw, 33vw"} />
 
             <div className="absolute inset-0 bg-black/10" />
 

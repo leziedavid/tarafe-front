@@ -85,45 +85,45 @@ export default function ContactForm() {
 
     // === Formulaire réel ===
     return (
-        <section className=" max-w-10xl mx-auto grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-sm-lg my-section py-10">
+        <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-xl my-section py-10 ">
 
             {/* ---- COLONNE GAUCHE ---- */}
-            <div className="bg-white text-gray-900 p-10 md:p-14 flex flex-col justify-center space-y-6">
+            <div className="bg-background text-foreground p-10 md:p-14 flex flex-col justify-center space-y-6">
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase mb-6 text-brand-secondary leading-tight">
                     Contactez-nous
                 </h2>
 
-                <p className="text-gray-600 text-lg leading-relaxed">
+                <p className="text-muted-foreground text-lg leading-relaxed">
                     Votre adresse électronique ne sera pas publiée. <br />
                     Les champs obligatoires sont marqués (
-                    <span className="text-[#fd980e]">*</span>)
+                    <span className="text-brand-primary">*</span>)
                 </p>
 
-                <div className="mt-6 space-y-4 text-gray-700 text-base font-medium">
+                <div className="mt-6 space-y-4 text-foreground/80 text-base font-medium">
                     <div className="flex items-start gap-4">
-                        <div className="p-2.5 bg-[#f0f0f7] rounded-lg">
-                            <Icon icon="solar:map-point-bold" className="w-5 h-5 text-[#242078]" />
+                        <div className="p-2.5 bg-muted rounded-lg">
+                            <Icon icon="solar:map-point-bold" className="w-5 h-5 text-brand-secondary" />
                         </div>
                         <p>Abidjan, Côte d’Ivoire</p>
                     </div>
 
                     <div className="flex items-start gap-4">
-                        <div className="p-2.5 bg-[#f0f0f7] rounded-lg">
-                            <Icon icon="solar:phone-calling-bold" className="w-5 h-5 text-[#242078]" />
+                        <div className="p-2.5 bg-muted rounded-lg">
+                            <Icon icon="solar:phone-calling-bold" className="w-5 h-5 text-brand-secondary" />
                         </div>
                         <p>+225 0747003450</p>
                     </div>
 
                     <div className="flex items-start gap-4">
-                        <div className="p-2.5 bg-[#f0f0f7] rounded-lg">
-                            <Icon icon="solar:letter-bold" className="w-5 h-5 text-[#242078]" />
+                        <div className="p-2.5 bg-muted rounded-lg">
+                            <Icon icon="solar:letter-bold" className="w-5 h-5 text-brand-secondary" />
                         </div>
                         <p>contact@tarafe.com</p>
                     </div>
 
                     <div className="flex items-start gap-4">
-                        <div className="p-2.5 bg-[#f0f0f7] rounded-lg">
-                            <Icon icon="solar:clock-circle-bold" className="w-5 h-5 text-[#242078]" />
+                        <div className="p-2.5 bg-muted rounded-lg">
+                            <Icon icon="solar:clock-circle-bold" className="w-5 h-5 text-brand-secondary" />
                         </div>
                         <p>9h à 20h (lundi au samedi)</p>
                     </div>
@@ -133,7 +133,7 @@ export default function ContactForm() {
             {/* ---- FORMULAIRE ---- */}
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="bg-gray-50 p-10 flex flex-col justify-center space-y-5"
+                className="bg-muted p-10 flex flex-col justify-center space-y-5"
             >
                 {[
                     { label: "Nom complet", name: "nomPrenom", placeholder: "PROXIMITY KOUASSI" },
@@ -152,7 +152,7 @@ export default function ContactForm() {
                             <input  {...register(field.name as keyof ContactFormData)}
                                 type={field.type ?? "text"}
                                 placeholder={field.placeholder}
-                                className="w-full border border-gray-300 rounded-sm p-2 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-[#242078] focus:border-[#242078] hover:border-gray-400 transition-all duration-300"
+                                className="w-full border border-border rounded-lg p-3 bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary hover:border-brand-primary/50 transition-all duration-300"
                             />
 
                             {error && (
@@ -173,7 +173,7 @@ export default function ContactForm() {
                         {...register("contents")}
                         rows={4}
                         placeholder="Écrivez votre message ici..."
-                        className="w-full border border-gray-300 rounded-sm p-2 text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-[#242078] focus:border-[#242078] hover:border-gray-400 transition-all duration-300" />
+                        className="w-full border border-border rounded-lg p-3 bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary hover:border-brand-primary/50 transition-all duration-300" />
 
                     {errors.contents && (
                         <p className="text-red-500 text-sm mt-1">
@@ -182,7 +182,7 @@ export default function ContactForm() {
                     )}
                 </div>
 
-                <button type="submit" disabled={loading} className="bg-[#fd980e] text-white rounded-full py-3.5 px-8 font-semibold hover:bg-[#242078] hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100" >
+                <button type="submit" disabled={loading} className="bg-brand-primary text-white rounded-full py-4 px-8 font-bold text-lg hover:bg-brand-secondary hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg shadow-brand-primary/20" >
                     {loading ? "Envoi en cours..." : "Envoyer le message"}
                 </button>
 

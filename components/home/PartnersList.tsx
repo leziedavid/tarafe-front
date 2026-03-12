@@ -57,7 +57,7 @@ export default function PartnersList({ partners, isPaginate = false, isLoading =
     );
 
     return (
-        <section className="py-20 px-6 md:px-10 bg-white relative overflow-hidden">
+        <section className="py-18 px-6 md:px-10 bg-background transition-colors duration-500 relative overflow-hidden">
             {/* Subtle background pattern/texture if possible, otherwise keep clean white */}
             {/* The image shows a very light pattern of coffee beans or similar icons. 
                 I will use a subtle CSS background or keep it clean to match the premium feel. */}

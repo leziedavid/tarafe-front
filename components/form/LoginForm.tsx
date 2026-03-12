@@ -68,7 +68,7 @@ export default function LoginForm() {
                         router.push('/dashboard');
                         break;
                     case Role.CLIENT:
-                        router.push('/mon-compte');
+                        router.push('/account');
                         break;
                     default:
                         router.push('/');

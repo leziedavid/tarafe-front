@@ -206,7 +206,7 @@ export default function Page() {
         return (
             <>
                 <Navbar />
-                <div className="flex justify-center items-center h-60">
+                <div className="flex justify-center items-center h-60  mt-12 md:mt-0">
                     <div className="text-center">
                         <p className="text-gray-500">Aucun produit trouvé</p>
                         <button

@@ -68,7 +68,7 @@ export default function AlternatingFeaturesSection({ feature }: FeatureProps) {
     }
 
     return (
-        <section className="w-full bg-tarafe-gray">
+        <section className="w-full bg-background transition-colors duration-500">
             <div className="w-full md:max-w-[1400px] md:mx-auto px-0 md:px-6">
                 <div className="space-y-24 p-4 md:p-14">
                     {feature.map((feat) => {
@@ -82,7 +82,7 @@ export default function AlternatingFeaturesSection({ feature }: FeatureProps) {
                                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase leading-tight text-brand-secondary">
                                         {feat.title}
                                     </h2>
-                                    <p className="text-base md:text-lg leading-relaxed text-tarafe-black/80" dangerouslySetInnerHTML={{ __html: feat.description || "Description à venir..." }} />
+                                    <p className="text-base md:text-lg leading-relaxed text-foreground/80" dangerouslySetInnerHTML={{ __html: feat.description || "Description à venir..." }} />
                                     <Link href={feat.link || "#"} className="underline font-semibold inline-flex items-center gap-2 text-brand-secondary hover:gap-4 transition-all duration-300">
                                         En savoir plus
                                         <span>→</span>

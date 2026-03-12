@@ -136,7 +136,7 @@ export default function Store() {
     );
 
     return (
-        <div className="relative min-h-screen bg-white dark:bg-gray-950">
+        <div className="relative min-h-screen bg-background  mt-12 md:mt-0">
             {/* Store Navigation Indicator (Floating Cart) */}
             <div className="fixed bottom-8 right-8 z-[900]">
                 <button onClick={() => setIsCartModalOpen(true)} className="relative group p-4 bg-brand-primary text-white rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300">
@@ -164,16 +164,16 @@ export default function Store() {
                     </div>
 
                     {/* Search & Sort (Simplified for now) */}
-                    <div className="flex items-center gap-4 bg-white dark:bg-gray-900 p-2 rounded-2xl border border-gray-200 dark:border-gray-800">
+                    <div className="flex items-center gap-4 bg-card p-2 rounded-2xl border border-border">
                         <div className="relative">
-                            <Icon icon="solar:magnifer-linear" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <Icon icon="solar:magnifer-linear" className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                             <input
                                 type="text"
                                 placeholder="Rechercher..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && fetchData()}
-                                className="bg-white dark:bg-gray-800 border-none rounded-xl pl-10 h-11 text-sm focus:ring-2 focus:ring-brand-primary/20 w-full md:w-64"
+                                className="bg-background border-none rounded-xl pl-10 h-11 text-sm focus:ring-2 focus:ring-brand-primary/20 w-full md:w-64"
                             />
                         </div>
                         <button onClick={() => fetchData()} className="right-10 p-2 bg-brand-primary text-white rounded-xl shadow-lg shadow-brand-primary/20 hover:scale-105 transition-all">
@@ -185,12 +185,12 @@ export default function Store() {
 
                 {/* Categories Bar */}
                 <div className="flex flex-wrap items-center gap-3 mb-8">
-                    <button onClick={() => { setSelectedCategory(null); setSelectedSubCategory(null); setCurrentPage(1); }} className={`px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${!selectedCategory ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-white dark:bg-gray-900 text-gray-500 border-gray-200 dark:border-gray-800 hover:border-brand-primary/50"}`}  >
+                    <button onClick={() => { setSelectedCategory(null); setSelectedSubCategory(null); setCurrentPage(1); }} className={`px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${!selectedCategory ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-card text-muted-foreground border-border hover:border-brand-primary/50"}`}  >
                         Tous les produits
                     </button>
 
                     {categories.map((cat) => (
-                        <button key={cat.id} onClick={() => { setSelectedCategory(cat.id); setSelectedSubCategory(null); setCurrentPage(1); }} className={`px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${selectedCategory === cat.id ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-white dark:bg-gray-900 text-gray-500 border-gray-200 dark:border-gray-800 hover:border-brand-primary/50"}`} >
+                        <button key={cat.id} onClick={() => { setSelectedCategory(cat.id); setSelectedSubCategory(null); setCurrentPage(1); }} className={`px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${selectedCategory === cat.id ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-card text-muted-foreground border-border hover:border-brand-primary/50"}`} >
                             {cat.name}
                         </button>
                     ))}
@@ -199,9 +199,9 @@ export default function Store() {
                 {/* Sub Categories (Nested) */}
                 <AnimatePresence>
                     {subCategories.length > 0 && (
-                        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-gray-100 dark:border-gray-800" >
+                        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-border" >
                             {subCategories.map((sub) => (
-                                <button key={sub.id} onClick={() => { setSelectedSubCategory(sub.id); setCurrentPage(1); }} className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedSubCategory === sub.id ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900" : "bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200"}`}  >
+                                <button key={sub.id} onClick={() => { setSelectedSubCategory(sub.id); setCurrentPage(1); }} className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedSubCategory === sub.id ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-secondary/80"}`}  >
                                     {sub.name}
                                 </button>
                             ))}
@@ -217,7 +217,7 @@ export default function Store() {
 
                             return (
                                 <div key={product.id} className="group cursor-pointer flex flex-col" onClick={() => openProductDetail(product)}  >
-                                    <div className="relative aspect-[3/4] w-full rounded-2xl bg-[#f8f8f6] dark:bg-gray-900 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700">
+                                    <div className="relative aspect-[3/4] w-full rounded-2xl bg-muted overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700">
                                         {/* Badges */}
                                         {product.tag && (
                                             <div className="absolute top-5 left-5 z-20">
@@ -264,16 +264,16 @@ export default function Store() {
                                     {/* Info */}
                                     <div className="mt-4 px-2 space-y-1">
                                         <div className="flex items-center justify-between gap-2">
-                                            <h3 className="font-bold text-base text-gray-900 dark:text-white line-clamp-1 group-hover:text-brand-primary transition-colors">
+                                            <h3 className="font-bold text-base text-foreground line-clamp-1 group-hover:text-brand-primary transition-colors">
                                                 {product.name}
                                             </h3>
                                             <span className="shrink-0 text-sm font-black text-brand-primary">{price} FCFA</span>
                                         </div>
                                         <div className="flex items-center justify-between">
-                                            <p className="text-xs text-gray-400 font-medium">{product.category?.name || "Premium"}</p>
+                                            <p className="text-xs text-muted-foreground font-medium">{product.category?.name || "Premium"}</p>
                                             <div className="flex items-center gap-1">
                                                 <Icon icon="solar:star-bold" className="text-yellow-400 w-3 h-3" />
-                                                <span className="text-[10px] font-bold text-gray-400">{product.rating || "4.5"}</span>
+                                                <span className="text-[10px] font-bold text-muted-foreground">{product.rating || "4.5"}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -286,12 +286,12 @@ export default function Store() {
                 {/* Empty State */}
                 {!loading && products.length === 0 && (
                     <div className="py-32 flex flex-col items-center justify-center text-center">
-                        <div className="w-24 h-24 bg-gray-50 dark:bg-gray-900 rounded-full flex items-center justify-center text-gray-200 mb-6">
+                        <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center text-muted-foreground mb-6">
                             <Icon icon="solar:box-bold-duotone" width={64} />
                         </div>
-                        <h3 className="text-xl font-bold dark:text-white mb-2">Aucun produit trouvé</h3>
-                        <p className="text-gray-400 max-w-sm">Désolé, nous n'avons trouvé aucun article correspondant à votre recherche ou catégorie.</p>
-                        <button onClick={() => { setSelectedCategory(null); setSearchTerm(""); fetchData(); }} className="mt-8 px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-bold text-sm" >
+                        <h3 className="text-xl font-bold text-foreground mb-2">Aucun produit trouvé</h3>
+                        <p className="text-muted-foreground max-w-sm">Désolé, nous n'avons trouvé aucun article correspondant à votre recherche ou catégorie.</p>
+                        <button onClick={() => { setSelectedCategory(null); setSearchTerm(""); fetchData(); }} className="mt-8 px-8 py-3 bg-primary text-primary-foreground rounded-2xl font-bold text-sm hover:opacity-90 transition-all" >
                             Réinitialiser les filtres
                         </button>
                     </div>
@@ -300,20 +300,20 @@ export default function Store() {
                 {/* Pagination */}
                 {totalItemsCount > limit && (
                     <div className="mt-20 flex items-center justify-center gap-4">
-                        <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="flex items-center gap-2 px-6 py-3 border border-gray-200 dark:border-gray-800 rounded-2xl font-bold text-sm hover:bg-gray-50 dark:hover:bg-gray-900 transition-all disabled:opacity-30"  >
+                        <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="flex items-center gap-2 px-6 py-3 border border-border rounded-2xl font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30"  >
                             <Icon icon="solar:alt-arrow-left-bold" />
                             Précédent
                         </button>
 
                         <div className="flex items-center gap-1">
                             {Array.from({ length: Math.ceil(totalItemsCount / limit) }, (_, i) => i + 1).map((page) => (
-                                <button key={page} onClick={() => setCurrentPage(page)} className={`w-12 h-12 flex items-center justify-center rounded-2xl font-bold text-sm transition-all ${currentPage === page ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25" : "text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}>
+                                <button key={page} onClick={() => setCurrentPage(page)} className={`w-12 h-12 flex items-center justify-center rounded-2xl font-bold text-sm transition-all ${currentPage === page ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25" : "text-muted-foreground hover:text-foreground"}`}>
                                     {page}
                                 </button>
                             ))}
                         </div>
 
-                        <button disabled={currentPage === Math.ceil(totalItemsCount / limit)} onClick={() => setCurrentPage(p => p + 1)} className="flex items-center gap-2 px-6 py-3 border border-gray-200 dark:border-gray-800 rounded-2xl font-bold text-sm hover:bg-gray-50 dark:hover:bg-gray-900 transition-all disabled:opacity-30"  >
+                        <button disabled={currentPage === Math.ceil(totalItemsCount / limit)} onClick={() => setCurrentPage(p => p + 1)} className="flex items-center gap-2 px-6 py-3 border border-border rounded-2xl font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30"  >
                             Suivant
                             <Icon icon="solar:alt-arrow-right-bold" />
                         </button>

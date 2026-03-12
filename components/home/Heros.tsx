@@ -1,293 +1,185 @@
 "use client";
 
-import Image from "next/image";
-import { Hero } from "@/types/interfaces";
 import { useState, useEffect } from "react";
-import { getImagesUrl } from "@/types/baseUrl";
+import Image from "next/image";
 import Link from "next/link";
+import { Icon } from "@iconify/react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { getImagesUrl } from "@/types/baseUrl";
+
+import { Hero } from "@/types/interfaces";
 
 interface HeroProps {
     heros: Hero[];
 }
 
-
-function highlightTextInTitle(title: string, highlight?: string | null) {
-    if (!title) return null;
-    return (
-        <>
-            <p className="text-brand-secondary font-bold">{title}</p>
-            {highlight && (
-                <> <span className="text-transparent bg-brand-primary bg-clip-text">  {highlight}  </span> </>
-            )}
-        </>
-    );
-}
-
-
-// SKELETON COMPONENT - VERSION AMÉLIORÉE
-function HeroSkeleton() {
-    return (
-        <section className="w-full overflow-x-hidden bg-gradient-to-br from-background via-background to-muted/20 text-foreground">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-2 grid lg:grid-cols-2 gap-14 items-center">
-
-                {/* LEFT CONTENT SKELETON */}
-                <div className="space-y-6 sm:space-y-8">
-                    {/* BADGE SKELETON - pour plus de style */}
-                    <div className="flex items-center gap-2">
-                        <div className="h-6 w-6 rounded-full bg-gradient-to-r from-brand-primary/30 to-brand-primary/10 animate-pulse" />
-                        <div className="h-4 w-24 rounded-full bg-gradient-to-r from-muted-foreground/20 to-muted-foreground/5 animate-pulse" />
-                    </div>
-
-                    {/* TITLE SKELETON - avec dégradé et animation */}
-                    <div className="space-y-3">
-                        <div className="relative">
-                            <div className="h-12 sm:h-16 lg:h-20 bg-gradient-to-r from-muted via-muted/80 to-muted rounded-lg w-3/4 animate-pulse" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 dark:via-white/5 to-transparent animate-shimmer" />
-                        </div>
-                        <div className="relative">
-                            <div className="h-12 sm:h-16 lg:h-20 bg-gradient-to-r from-muted via-muted/80 to-muted rounded-lg w-2/3 animate-pulse" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 dark:via-white/5 to-transparent animate-shimmer" style={{ animationDelay: '0.2s' }} />
-                        </div>
-                        <div className="relative">
-                            <div className="h-12 sm:h-16 lg:h-20 bg-gradient-to-r from-muted via-muted/80 to-muted rounded-lg w-1/2 animate-pulse" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 dark:via-white/5 to-transparent animate-shimmer" style={{ animationDelay: '0.4s' }} />
-                        </div>
-                    </div>
-
-                    {/* DESCRIPTION SKELETON - avec vague plus subtile */}
-                    <div className="space-y-3">
-                        <div className="relative">
-                            <div className="h-4 bg-gradient-to-r from-muted-foreground/20 via-muted-foreground/15 to-muted-foreground/20 rounded w-full animate-pulse" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-white/10 to-transparent animate-shimmer" />
-                        </div>
-                        <div className="relative">
-                            <div className="h-4 bg-gradient-to-r from-muted-foreground/20 via-muted-foreground/15 to-muted-foreground/20 rounded w-5/6 animate-pulse" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-white/10 to-transparent animate-shimmer" style={{ animationDelay: '0.15s' }} />
-                        </div>
-                        <div className="relative">
-                            <div className="h-4 bg-gradient-to-r from-muted-foreground/20 via-muted-foreground/15 to-muted-foreground/20 rounded w-4/6 animate-pulse" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-white/10 to-transparent animate-shimmer" style={{ animationDelay: '0.3s' }} />
-                        </div>
-                    </div>
-
-                    {/* BUTTONS SKELETON - avec effet de glow */}
-                    <div className="flex flex-wrap gap-4">
-                        <div className="relative">
-                            <div className="bg-gradient-to-r from-brand-primary/30 via-brand-primary/20 to-brand-primary/30 rounded-full w-48 h-12 animate-pulse" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 dark:via-white/20 to-transparent rounded-full animate-shimmer" />
-                        </div>
-                        <div className="relative">
-                            <div className="bg-gradient-to-r from-muted via-muted/80 to-muted rounded-full w-36 h-12 animate-pulse" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 dark:via-white/20 to-transparent rounded-full animate-shimmer" style={{ animationDelay: '0.2s' }} />
-                        </div>
-                    </div>
-                </div>
-
-                {/* RIGHT IMAGE SKELETON - avec overlay stylisé */}
-                <div className="relative flex justify-center lg:justify-end">
-                    <div className="relative w-full aspect-[4/5] sm:aspect-[4/5] lg:w-[420px] lg:h-[520px] lg:aspect-auto rounded-3xl overflow-hidden">
-                        {/* Image placeholder avec dégradé */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-muted via-muted/80 to-muted/60 animate-pulse" />
-
-                        {/* Motif géométrique subtil */}
-                        <div className="absolute inset-0 opacity-20">
-                            <div className="absolute top-10 left-10 w-20 h-20 border-2 border-white/20 rounded-2xl rotate-12" />
-                            <div className="absolute bottom-10 right-10 w-32 h-32 border-2 border-white/20 rounded-full" />
-                            <div className="absolute top-1/2 left-1/2 w-40 h-40 border-2 border-white/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-                        </div>
-
-                        {/* Vague lumineuse */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 dark:via-white/10 to-transparent animate-shimmer" />
-
-                        {/* Floating cards skeleton - visibles même en skeleton */}
-                        <div className="absolute hidden sm:block bottom-20 -left-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-lg dark:shadow-black/40 rounded-2xl p-4 w-64 border border-white/30 dark:border-gray-800/50">
-                            <div className="flex items-center gap-2 mb-3">
-                                <div className="h-4 w-4 rounded-full bg-gradient-to-r from-brand-primary/30 to-brand-primary/10 animate-pulse" />
-                                <div className="h-3 w-24 bg-gradient-to-r from-muted-foreground/30 to-muted-foreground/10 rounded animate-pulse" />
-                            </div>
-                            <div className="space-y-2">
-                                <div className="h-2 bg-gradient-to-r from-muted-foreground/30 via-muted-foreground/20 to-muted-foreground/30 rounded w-full animate-pulse" />
-                                <div className="h-2 bg-gradient-to-r from-muted-foreground/30 via-muted-foreground/20 to-muted-foreground/30 rounded w-4/5 animate-pulse" />
-                                <div className="h-2 bg-gradient-to-r from-muted-foreground/30 via-muted-foreground/20 to-muted-foreground/30 rounded w-3/5 animate-pulse" />
-                            </div>
-                        </div>
-
-                        <div className="absolute hidden sm:block -bottom-8 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-lg dark:shadow-black/40 rounded-2xl p-4 w-56 border border-white/30 dark:border-gray-800/50">
-                            <div className="flex items-center gap-2 mb-3">
-                                <div className="h-4 w-4 rounded-full bg-gradient-to-r from-muted-foreground/30 to-muted-foreground/10 animate-pulse" />
-                                <div className="h-3 w-20 bg-gradient-to-r from-muted-foreground/30 to-muted-foreground/10 rounded animate-pulse" />
-                            </div>
-                            <div className="space-y-2">
-                                <div className="h-2 bg-gradient-to-r from-muted-foreground/30 via-muted-foreground/20 to-muted-foreground/30 rounded animate-pulse" />
-                                <div className="h-2 bg-gradient-to-r from-muted-foreground/30 via-muted-foreground/20 to-muted-foreground/30 rounded animate-pulse" />
-                                <div className="h-2 bg-gradient-to-r from-muted-foreground/30 via-muted-foreground/20 to-muted-foreground/30 rounded animate-pulse" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-
-// SLIDER INDICATOR COMPONENT
-function SliderIndicator({ total, current }: { total: number; current: number }) {
-    return (
-        <div className="flex justify-center items-center gap-2 mt-8 lg:mt-0 lg:absolute lg:bottom-6 lg:left-1/2 lg:-translate-x-1/2">
-            {Array.from({ length: total }).map((_, index) => (
-                <div key={index}
-                    className={`
-                        h-1.5 rounded-full transition-all duration-300
-                        ${index === current ? 'w-8 bg-brand-primary' : 'w-4 bg-muted-foreground/30'
-                        }
-                    `}
-                />
-            ))}
-        </div>
-    );
-}
-
 export default function Heros({ heros }: HeroProps) {
-
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
     const urlImages = getImagesUrl();
 
-    // MONITEUR : tant qu'il n'y a pas de données, le skeleton est affiché
     useEffect(() => {
-        if (heros && heros.length > 0) {
-            setIsLoading(false);
-        }
-    }, [heros]);
-
-    const isMultipleHeros = heros?.length > 1;
-
-    // Auto-slide si plusieurs héros
-    useEffect(() => {
-        if (!isMultipleHeros || !heros?.length || isLoading) return;
-
+        if (heros.length <= 1) return;
         const interval = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % heros.length);
-        }, 5000);
-
+        }, 6000);
         return () => clearInterval(interval);
-    }, [isMultipleHeros, heros?.length, isLoading]);
+    }, [heros.length]);
 
-    // Affiche le skeleton pendant le chargement
-    if (isLoading) {
-        return <HeroSkeleton />;
-    }
-
-    // Si pas de données, ne rien afficher
-    if (!heros?.length) {
-        return null;
-    }
-
-    // Si un seul hero, affichage normal
-    if (!isMultipleHeros) {
-        const hero = heros[0];
+    if (!heros || heros.length === 0) {
         return (
-            <section className="w-full overflow-x-hidden bg-background text-foreground">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-2 grid lg:grid-cols-2 gap-14 items-center">
-
-                    {/* LEFT CONTENT */}
-                    <div className="space-y-6 sm:space-y-8">
-                        {/* TITLE */}
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight uppercase">
-                            {highlightTextInTitle(hero.title, hero.highlight_text)}
-                        </h1>
-
-                        {/* DESCRIPTION */}
-                        {hero.description && (
-                            <p className="text-sm sm:text-lg text-muted-foreground max-w-xl leading-relaxed" dangerouslySetInnerHTML={{ __html: hero.description }} />
-                        )}
-
-                        {/* BUTTONS */}
-                        {(hero.primary_button_text || hero.secondary_button_text) && (
-                            <div className="flex flex-wrap gap-4">
-                                {hero.primary_button_text && hero.primary_button_link && (
-                                    <Link href={hero.primary_button_link} className="bg-brand-primary text-white px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:opacity-90 transition" >
-                                        {hero.primary_button_text}
-                                    </Link>
-                                )}
-                                {hero.secondary_button_text && hero.secondary_button_link && (
-                                    <Link href={hero.secondary_button_link} className="border border-border bg-card text-brand-secondary px-5 sm:px-7 py-3 sm:py-4 rounded-full font-semibold hover:bg-muted transition"  >
-                                        {hero.secondary_button_text}
-                                    </Link>
-                                )}
+            <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#242078] dark:bg-background">
+                <div className="container relative z-10 mx-auto px-6 md:px-12 py-12 lg:py-0 w-full animate-pulse">
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center mt-20">
+                        {/* Skeleton Content */}
+                        <div className="max-w-2xl space-y-6 lg:pr-10 w-full">
+                            <div className="space-y-4">
+                                <div className="h-12 md:h-16 lg:h-20 bg-white/10 rounded-2xl w-3/4"></div>
+                                <div className="h-12 md:h-16 lg:h-20 bg-white/10 rounded-2xl w-full"></div>
+                                <div className="h-12 md:h-16 lg:h-20 bg-white/10 rounded-2xl w-5/6"></div>
                             </div>
-                        )}
-                    </div>
+                            <div className="h-6 md:h-8 bg-white/10 rounded-lg w-2/3 mt-6"></div>
+                            <div className="h-6 md:h-8 bg-white/10 rounded-lg w-1/2"></div>
 
-                    {/* RIGHT IMAGE */}
-                    {hero.image && (
-                        <div className="relative flex justify-center lg:justify-end">
-                            <div className="relative w-full aspect-[4/5] sm:aspect-[4/5] lg:w-[420px] lg:h-[520px] lg:aspect-auto rounded-3xl overflow-hidden dark:shadow-black/40">
-                                <Image src={`${urlImages}/${hero.image}`} alt={hero.title || "Hero image"} fill className="object-cover" sizes="(max-width:768px) 100vw, 420px" unoptimized />
+                            <div className="flex gap-3 w-full sm:w-auto mt-10">
+                                <div className="h-12 sm:h-14 w-32 sm:w-40 bg-white/20 rounded-full"></div>
+                                <div className="h-12 sm:h-14 w-32 sm:w-40 bg-white/5 border border-white/10 rounded-full"></div>
                             </div>
                         </div>
-                    )}
+
+                        {/* Skeleton Image */}
+                        <div className="relative flex justify-center items-center mt-12 lg:mt-0">
+                            <div className="relative w-full max-w-[450px] aspect-square flex items-center justify-center">
+                                <div className="absolute w-full h-[120%] sm:h-full bg-white/5 rounded-full blur-3xl scale-110"></div>
+                                <div className="relative z-10 w-3/4 h-3/4 bg-white/10 rounded-3xl drop-shadow-2xl"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         );
     }
 
-    // MODE SLIDER : plusieurs héros
     const currentHero = heros[currentSlide];
 
+
+    function highlightTextInTitle(title: string, highlight?: string | null) {
+        if (!title) return null;
+        return (
+            <>
+                <p className="text-white font-bold">{title}</p>
+                {highlight && (
+                    <> <span className="text-transparent bg-brand-primary bg-clip-text">  {highlight}  </span> </>
+                )}
+            </>
+        );
+    }
+
     return (
-        <section className="w-full overflow-x-hidden bg-background text-foreground relative pb-16 lg:pb-0">
+        //bg-[#0a1a10]
+        <section className="relative w-full min-h-screen flex flex-col items-center overflow-hidden bg-[#242078] dark:bg-background">
+            {/* Minimal spacing for transparent Navbar */}
+            <div className="h-24 md:h-32 w-full shrink-0" />
 
-            {/* OVERLAY */}
-            {/* <div className="absolute inset-0 bg-black/50 z-10 pointer-events-none" /> */}
+            {/* Mesh Gradient Background */}
+            {/* <div className="absolute inset-0 z-0">
+                <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#1a4a2e] rounded-full blur-[120px] opacity-40 animate-pulse" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#0f2e1e] rounded-full blur-[100px] opacity-30" />
+            </div> */}
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-2 grid lg:grid-cols-2 gap-14 items-center">
+            <div className="container relative z-10 mx-auto px-6 md:px-12 py-12 lg:py-0">
+                <AnimatePresence mode="wait">
+                    <motion.div key={currentSlide} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center" >
+                        {/* Left Column: Text Content */}
+                        <div className="max-w-2xl space-y-8 lg:pr-10">
+                            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} className="space-y-6"  >
+                                <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-white leading-[1.05]">
+                                    {highlightTextInTitle(currentHero.title, currentHero.highlight_text)}
 
-                {/* LEFT CONTENT - SLIDE ACTUEL */}
-                <div className="space-y-6 sm:space-y-8">
-                    {/* TITLE */}
-                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight uppercase">
-                        {highlightTextInTitle(currentHero.title, currentHero.highlight_text)}
-                    </h1>
+                                    {/* {currentHero.title.split('\n').map((line, i) => (<span key={i}>{line}<br /></span>)) || "Smart way to manage money"} */}
+                                </h1>
+                                <p className="text-lg md:text-xl text-white max-w-md font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: currentHero.description || "Planning today lays the foundation for a secure and successful tomorrow." }} />
+                            </motion.div>
 
-                    {/* DESCRIPTION */}
-                    {currentHero.description && (
-                        <p className="text-sm sm:text-lg text-muted-foreground max-w-xl leading-relaxed" dangerouslySetInnerHTML={{ __html: currentHero.description }} />
-                    )}
-
-                    {/* BUTTONS */}
-                    {(currentHero.primary_button_text || currentHero.secondary_button_text) && (
-                        <div className="flex flex-wrap gap-4">
-                            {currentHero.primary_button_text && currentHero.primary_button_link && (
-                                <Link href={currentHero.primary_button_link} className="bg-brand-primary text-white px-5 sm:px-7 py-2 sm:py-3 rounded-full font-semibold hover:opacity-90 transition"  >
-                                    {currentHero.primary_button_text}
-                                </Link>
-                            )}
-                            {currentHero.secondary_button_text && currentHero.secondary_button_link && (
-                                <Link href={currentHero.secondary_button_link} className="border border-border bg-card text-brand-secondary px-5 sm:px-7 py-2 sm:py-3 rounded-full font-semibold hover:bg-muted transition"  >
-                                    {currentHero.secondary_button_text}
-                                </Link>
-                            )}
-                        </div>
-                    )}
-                </div>
-
-                {/* RIGHT IMAGE - SLIDE ACTUEL */}
-                {currentHero.image && (
-                    <div className="relative flex justify-center lg:justify-end">
-                        <div className="relative w-full aspect-[4/5] sm:aspect-[4/5] lg:w-[420px] lg:h-[520px] lg:aspect-auto rounded-3xl overflow-hidden dark:shadow-black/40">
-                            <Image src={`${urlImages}/${currentHero.image}`} alt={currentHero.title || "Hero image"} fill className="object-cover transition-opacity duration-500" sizes="(max-width:768px) 100vw, 420px"
-                                unoptimized
-                            />
+                            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.2 }} className="flex gap-3 w-full sm:w-auto mt-6" >
+                                {currentHero.primary_button_text && (
+                                    <Link href={currentHero.primary_button_link || "/auth/register"} className="flex-1 sm:flex-none inline-flex items-center justify-center px-4 sm:px-8 md:px-10 py-3 sm:py-3 bg-white text-[#0a1a10] text-xs sm:text-lg font-semibold rounded-full hover:bg-white/90 transition-all duration-300 hover:scale-105 active:scale-95 shadow-xl whitespace-nowrap" >
+                                        {currentHero.primary_button_text}
+                                    </Link>
+                                )}
+                                {currentHero.secondary_button_text && (
+                                    <Link href={currentHero.secondary_button_link || "#"} className="flex-1 sm:flex-none inline-flex items-center justify-center px-4 sm:px-8 md:px-10 py-3 sm:py-3 bg-transparent border border-white/20 text-white text-xs sm:text-lg font-semibold rounded-full hover:bg-white/10 transition-all duration-300 whitespace-nowrap" >
+                                        {currentHero.secondary_button_text}
+                                    </Link>
+                                )}
+                            </motion.div>
 
                         </div>
+
+                        {/* Right Column: Dynamic Hero Image / App Mockup */}
+                        <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="relative flex justify-center items-center" >
+                            <div className="relative w-full max-w-[550px] aspect-square flex items-center justify-center">
+                                <div className="absolute w-full h-full bg-[#1a4a2e] rounded-full blur-[120px] opacity-20 scale-110" />
+
+                                <div className="relative z-10 w-full h-[120%] sm:h-full scale-[1.15] sm:scale-100">
+                                    <Image src={currentHero.image ? `${urlImages}/${currentHero.image}` : "/hero-mockup.png"} alt={currentHero.title} fill className="object-contain drop-shadow-2xl" priority unoptimized />
+                                </div>
+
+                                {/* Floating Card: Dynamic or Mockup style */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 40 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.6, delay: 0.6 }}
+                                    className="absolute bottom-[10%] left-[-5%] md:left-[-10%] z-20 bg-white dark:bg-zinc-900 shadow-2xl rounded-2xl p-4 md:p-6 min-w-[240px] md:min-w-[280px] border border-white/10"
+                                >
+                                    <div className="space-y-4">
+                                        <div className="flex justify-between items-center">
+                                            <div>
+                                                <p className="text-muted-foreground text-[10px] md:text-xs uppercase tracking-wider font-semibold">Plus de </p>
+                                                <h4 className="text-2xl md:text-3xl font-bold text-foreground">10000</h4>
+                                                <p className="text-muted-foreground text-[10px] md:text-xs">Projets réalisés</p>
+                                            </div>
+                                            <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                                <Icon icon="solar:chart-square-bold" className="text-primary w-5 h-5 md:w-6 md:h-6" />
+                                            </div>
+                                        </div>
+                                        <div className="w-full bg-slate-100 dark:bg-zinc-800 rounded-full h-2 overflow-hidden">
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: "65%" }}
+                                                transition={{ duration: 1, delay: 1 }}
+                                                className="bg-primary h-full"
+                                            />
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                </AnimatePresence>
+
+                {/* Slider Indicators */}
+                {heros.length > 1 && (
+                    <div className="flex justify-center gap-2 mt-8">
+                        {heros.map((_, i) => (
+                            <button key={i} onClick={() => setCurrentSlide(i)} className={`h-1.5 rounded-full transition-all duration-300 ${i === currentSlide ? "w-8 bg-white" : "w-2 bg-white/20 h-1.5"}`} />
+                        ))}
                     </div>
                 )}
             </div>
 
-            {/* INDICATEURS SLIDER - UNIQUEMENT DES PETITS TRAITS */}
-            <SliderIndicator total={heros.length} current={currentSlide} />
+            {/* Custom Background Decoration */}
+            <div className="absolute bottom-0 right-0 w-[40%] h-[60%] pointer-events-none z-0">
+                <svg viewBox="0 0 400 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full opacity-10">
+                    <path d="M400 600V0C300 100 0 200 0 400C0 600 200 600 400 600Z" fill="url(#paint0_linear)" />
+                    <defs>
+                        <linearGradient id="paint0_linear" x1="200" y1="0" x2="200" y2="600" gradientUnits="userSpaceOnUse">
+                            <stop stopColor="#1a4a2e" />
+                            <stop offset="1" stopColor="#0a1a10" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
         </section>
     );
 }

@@ -36,7 +36,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-julaya-gray text-gray-900">
+    <main className="min-h-screen bg-background text-foreground transition-colors duration-500">
       <Navbar />
       {/* <pre>{JSON.stringify(response?.HomePageSections, null, 2)}</pre> */}
       <Heros heros={response?.HomePageSections.heros ?? []} />
@@ -46,6 +46,7 @@ export default function Home() {
       <ContactForm />
       <PartnersList partners={response?.partenaires ?? []} isPaginate={true} isLoading={loading} />
       <FinalCTASection finals={response?.HomePageSections.final_ctas ?? []} />
+
       <Footer reglages={response?.reglages ?? []} />
     </main>
   );

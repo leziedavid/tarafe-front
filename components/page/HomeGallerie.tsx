@@ -95,9 +95,9 @@ export default function HomeGallerie() {
 
     // Skeleton for the gallery items
     const renderSkeleton = () => (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0  mt-12 md:mt-0">
             {Array(8).fill(0).map((_, i) => (
-                <div key={i} className="aspect-[3/4] w-full rounded-[2rem] bg-gray-100 dark:bg-gray-800 animate-pulse relative overflow-hidden">
+                <div key={i} className="aspect-[3/4] w-full rounded-[2rem] bg-muted animate-pulse relative overflow-hidden">
                     <Skeleton className="absolute inset-0" />
                 </div>
             ))}
@@ -106,7 +106,7 @@ export default function HomeGallerie() {
 
     return (
         <>
-            <section className="max-w-7xl mx-auto px-6 py-10">
+            <section className="max-w-7xl mx-auto px-6 py-10  mt-12 md:mt-0">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-10">
                     <h2 className="text-brand-secondary text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
@@ -118,7 +118,7 @@ export default function HomeGallerie() {
                 <div className="flex flex-nowrap sm:flex-wrap items-center gap-3 mb-8 overflow-x-auto hide-scrollbar pb-2 sm:pb-0 px-2 sm:px-0">
                     <button
                         onClick={() => handleFilter(0)}
-                        className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === 0 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-white dark:bg-gray-900 text-brand-secondary border-gray-200 dark:border-gray-800 hover:border-brand-primary/50"}`}
+                        className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === 0 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-background text-foreground border-border hover:border-brand-primary/50"}`}
                     >
                         Tous
                     </button>
@@ -128,21 +128,21 @@ export default function HomeGallerie() {
                             <button
                                 key={cat.idcategories_gallery}
                                 onClick={() => handleFilter(cat.idcategories_gallery)}
-                                className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === cat.idcategories_gallery ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-white dark:bg-gray-900 text-brand-secondary border-gray-200 dark:border-gray-800 hover:border-brand-primary/50"}`}
+                                className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === cat.idcategories_gallery ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-background text-foreground border-border hover:border-brand-primary/50"}`}
                             >
                                 {cat.libelle}
                             </button>
                         ))
                     ) : (
                         Array(4).fill(0).map((_, i) => (
-                            <div key={i} className="shrink-0 w-24 h-10 bg-gray-100 dark:bg-gray-800 rounded-full animate-pulse" />
+                            <div key={i} className="shrink-0 w-24 h-10 bg-muted rounded-full animate-pulse" />
                         ))
                     )}
 
                     {activeCategory !== 0 && (
                         <button
                             onClick={resetFilters}
-                            className="shrink-0 p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-brand-primary transition-colors"
+                            className="shrink-0 p-2.5 rounded-full bg-secondary text-secondary-foreground hover:text-brand-primary transition-colors"
                             title="Réinitialiser"
                         >
                             <Icon icon="solar:backspace-bold" width="24" height="24" />
@@ -162,7 +162,7 @@ export default function HomeGallerie() {
                                     className="group cursor-pointer"
                                     onClick={() => { setSelectedImages([{ file_path: item.files_gallerie_images }]); setModalOpen(true); }}
                                 >
-                                    <div className="relative aspect-[3/4] rounded-[2rem] bg-[#efefec] dark:bg-gray-900 overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500">
+                                    <div className="relative aspect-[3/4] rounded-3xl bg-muted overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500">
                                         <Image
                                             src={`${urlImages}/${item.files_gallerie_images}`}
                                             alt={item.libelle_gallerie_images || "Gallery Image"}
@@ -185,7 +185,7 @@ export default function HomeGallerie() {
                         {gallery.length > 0 && totalPages > 1 && (
                             <div className="flex items-center justify-center gap-4 mt-12">
                                 <button
-                                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 font-bold text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl border border-border font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                                     onClick={onPreviousPage}
                                     disabled={currentPage === 1}
                                 >
@@ -193,12 +193,12 @@ export default function HomeGallerie() {
                                     Précédent
                                 </button>
 
-                                <div className="text-sm font-bold text-gray-500">
+                                <div className="text-sm font-bold text-muted-foreground">
                                     {currentPage} / {totalPages}
                                 </div>
 
                                 <button
-                                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 font-bold text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl border border-border font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                                     onClick={onNextPage}
                                     disabled={currentPage === totalPages}
                                 >
@@ -209,7 +209,7 @@ export default function HomeGallerie() {
                         )}
 
                         {!loading && gallery.length === 0 && (
-                            <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+                            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
                                 <Icon icon="solar:gallery-wide-bold" width="64" height="64" className="mb-4 opacity-20" />
                                 <p className="text-lg font-medium">Aucune image trouvée</p>
                             </div>

@@ -47,7 +47,7 @@ export default function Page() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-white text-gray-900">
+    <main className="min-h-screen bg-background text-foreground transition-colors duration-500">
       <Navbar />
 
       {/* Hero Section */}
@@ -57,8 +57,8 @@ export default function Page() {
             {/* Left Side - Text Content */}
             <div className="flex-1 flex flex-col justify-center">
               <div className="max-w-2xl">
-                <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight text-gray-900">  A propos de Tarafé  </h1>
-                <p className="text-md text-gray-600 mb-8 leading-relaxed">
+                <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight text-foreground">  A propos de Tarafé  </h1>
+                <p className="text-md text-muted-foreground mb-8 leading-relaxed">
 
                   Tarafé est une plateforme digitale de personnalisation des produits mode, accessoires et déco, avec une touche africaine, pour les entreprises et les particuliers. Notre mission est de valoriser les savoir-faire et le patrimoine textile local.
                   <br />
@@ -66,7 +66,7 @@ export default function Page() {
                   Personnalisation de produits : Tarafé offre la possibilité de personnaliser divers articles tels que des vêtements, des accessoires et des objets de décoration, en y intégrant des motifs et des designs inspirés de la culture africaine.
                   Solutions pour les entreprises (B2B) : La plateforme propose des services adaptés aux besoins des entreprises, notamment pour des cadeaux d'entreprise personnalisés, du merchandising ou des articles promotionnels reflétant une identité africaine. Bienvenue  😊
                 </p>
-                
+
               </div>
             </div>
 
@@ -83,10 +83,10 @@ export default function Page() {
                     {equipeData.map((membre, index) => (
                       <div key={membre.id_equipe} className="w-full h-full flex-shrink-0 relative">
                         {/* Image de fond */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50">
+                        <div className="absolute inset-0 bg-muted">
                           {/* Placeholder - Remplacez par vos vraies images */}
-                          <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                            <div className="text-center text-gray-400">
+                          <div className="w-full h-full flex items-center justify-center bg-muted">
+                            <div className="text-center text-muted-foreground">
                               <div className="text-6xl mb-4">👤</div>
                               {/* <p>Photo de {membre.nomPren_equipe}</p> */}
                               {/* Décommentez pour utiliser les vraies images */}
@@ -149,15 +149,15 @@ export default function Page() {
                   {/* Boutons de navigation */}
                   <button
                     onClick={prevSlide}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 rounded-full transition-colors shadow-lg"
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-colors shadow-lg"
                   >
-                    <ChevronLeft size={24} className="text-gray-800" />
+                    <ChevronLeft size={24} className="text-white" />
                   </button>
                   <button
                     onClick={nextSlide}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 rounded-full transition-colors shadow-lg"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-colors shadow-lg"
                   >
-                    <ChevronRight size={24} className="text-gray-800" />
+                    <ChevronRight size={24} className="text-white" />
                   </button>
 
                   {/* Indicateurs de slide */}

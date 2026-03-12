@@ -107,7 +107,7 @@ const Footer = ({ reglages }: reglagesProps) => {
     // === Rendu Skeleton ===
     if (isLoading) {
         return (
-            <footer className="w-full bg-[#242078] text-background py-16 md:py-24 bootom-0">
+            <footer className="w-full bg-[#242078] dark:bg-background/80 backdrop-blur-lg text-white py-16 md:py-24 bootom-0 transition-colors duration-500 border-t border-white/5">
                 <div className="container mx-auto px-6 md:px-10 animate-pulse">
                     <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-start">
                         {/* Colonne gauche */}
@@ -146,7 +146,7 @@ const Footer = ({ reglages }: reglagesProps) => {
     // === Rendu normal ===
 
     return (
-        <footer className="w-full bg-[#242078] text-background py-16 md:py-24">
+        <footer className="w-full bg-[#242078] dark:bg-background/80 backdrop-blur-lg text-white py-16 md:py-24 transition-colors duration-500 border-t border-white/5">
             <div className="container mx-auto px-6 md:px-10">
                 {/* Structure en 3 colonnes avec plus d'espace pour la première */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
@@ -154,7 +154,7 @@ const Footer = ({ reglages }: reglagesProps) => {
                     {/* Première colonne - Logo et description (prend plus d'espace) */}
                     <div className="lg:col-span-6 flex flex-col gap-4">
                         <Image src={`${urlImages}/${photoUrl}`} alt="Tarafé Logo" width={180} height={40} className="object-contain" priority unoptimized />
-                        <p className="text-sm sm:text-base md:text-lg leading-relaxed text-background/80 max-w-2xl">
+                        <p className="text-sm sm:text-base md:text-lg leading-relaxed text-white/80 max-w-2xl">
                             {reglages[0]?.desc_footer}
                         </p>
                     </div>

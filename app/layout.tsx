@@ -81,17 +81,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
       {/* <body className={`${jost.variable} antialiased`} > */}
 
-      <body className={`${opensans.variable} ${poppins.variable} font-sans antialiased`}>
+      <body className={`${jost.variable} font-sans antialiased`}>
 
-        <ThemeProvider attribute="class" enableSystem={false} defaultTheme="light" disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <div className="flex flex-col min-h-screen">
             <main className="flex-1">
-              {/* <CartProvider> */}
-              <AlertProvider>
-                <Providers>
-                  <AlertProvider>  {children}  </AlertProvider>
-                </Providers>
-              </AlertProvider>
+              <Providers>
+                <AlertProvider>
+                  {children}
+                </AlertProvider>
+              </Providers>
             </main>
           </div>
         </ThemeProvider>
