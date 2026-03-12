@@ -87,7 +87,7 @@ export default function Heros({ heros }: HeroProps) {
                 <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#0f2e1e] rounded-full blur-[100px] opacity-30" />
             </div> */}
 
-            <div className="container relative z-10 mx-auto px-6 md:px-12 py-12 lg:py-0">
+            <div className="container relative z-10 mx-auto px-6 md:px-12 py-2 lg:py-0">
                 <AnimatePresence mode="wait">
                     <motion.div key={currentSlide} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center" >
                         {/* Left Column: Text Content */}

@@ -41,8 +41,14 @@ export default function Navbar() {
             {/* Mobile Header (Logo Only) */}
             <div className="fixed top-6 left-6 z-50 md:hidden pointer-events-none">
                 <Link href="/" className="pointer-events-auto block transition-transform active:scale-95">
-                    <div className="relative w-28 h-8">
-                        <Image src="/ads/logos2.png" alt="Tarafe Logo" fill className="object-contain" priority />
+                    <div className="relative w-40 h-12">
+                        <Image
+                            src={(isScrolled || pathname !== "/") ? "/ads/logos2.png" : "/ads/Logo_blanc.png"}
+                            alt="Tarafe Logo"
+                            fill
+                            className="object-contain"
+                            priority
+                        />
                     </div>
                 </Link>
             </div>
@@ -53,7 +59,13 @@ export default function Navbar() {
                 <div className="absolute left-12 top-1/2 -translate-y-1/2">
                     <Link href="/" className="pointer-events-auto block transition-transform duration-300 hover:scale-105 active:scale-95 origin-left">
                         <div className="relative w-36 h-10 md:w-48 md:h-12">
-                            <Image src="/ads/logos2.png" alt="Tarafe Logo" fill className="object-contain" priority />
+                            <Image
+                                src={(isScrolled || pathname !== "/") ? "/ads/logos2.png" : "/ads/Logo_blanc.png"}
+                                alt="Tarafe Logo"
+                                fill
+                                className="object-contain"
+                                priority
+                            />
                         </div>
                     </Link>
                 </div>
