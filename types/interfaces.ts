@@ -234,6 +234,12 @@ export interface Equipe {
     updated_at?: string | null;
 }
 
+
+export interface EquipeResponse {
+    equipes: Equipe[];
+    reglages: Reglage[];
+}
+
 // Interface pour une visite
 export interface Visit {
     id_visit: number;

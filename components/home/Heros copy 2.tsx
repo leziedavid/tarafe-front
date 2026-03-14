@@ -76,35 +76,16 @@ export default function Heros({ heros }: HeroProps) {
     }
 
     return (
-        <section className="relative w-full min-h-screen flex flex-col items-center overflow-hidden bg-background">
-            {/* Dynamic Background Image */}
-            <div className="absolute inset-0 z-0">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={currentSlide}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 1.2, ease: "easeInOut" }}
-                        className="absolute inset-0"
-                    >
-                        <Image
-                            src={currentHero.image ? `${urlImages}/${currentHero.image}` : "/hero-mockup.png"}
-                            alt="Background"
-                            fill
-                            className="object-cover scale-105 blur-[2px]"
-                            unoptimized
-                            priority
-                        />
-                        {/* Overlay to ensure readability */}
-                        <div className="absolute inset-0 bg-black/60 dark:bg-background/80" />
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-                    </motion.div>
-                </AnimatePresence>
-            </div>
-
+        //bg-[#0a1a10]
+        <section className="relative w-full min-h-screen flex flex-col items-center overflow-hidden bg-[#242078] dark:bg-background">
             {/* Minimal spacing for transparent Navbar */}
-            <div className="h-24 md:h-32 w-full shrink-0 z-10" />
+            <div className="h-24 md:h-32 w-full shrink-0" />
+
+            {/* Mesh Gradient Background */}
+            {/* <div className="absolute inset-0 z-0">
+                <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#1a4a2e] rounded-full blur-[120px] opacity-40 animate-pulse" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#0f2e1e] rounded-full blur-[100px] opacity-30" />
+            </div> */}
 
             <div className="container relative z-10 mx-auto px-6 md:px-12 py-2 lg:py-0">
                 <AnimatePresence mode="wait">
@@ -114,6 +95,8 @@ export default function Heros({ heros }: HeroProps) {
                             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} className="space-y-6"  >
                                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-white leading-[1.05]">
                                     {highlightTextInTitle(currentHero.title, currentHero.highlight_text)}
+
+                                    {/* {currentHero.title.split('\n').map((line, i) => (<span key={i}>{line}<br /></span>)) || "Smart way to manage money"} */}
                                 </h1>
                                 <p className="text-lg md:text-xl text-white max-w-md font-light leading-relaxed" dangerouslySetInnerHTML={{ __html: currentHero.description || "Planning today lays the foundation for a secure and successful tomorrow." }} />
                             </motion.div>
@@ -136,13 +119,13 @@ export default function Heros({ heros }: HeroProps) {
                         {/* Right Column: Dynamic Hero Image / App Mockup */}
                         <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="relative flex justify-center items-center" >
                             <div className="relative w-full max-w-[550px] aspect-square flex items-center justify-center">
-                                <div className="absolute w-full h-full bg-brand-primary/20 rounded-full blur-[120px] scale-110" />
+                                <div className="absolute w-full h-full bg-[#1a4a2e] rounded-full blur-[120px] opacity-20 scale-110" />
 
                                 <div className="relative z-10 w-full h-[120%] sm:h-full scale-[1.15] sm:scale-100">
                                     <Image src={currentHero.image ? `${urlImages}/${currentHero.image}` : "/hero-mockup.png"} alt={currentHero.title} fill className="object-contain drop-shadow-2xl" priority unoptimized />
                                 </div>
 
-                                {/* Floating Card */}
+                                {/* Floating Card: Dynamic or Mockup style */}
                                 <motion.div
                                     initial={{ opacity: 0, y: 40 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -177,12 +160,25 @@ export default function Heros({ heros }: HeroProps) {
 
                 {/* Slider Indicators */}
                 {heros.length > 1 && (
-                    <div className="flex justify-center gap-2 mt-8 relative z-10">
+                    <div className="flex justify-center gap-2 mt-8">
                         {heros.map((_, i) => (
-                            <button key={i} onClick={() => setCurrentSlide(i)} className={`h-1.5 rounded-full transition-all duration-300 ${i === currentSlide ? "w-8 bg-white" : "w-2 bg-white/40 h-1.5"}`} />
+                            <button key={i} onClick={() => setCurrentSlide(i)} className={`h-1.5 rounded-full transition-all duration-300 ${i === currentSlide ? "w-8 bg-white" : "w-2 bg-white/20 h-1.5"}`} />
                         ))}
                     </div>
                 )}
+            </div>
+
+            {/* Custom Background Decoration */}
+            <div className="absolute bottom-0 right-0 w-[40%] h-[60%] pointer-events-none z-0">
+                <svg viewBox="0 0 400 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full opacity-10">
+                    <path d="M400 600V0C300 100 0 200 0 400C0 600 200 600 400 600Z" fill="url(#paint0_linear)" />
+                    <defs>
+                        <linearGradient id="paint0_linear" x1="200" y1="0" x2="200" y2="600" gradientUnits="userSpaceOnUse">
+                            <stop stopColor="#1a4a2e" />
+                            <stop offset="1" stopColor="#0a1a10" />
+                        </linearGradient>
+                    </defs>
+                </svg>
             </div>
         </section>
     );

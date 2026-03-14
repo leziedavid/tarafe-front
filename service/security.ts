@@ -1,7 +1,7 @@
 import { fetchWithAuth, getTokenFromLocalStorage } from "@/app/middleware";
 import { BaseResponse } from "@/types/BaseResponse";
 import { getBaseUrl } from "@/types/baseUrl";
-import { User } from "@/types/interfaces";
+import { Equipe, EquipeResponse, User } from "@/types/interfaces";
 import { Pagination as PaginationType } from "@/types/pagination";
 
 const baseUrl = getBaseUrl();
@@ -129,6 +129,16 @@ export const getUserAllData = async (): Promise<BaseResponse<{ user: User; store
     const token = getTokenFromLocalStorage()
     if (!token) return { statusCode: 401, message: 'Non authentifié' }
     const response = await fetchWithAuth(`${baseUrl}/auth/me`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
+    return await response.json();
+};
+
+// getall equipe
+
+export const getAllEquipe = async (): Promise<BaseResponse<EquipeResponse>> => {
+    const response = await fetch(`${baseUrl}/equipes/all/data`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
     });

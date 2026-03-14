@@ -3,164 +3,190 @@
 import Footer from "@/components/page/Footer";
 import Navbar from "@/components/page/Navbar";
 import React, { useState, useEffect } from 'react';
-import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Icon } from '@iconify/react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Equipe, Reglage } from "@/types/interfaces";
+import { getAllEquipe } from "@/service/security";
+import { getImagesUrl } from "@/types/baseUrl";
 
 export default function Page() {
-  const equipeData = [
-    {
-      "id_equipe": "3",
-      "nomPren_equipe": "Inès",
-      "fonction_equipe": "Designer graphique",
-      "email_equipe": "contact@tarafe.com",
-      "photo_equipe": "/ads/tdl.jpg"
-    },
-    {
-      "id_equipe": "2",
-      "nomPren_equipe": "Bénédicte",
-      "fonction_equipe": "Co-fondatrice / Marketing",
-      "email_equipe": "contact@tarafe.com",
-      "photo_equipe": "/ads/benedicte.webp"
-    },
-    {
-      "id_equipe": "1",
-      "nomPren_equipe": "David",
-      "fonction_equipe": "Développeur web mobile",
-      "email_equipe": "contact@tarafe.com",
-      "photo_equipe": "/ads/tdl.jpg"
-    }
-  ];
-
+  const [equipeData, setEquipeData] = useState<Equipe[]>([]);
+  const [reglages, setReglages] = useState<Reglage[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const urlImages = getImagesUrl();
+
+  useEffect(() => {
+    getAllEquipe().then((res) => {
+      if (res.data) {
+        setEquipeData(res.data.equipes || []);
+        if (res.data.reglages) {
+          setReglages(res.data.reglages);
+        }
+      }
+      setLoading(false);
+    }).catch(err => {
+      console.error("Erreur lors de la récupération de l'équipe:", err);
+      setLoading(false);
+    });
+  }, []);
 
   const nextSlide = () => {
+    if (equipeData.length === 0) return;
     setCurrentSlide((prev) => (prev === equipeData.length - 1 ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
+    if (equipeData.length === 0) return;
     setCurrentSlide((prev) => (prev === 0 ? equipeData.length - 1 : prev - 1));
   };
 
   useEffect(() => {
+    if (equipeData.length <= 1) return;
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [equipeData.length]);
+
+  // Helper function for images
+  const getFullImageUrl = (path: string | null | undefined) => {
+    if (!path) return '/ads/tdl.jpg';
+    if (path.startsWith('http') || path.startsWith('data:')) return path;
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    return `${urlImages}${cleanPath}`;
+  };
 
   return (
-    <main className="min-h-screen bg-background text-foreground transition-colors duration-500 mt-12 md:mt-0">
+    <main className="min-h-screen bg-background text-foreground transition-colors duration-500">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="min-h-screen flex items-center">
-        <div className="max-w-7xl mx-auto px-6 py-12 w-full">
-          <div className="flex flex-col lg:flex-row items-stretch gap-12 h-full">
-            {/* Left Side - Text Content */}
-            <div className="flex-1 flex flex-col justify-center">
-              <div className="max-w-2xl">
-                <h1 className="text-3xl md:text-4xl font-bold mb-6  text-brand-secondary uppercase">  A propos de Tarafé  </h1>
-                <p className="text-md text-muted-foreground mb-8 leading-relaxed">
+      <section className="relative mt-20 md:mt-24 pb-20 overflow-hidden">
+        {/* Decorative Background Elements */}
+        <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none">
+          <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand/5 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-secondary/5 rounded-full blur-[120px]" />
+        </div>
 
-                  Tarafé est une plateforme digitale de personnalisation des produits mode, accessoires et déco, avec une touche africaine, pour les entreprises et les particuliers. Notre mission est de valoriser les savoir-faire et le patrimoine textile local.
-                  <br />
-                  Nos services :
-                  Personnalisation de produits : Tarafé offre la possibilité de personnaliser divers articles tels que des vêtements, des accessoires et des objets de décoration, en y intégrant des motifs et des designs inspirés de la culture africaine.
-                  Solutions pour les entreprises (B2B) : La plateforme propose des services adaptés aux besoins des entreprises, notamment pour des cadeaux d'entreprise personnalisés, du merchandising ou des articles promotionnels reflétant une identité africaine. Bienvenue  😊
-                </p>
-
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col lg:flex-row items-start gap-16">
+            {/* Left Side - Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="flex-1 space-y-8"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand/10 text-brand font-medium text-sm">
+                <Icon icon="solar:star-fall-2-bold-duotone" className="text-lg" />
+                <span>{reglages[0]?.entreprise_reglages || "Notre Histoire"}</span>
               </div>
-            </div>
 
-            {/* Right Side - Carousel avec images en background */}
-            <div className="flex-1 flex items-center justify-center">
-              <div className="relative w-full h-[600px] max-w-xl rounded-2xl overflow-hidden shadow-2xl">
-                {/* Carousel Container */}
-                <div className="relative w-full h-full">
-                  {/* Slides avec images en background */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-brand-secondary leading-[1.1]">
+                {reglages[0]?.texteHeader2 || "À propos de Tarafé"}
+              </h1>
 
-                  <div className="flex transition-transform duration-500 ease-in-out h-full" style={{ transform: `translateX(-${currentSlide * 100}%)` }} >
-                    {equipeData.map((membre, index) => (
-                      <div key={membre.id_equipe} className="w-full h-full flex-shrink-0 relative">
-                        {/* Image de fond */}
-                        <div className="absolute inset-0 bg-muted">
-                          {/* Placeholder - Remplacez par vos vraies images */}
-                          <div className="w-full h-full flex items-center justify-center bg-muted">
-                            <div className="text-center text-muted-foreground">
-                              <div className="text-6xl mb-4">👤</div>
-                              {/* <p>Photo de {membre.nomPren_equipe}</p> */}
-                              {/* Décommentez pour utiliser les vraies images */}
-                              <Image src={membre.photo_equipe} alt={membre.nomPren_equipe} fill className="object-cover" priority unoptimized />
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Overlay avec texte */}
-                        <div className="absolute inset-0 bg-black/20 flex items-end">
-                          <div className="p-8 text-white w-full bg-gradient-to-t from-black/80 to-transparent">
-                            <h3 className="text-3xl font-bold mb-2">{membre.nomPren_equipe}</h3>
-                            <p className="text-blue-300 text-xl mb-3">{membre.fonction_equipe}</p>
-                            <p className="text-gray-300">{membre.email_equipe}</p>
-                          </div>
-                        </div>
-                      </div>
-
-
-                      // <div key={membre.id_equipe} className="w-full h-full flex-shrink-0 relative">
-                      //   {/* Image de fond avec dimensions fixes */}
-                      //   <div className="absolute inset-0">
-                      //     <Image
-                      //       src={membre.photo_equipe}
-                      //       alt={membre.nomPren_equipe}
-                      //       fill
-                      //       className="object-cover"
-                      //       priority={index === 0}
-                      //       sizes="100vw"
-                      //       quality={90}
-                      //       placeholder="blur"
-                      //       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaUMk9SQHL1wj+ob4K6B6h+cnD0pbbEn"
-                      //       style={{
-                      //         objectFit: 'cover',
-                      //         objectPosition: 'center'
-                      //       }}
-                      //     />
-                      //   </div>
-
-                      //   {/* Gradient overlay pour améliorer la lisibilité */}
-                      //   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end">
-                      //     <div className="p-8 text-white w-full">
-                      //       <h3 className="text-3xl font-bold mb-2">{membre.nomPren_equipe}</h3>
-                      //       <p className="text-blue-300 text-xl mb-3">{membre.fonction_equipe}</p>
-                      //       <p className="text-gray-300">{membre.email_equipe}</p>
-                      //     </div>
-                      //   </div>
-                      // </div>
-
-                    ))}
-                  </div>
-
-                  {/* Boutons de navigation */}
-                  <button onClick={prevSlide} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-colors shadow-lg" >
-                    <ChevronLeft size={24} className="text-white" />
-                  </button>
-
-                  <button onClick={nextSlide} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-colors shadow-lg"  >
-                    <ChevronRight size={24} className="text-white" />
-                  </button>
-
-                  {/* Indicateurs de slide */}
-                  <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3">
-                    {equipeData.map((_, index) => (
-                      <button key={index} onClick={() => setCurrentSlide(index)} className={`w-3 h-3 rounded-full transition-colors ${index === currentSlide ? 'bg-white' : 'bg-white/50'}`} />
-                    ))}
-                  </div>
-
+              {loading ? (
+                <div className="space-y-4">
+                  <div className="h-4 bg-muted animate-pulse rounded w-3/4" />
+                  <div className="h-4 bg-muted animate-pulse rounded w-1/2" />
+                  <div className="h-4 bg-muted animate-pulse rounded w-2/3" />
                 </div>
+              ) : (
+                <div
+                  className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: reglages[0]?.description_reglages || "" }}
+                />
+              )}
+
+
+            </motion.div>
+
+            {/* Right Side - Slider */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="flex-1 w-full lg:sticky lg:top-32"
+            >
+              <div className="relative group aspect-[4/5] md:aspect-square lg:aspect-[4/5] max-w-lg mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl bg-muted ring-1 ring-white/10">
+                {loading ? (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4">
+                    <div className="w-12 h-12 border-4 border-brand border-t-transparent rounded-full animate-spin" />
+                    <p className="text-muted-foreground animate-pulse">Chargement de l'équipe...</p>
+                  </div>
+                ) : equipeData.length > 0 ? (
+                  <>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentSlide}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="absolute inset-0"
+                      >
+                        <Image
+                          src={getFullImageUrl(equipeData[currentSlide].photo_equipe)}
+                          alt={equipeData[currentSlide].nomPren_equipe || 'Membre Tarafé'}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          priority
+                          unoptimized
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+
+                        <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 space-y-2">
+                          <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                          >
+                            <h3 className="text-3xl md:text-4xl font-black text-white">{equipeData[currentSlide].nomPren_equipe}</h3>
+                            <div className="flex items-center gap-3 mt-2">
+                              <span className="w-8 h-[2px] bg-white" />
+                              <p className="text-white font-bold uppercase tracking-widest text-sm">{equipeData[currentSlide].fonction_equipe}</p>
+                            </div>
+                            {equipeData[currentSlide].email_equipe && (
+                              <p className="text-white mt-4 flex items-center gap-2 text-sm">
+                                <Icon icon="solar:letter-linear" />
+                                {equipeData[currentSlide].email_equipe}
+                              </p>
+                            )}
+                          </motion.div>
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+
+                    {/* Navigation Buttons */}
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button onClick={prevSlide} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all shadow-lg">
+                        <Icon icon="solar:alt-arrow-left-linear" className="text-2xl" />
+                      </button>
+                      <button onClick={nextSlide} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all shadow-lg">
+                        <Icon icon="solar:alt-arrow-right-linear" className="text-2xl" />
+                      </button>
+                    </div>
+
+                    {/* Progress Indicators */}
+                    <div className="absolute top-8 right-8 flex flex-col gap-2">
+                      {equipeData.map((_, index) => (
+                        <button key={index} onClick={() => setCurrentSlide(index)} className={`w-1.5 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-brand h-10' : 'bg-white/30 h-6'}`} />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-secondary/50">
+                    <p className="text-muted-foreground">Aucun membre d'équipe trouvé.</p>
+                  </div>
+                )}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      <Footer reglages={[]} />
+      <Footer reglages={reglages} />
     </main>
   );
 }
