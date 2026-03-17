@@ -19,6 +19,7 @@ export default function PricingManagement() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [selectedPricingFiles, setSelectedPricingFiles] = useState<any[]>([]);
+    const [initialIndex, setInitialIndex] = useState<number | null>(null);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const urlImages = getImagesUrl();
 
@@ -126,6 +127,7 @@ export default function PricingManagement() {
                                                         <div className="w-10 h-10 flex-shrink-0 cursor-pointer hover:opacity-80 transition-all group/img relative overflow-hidden rounded-lg shadow-sm"
                                                             onClick={() => {
                                                                 setSelectedPricingFiles(pricing.files || []);
+                                                                setInitialIndex(0);
                                                                 setPreviewOpen(true);
                                                             }} >
                                                             <Image src={`${urlImages}/${pricing.files[0].file_path}`} alt={pricing.files[0].file_path} fill className="object-contain p-2" unoptimized />
@@ -172,7 +174,7 @@ export default function PricingManagement() {
                         </table>
                     </div>
                 </div>
-            </div>
+            </div >
 
             <MyModal open={open} onClose={() => setOpen(false)} mode="mobile" typeModal="large">
                 <PricingForm
@@ -189,16 +191,19 @@ export default function PricingManagement() {
                 onConfirm={confirmDelete}
             />
 
-            <MyModal open={previewOpen} onClose={() => setPreviewOpen(false)} mode="mobile" typeModal="large">
-                <div className="py-4">
-                    <h3 className="text-xl font-bold mb-6 text-brand-secondary border-b pb-2">Aperçu du produit</h3>
+            {
+                previewOpen && selectedPricingFiles && (
                     <ImagePreview
                         data={selectedPricingFiles}
                         imageKey="file_path"
-                        className="rounded-2xl"
+                        initialIndex={initialIndex}
+                        onClose={() => {
+                            setPreviewOpen(false);
+                            setInitialIndex(null);
+                        }}
                     />
-                </div >
-            </MyModal >
+                )
+            }
         </>
     );
 }

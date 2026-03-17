@@ -53,13 +53,7 @@ export default function Navbar() {
             <div className={`fixed top-6 left-6 z-50 md:hidden pointer-events-none transition-all duration-500 ${isScrolled ? "opacity-0 -translate-y-10" : "opacity-100 translate-y-0"}`}>
                 <Link href="/" className="pointer-events-auto block transition-transform active:scale-95">
                     <div className="relative w-40 h-12">
-                        <Image
-                            src={logoSrc}
-                            alt="Tarafe Logo"
-                            fill
-                            className="object-contain"
-                            priority
-                        />
+                        <Image src={logoSrc} alt="Tarafe Logo" fill className="object-contain" priority />
                     </div>
                 </Link>
             </div>
@@ -77,7 +71,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Center: Menu + Cart + Login Pill (Orange on scroll or non-hero pages) */}
-                <div className={`flex items-center gap-6 px-4 py-2 rounded-full border transition-all duration-500 pointer-events-auto shadow-lg  ${isScrolled ? "bg-brand-primary/50 border-brand-primary scale-95" : "bg-background/20 backdrop-blur-md border-white/10 hover:bg-background/30"}`} >
+                <div className={`flex items-center gap-6 px-4 py-2 rounded-full border transition-all duration-500 pointer-events-auto shadow-lg  ${isScrolled ? "bg-background/20 border-brand-primary scale-95" : "bg-background/20 backdrop-blur-md border-white/10 hover:bg-background/30"}`} >
                     <nav className="flex items-center gap-1">
                         {NAV_LINKS.map((link) => {
                             const active = isTabActive(link.href);

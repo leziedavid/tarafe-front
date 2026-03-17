@@ -5,7 +5,6 @@ import { Pricing } from "@/types/interfaces";
 import { Icon } from "@iconify/react";
 import { getImagesUrl } from "@/types/baseUrl";
 import ImagePreview from "../shared/ImagePreview";
-import MyModal from "../modal/MyModal";
 import Image from "next/image";
 
 interface PricingSectionProps {
@@ -16,6 +15,7 @@ interface PricingSectionProps {
 export default function PricingSection({ pricing = [], isLoading = false }: PricingSectionProps) {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
+    const [initialIndex, setInitialIndex] = useState<number | null>(null);
     const urlImages = getImagesUrl();
 
     // Filtrer les tarifs actifs
@@ -84,7 +84,11 @@ export default function PricingSection({ pricing = [], isLoading = false }: Pric
                                                 <div className="flex items-center gap-4">
                                                     {item.files && item.files.length > 0 ? (
                                                         <div className="w-14 h-14 md:w-16 md:h-16 flex-shrink-0 cursor-pointer hover:scale-110 active:scale-95 transition-all group/img relative overflow-hidden rounded-2xl bg-white shadow-sm border border-border/50"
-                                                            onClick={() => { setSelectedFiles(item.files || []); setPreviewOpen(true); }} >
+                                                            onClick={() => {
+                                                                setSelectedFiles(item.files || []);
+                                                                setInitialIndex(0);
+                                                                setPreviewOpen(true);
+                                                            }} >
                                                             <Image src={`${urlImages}/${item.files[0].file_path}`} alt={item.product_name} fill className="object-contain p-2" unoptimized />
                                                             <div className="absolute inset-0 bg-brand-primary/20 opacity-0 group-hover/img:opacity-100 flex items-center justify-center transition-opacity backdrop-blur-[2px]">
                                                                 <Icon icon="solar:eye-bold" className="w-5 h-5 text-brand-primary" />
@@ -139,16 +143,17 @@ export default function PricingSection({ pricing = [], isLoading = false }: Pric
                 </div>
             </div>
 
-            <MyModal open={previewOpen} onClose={() => setPreviewOpen(false)} mode="mobile" typeModal="large">
-                <div className="py-4">
-                    <h3 className="text-xl font-bold mb-6 text-brand-secondary border-b pb-2">Aperçu des détails</h3>
-                    <ImagePreview
-                        data={selectedFiles}
-                        imageKey="file_path"
-                        className="rounded-2xl"
-                    />
-                </div>
-            </MyModal>
+            {previewOpen && selectedFiles && (
+                <ImagePreview
+                    data={selectedFiles}
+                    imageKey="file_path"
+                    initialIndex={initialIndex}
+                    onClose={() => {
+                        setPreviewOpen(false);
+                        setInitialIndex(null);
+                    }}
+                />
+            )}
         </section>
 
     );

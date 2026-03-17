@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import Footer from "./Footer";
 import { Icon } from "@iconify/react";
 import ImagePreview from "../shared/ImagePreview";
-import MyModal from "../modal/MyModal";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProductHero, { HeroSlide } from "../store/ProductHero";
 
@@ -26,6 +25,7 @@ export default function HomeGallerie() {
     const [totalPages, setTotalPages] = useState<number>(1);
     const [selectedImages, setSelectedImages] = useState<any[] | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [initialIndex, setInitialIndex] = useState<number | null>(null);
     const urlImages = getImagesUrl();
 
     // === Fetch des données ===
@@ -175,11 +175,15 @@ export default function HomeGallerie() {
                 ) : (
                     <>
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0">
-                            {gallery.map((item) => (
+                            {gallery.map((item, index) => (
                                 <div
                                     key={item.id_gallerie_images}
                                     className="group cursor-pointer"
-                                    onClick={() => { setSelectedImages([{ file_path: item.files_gallerie_images }]); setModalOpen(true); }}
+                                    onClick={() => {
+                                        setSelectedImages(gallery.map(g => ({ file_path: g.files_gallerie_images })));
+                                        setInitialIndex(index);
+                                        setModalOpen(true);
+                                    }}
                                 >
                                     <div className="relative aspect-[3/4] rounded-3xl bg-muted overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500">
                                         <Image
@@ -239,14 +243,17 @@ export default function HomeGallerie() {
 
             <Footer reglages={reglage} />
 
-            <MyModal open={modalOpen} onClose={() => setModalOpen(false)} typeModal="large">
-                <div className="py-4">
-                    <h3 className="text-xl font-bold mb-6 text-brand-secondary border-b pb-4">Détails de la réalisation</h3>
-                    {selectedImages && (
-                        <ImagePreview data={selectedImages} imageKey="file_path" className="rounded-2xl" />
-                    )}
-                </div>
-            </MyModal>
+            {modalOpen && selectedImages && (
+                <ImagePreview
+                    data={selectedImages}
+                    imageKey="file_path"
+                    initialIndex={initialIndex}
+                    onClose={() => {
+                        setModalOpen(false);
+                        setInitialIndex(null);
+                    }}
+                />
+            )}
         </>
     );
 }

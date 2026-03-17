@@ -14,6 +14,8 @@ interface ImagePreviewProps<T> {
     className?: string;
     aspectRatio?: "square" | "video" | "portrait" | "auto";
     objectFit?: "cover" | "contain";
+    onClose?: () => void;
+    initialIndex?: number | null;
 }
 
 export default function ImagePreview<T>({
@@ -22,9 +24,11 @@ export default function ImagePreview<T>({
     className,
     aspectRatio = "square",
     objectFit = "cover",
+    onClose,
+    initialIndex = null,
 }: ImagePreviewProps<T>) {
     const [loadingStates, setLoadingStates] = useState<boolean[]>([]);
-    const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+    const [focusedIndex, setFocusedIndex] = useState<number | null>(initialIndex);
     const [mounted, setMounted] = useState(false);
     const urlImages = getImagesUrl();
 
@@ -34,6 +38,17 @@ export default function ImagePreview<T>({
             setLoadingStates(new Array(data.length).fill(true));
         }
     }, [data]);
+
+    useEffect(() => {
+        if (initialIndex !== null) {
+            setFocusedIndex(initialIndex);
+        }
+    }, [initialIndex]);
+
+    const handleClose = () => {
+        setFocusedIndex(null);
+        if (onClose) onClose();
+    };
 
     const handleImageLoad = (index: number) => {
         setLoadingStates((prev) => {
@@ -80,12 +95,12 @@ export default function ImagePreview<T>({
         return createPortal(
             <div
                 className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/95 backdrop-blur-md animate-in fade-in duration-300"
-                onClick={() => setFocusedIndex(null)}
+                onClick={handleClose}
             >
                 {/* Close Button */}
                 <button
                     className="absolute top-6 right-6 z-[100001] bg-white/10 hover:bg-white/20 p-2.5 rounded-full transition-all group border border-white/10"
-                    onClick={(e) => { e.stopPropagation(); setFocusedIndex(null); }}
+                    onClick={(e) => { e.stopPropagation(); handleClose(); }}
                 >
                     <Icon icon="solar:close-circle-bold" className="w-8 h-8 text-white group-hover:scale-110 transition-transform" />
                 </button>
@@ -127,6 +142,11 @@ export default function ImagePreview<T>({
             document.body
         );
     };
+
+    // If initialIndex is provided, we don't render the grid, only the overlay
+    if (initialIndex !== null) {
+        return <FocusedOverlay />;
+    }
 
     return (
         <div className="relative w-full">
@@ -175,3 +195,4 @@ export default function ImagePreview<T>({
         </div>
     );
 }
+
