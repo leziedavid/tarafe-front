@@ -123,175 +123,238 @@ export default function Store() {
     // -----------------------------
     // Renders
     // -----------------------------
-    const renderCardSkeleton = () => (
+    const renderCardSkeleton = () =>
         Array(8).fill(0).map((_, i) => (
-            <div key={i} className="space-y-4">
-                <Skeleton className="aspect-[3/4] w-full rounded-[2.5rem]" />
-                <div className="space-y-2 px-2">
-                    <Skeleton className="h-4 w-3/4" />
-                    <Skeleton className="h-4 w-1/2" />
+            <div key={i} className="space-y-3">
+                <Skeleton className="aspect-[3/4] w-full rounded-2xl" />
+                <div className="space-y-2 px-1">
+                    <Skeleton className="h-3.5 w-3/4 rounded-lg" />
+                    <Skeleton className="h-3 w-1/2 rounded-lg" />
+                    <Skeleton className="h-3.5 w-1/3 rounded-lg" />
                 </div>
             </div>
-        ))
-    );
-
+        ));
 
     const heroSlides: HeroSlide[] = [
         {
             id: 1,
             image: "/ads/images.jpg",
             titleLines: [
-                "Tarafé est une plateforme digitale de personnalisation",
-                "des produits mode, accessoires et déco, avec une touche africaine,",
-                "pour les entreprises et les particuliers. Bienvenue !"
+                "Personnalisation à votre image",
+                "Mode, accessoires et déco avec une touche africaine, pour entreprises et particuliers.",
             ],
         },
     ];
 
-    return (
+    const totalPages = Math.ceil(totalItemsCount / limit);
 
-        <div className="relative min-h-screen bg-background  mt-12 md:mt-0">
-            {/* Store Navigation Indicator (Floating Cart) */}
-            <div className="fixed bottom-8 right-8 z-[900]">
-                <button onClick={() => setIsCartModalOpen(true)} className="relative group p-4 bg-brand-primary text-white rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300">
-                    <Icon icon="solar:cart-large-bold" width={20} />
+    return (
+        <div className="relative min-h-screen bg-background">
+
+            {/* Floating Cart Button */}
+            <div className="fixed bottom-7 right-5 z-[900]">
+                <motion.button
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.94 }}
+                    onClick={() => setIsCartModalOpen(true)}
+                    className="relative p-3.5 bg-brand-primary text-white rounded-2xl shadow-2xl shadow-brand-primary/40"
+                >
+                    <Icon icon="solar:cart-large-bold" width={22} />
                     {totalItems > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-white text-brand-primary w-7 h-7 flex items-center justify-center rounded-full text-xs font-black shadow-lg border-2 border-brand-primary animate-in zoom-in">
+                        <motion.span
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute -top-2 -right-2 bg-white text-brand-primary min-w-[1.4rem] h-[1.4rem] flex items-center justify-center rounded-full text-[10px] font-black shadow border-2 border-brand-primary px-1"
+                        >
                             {totalItems}
-                        </span>
+                        </motion.span>
                     )}
-                    <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap shadow-xl">
-                        Voir mon panier
-                    </div>
-                </button>
+                </motion.button>
             </div>
 
-            <section className="max-w-7xl mx-auto px-6 py-8 pb-32">
+            {/* Hero */}
+            <div className="px-4 sm:px-6 pt-14 md:pt-6 max-w-7xl mx-auto">
                 <ProductHero data={heroSlides} />
+            </div>
 
-                <div className="mt-16 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
-                    <div className="space-y-2">
-                        <h2 className="text-4xl md:text-5xl font-black text-brand-secondary dark:text-white leading-tight">
-                            Notre Boutique <span className="text-brand-primary">Tarafé</span>
-                        </h2>
-                        <p className="text-gray-400 font-medium">Découvrez notre collection exclusive de produits premium.</p>
-                    </div>
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-32">
 
-                    {/* Search & Sort (Simplified for now) */}
-                    <div className="flex items-center gap-4 bg-card p-2 rounded-2xl border border-border">
-                        <div className="relative">
-                            <Icon icon="solar:magnifer-linear" className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                            <input
-                                type="text"
-                                placeholder="Rechercher..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && fetchData()}
-                                className="bg-background border-none rounded-xl pl-10 h-11 text-sm focus:ring-2 focus:ring-brand-primary/20 w-full md:w-64"
-                            />
-                        </div>
-                        <button onClick={() => fetchData()} className="right-10 p-2 bg-brand-primary text-white rounded-xl shadow-lg shadow-brand-primary/20 hover:scale-105 transition-all">
-                            <Icon icon="solar:filter-bold" className="w-5 h-5" />
-                        </button>
-                    </div>
-
+                {/* Section Header */}
+                <div className="mb-7">
+                    <span className="text-brand-primary font-bold text-xs uppercase tracking-widest">Notre Collection</span>
+                    <h2 className="text-3xl md:text-4xl font-black text-foreground mt-1">
+                        Boutique <span className="text-brand-primary">Tarafé</span>
+                    </h2>
+                    <p className="text-muted-foreground text-sm mt-1.5">Découvrez notre collection exclusive de produits premium.</p>
                 </div>
 
-                {/* Categories Bar */}
-                <div className="flex flex-wrap items-center gap-3 mb-8">
-                    <button onClick={() => { setSelectedCategory(null); setSelectedSubCategory(null); setCurrentPage(1); }} className={`px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${!selectedCategory ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-card text-muted-foreground border-border hover:border-brand-primary/50"}`}  >
-                        Tous les produits
-                    </button>
-
-                    {categories.map((cat) => (
-                        <button key={cat.id} onClick={() => { setSelectedCategory(cat.id); setSelectedSubCategory(null); setCurrentPage(1); }} className={`px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${selectedCategory === cat.id ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-card text-muted-foreground border-border hover:border-brand-primary/50"}`} >
-                            {cat.name}
+                {/* Search + Sort */}
+                <div className="flex flex-col sm:flex-row gap-3 mb-7">
+                    <div className="relative flex-1">
+                        <Icon icon="solar:magnifer-linear" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" />
+                        <input
+                            type="text"
+                            placeholder="Rechercher un produit..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyDown={(e) => e.key === "Enter" && fetchData()}
+                            className="w-full bg-card border border-border rounded-xl pl-10 pr-4 h-11 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary/40 transition-all text-foreground placeholder:text-muted-foreground"
+                        />
+                    </div>
+                    <div className="flex gap-2">
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'date' | 'stock')}
+                            className="bg-card border border-border rounded-xl px-3 h-11 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-primary/20 cursor-pointer"
+                        >
+                            <option value="date">Plus récents</option>
+                            <option value="price">Par prix</option>
+                            <option value="name">Par nom</option>
+                            <option value="stock">Par stock</option>
+                        </select>
+                        <button
+                            onClick={fetchData}
+                            className="px-4 h-11 bg-brand-primary text-white rounded-xl hover:bg-brand-primary/90 transition-colors shadow-lg shadow-brand-primary/20 flex items-center gap-2 font-semibold text-sm"
+                        >
+                            <Icon icon="solar:magnifer-bold" width={16} />
+                            <span className="hidden sm:inline">Chercher</span>
                         </button>
-                    ))}
+                    </div>
                 </div>
 
-                {/* Sub Categories (Nested) */}
+                {/* Categories */}
+                <div className="overflow-x-auto scrollbar-hide mb-2">
+                    <div className="flex items-center gap-2 pb-1 min-w-max">
+                        <button
+                            onClick={() => { setSelectedCategory(null); setSelectedSubCategory(null); setCurrentPage(1); }}
+                            className={`px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${!selectedCategory
+                                ? "bg-brand-primary text-white shadow-md shadow-brand-primary/25"
+                                : "bg-card text-muted-foreground border border-border hover:border-brand-primary/40 hover:text-foreground"}`}
+                        >
+                            Tous les produits
+                        </button>
+                        {categories.map((cat) => (
+                            <button
+                                key={cat.id}
+                                onClick={() => { setSelectedCategory(cat.id); setSelectedSubCategory(null); setCurrentPage(1); }}
+                                className={`px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${selectedCategory === cat.id
+                                    ? "bg-brand-primary text-white shadow-md shadow-brand-primary/25"
+                                    : "bg-card text-muted-foreground border border-border hover:border-brand-primary/40 hover:text-foreground"}`}
+                            >
+                                {cat.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Sub Categories */}
                 <AnimatePresence>
                     {subCategories.length > 0 && (
-                        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-border" >
-                            {subCategories.map((sub) => (
-                                <button key={sub.id} onClick={() => { setSelectedSubCategory(sub.id); setCurrentPage(1); }} className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${selectedSubCategory === sub.id ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-secondary/80"}`}  >
-                                    {sub.name}
-                                </button>
-                            ))}
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="overflow-x-auto scrollbar-hide pt-3 mb-2">
+                                <div className="flex items-center gap-2 pb-1 min-w-max">
+                                    {subCategories.map((sub) => (
+                                        <button
+                                            key={sub.id}
+                                            onClick={() => { setSelectedSubCategory(sub.id); setCurrentPage(1); }}
+                                            className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${selectedSubCategory === sub.id
+                                                ? "bg-foreground text-background"
+                                                : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
+                                        >
+                                            {sub.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
+                {/* Results Count */}
+                {!loading && products.length > 0 && (
+                    <p className="text-xs text-muted-foreground mt-4 mb-6">
+                        {totalItemsCount} produit{totalItemsCount > 1 ? "s" : ""} trouvé{totalItemsCount > 1 ? "s" : ""}
+                    </p>
+                )}
+
                 {/* Product Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
                     {loading ? renderCardSkeleton() : (
-                        products.map((product) => {
+                        products.map((product, index) => {
                             const price = parseFloat(product.price).toLocaleString();
 
                             return (
-                                <div key={product.id} className="group cursor-pointer flex flex-col" onClick={() => openProductDetail(product)}  >
-                                    <div className="relative aspect-[3/4] w-full rounded-2xl bg-muted overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700">
-                                        {/* Badges */}
+                                <motion.div
+                                    key={product.id}
+                                    initial={{ opacity: 0, y: 24 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.04, duration: 0.35 }}
+                                    className="group cursor-pointer"
+                                    onClick={() => openProductDetail(product)}
+                                >
+                                    {/* Image */}
+                                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-muted">
+                                        {/* Tag */}
                                         {product.tag && (
-                                            <div className="absolute top-5 left-5 z-20">
-                                                <span className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest ${product.tag === "NEW ARRIVAL" ? "bg-white text-black shadow-lg" : "bg-brand-primary text-white shadow-lg shadow-brand-primary/30"}`}>
-                                                    {product.tag}
-                                                </span>
-                                            </div>
+                                            <span className={`absolute top-2.5 left-2.5 z-20 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm ${product.tag === "NEW ARRIVAL" ? "bg-white text-black" : "bg-brand-primary text-white"}`}>
+                                                {product.tag}
+                                            </span>
                                         )}
 
-                                        {/* Actions Overlay */}
-                                        {/* Actions Overlay */}
-                                        <div className="absolute inset-x-0 bottom-0 p-6 z-30 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                                            <div className="flex gap-2">
-
-                                                <button
-                                                    onClick={(e) => handleAddToCart(e, product)}
-                                                    className="flex-1 bg-white py-4 rounded-2xl text-black font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-brand-primary hover:text-white transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2"
-                                                >
-                                                    {/* Icon visible seulement sur mobile */}
-                                                    <span className="md:hidden">
-                                                        <Icon icon="solar:cart-plus-bold" width={20} />
-                                                    </span>
-
-                                                    {/* Texte visible seulement sur desktop */}
-                                                    <span className="hidden md:inline">
-                                                        Ajouter au panier
-                                                    </span>
-                                                </button>
-
-                                                <div className="aspect-square w-12 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center text-white border border-white/20 hover:bg-brand-primary transition-all shadow-xl">
-                                                    <Icon icon="solar:eye-bold" width={20} />
-                                                </div>
-
-                                            </div>
-                                        </div>
-
                                         {/* Image */}
-                                        <Image src={`${urlImages}/${product.image}`} alt={product.name} fill className="object-cover transition-transform duration-1000 group-hover:scale-110" unoptimized />
+                                        <Image
+                                            src={`${urlImages}/${product.image}`}
+                                            alt={product.name}
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                            unoptimized
+                                        />
 
-                                        {/* Decorative Overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        {/* Hover overlay */}
+                                        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                            <motion.span
+                                                initial={false}
+                                                className="bg-white text-black px-4 py-2 rounded-full text-xs font-bold shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300"
+                                            >
+                                                Voir le produit
+                                            </motion.span>
+                                        </div>
                                     </div>
 
                                     {/* Info */}
-                                    <div className="mt-4 px-2 space-y-1">
-                                        <div className="flex items-center justify-between gap-2">
-                                            <h3 className="font-bold text-base text-foreground line-clamp-1 group-hover:text-brand-primary transition-colors">
-                                                {product.name}
-                                            </h3>
-                                            <span className="shrink-0 text-sm font-black text-brand-primary">{price} FCFA</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <p className="text-xs text-muted-foreground font-medium">{product.category?.name || "Premium"}</p>
-                                            <div className="flex items-center gap-1">
-                                                <Icon icon="solar:star-bold" className="text-yellow-400 w-3 h-3" />
-                                                <span className="text-[10px] font-bold text-muted-foreground">{product.rating || "4.5"}</span>
+                                    <div className="mt-3 px-0.5">
+                                        <h3 className="font-semibold text-sm text-foreground line-clamp-1 group-hover:text-brand-primary transition-colors leading-snug">
+                                            {product.name}
+                                        </h3>
+                                        <p className="text-[11px] text-muted-foreground mt-0.5">
+                                            {product.category?.name || "Premium"}
+                                        </p>
+                                        <div className="flex items-center justify-between mt-2">
+                                            <span className="font-black text-brand-primary text-sm">
+                                                {price}
+                                                <span className="text-[10px] font-bold ml-0.5">FCFA</span>
+                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-0.5">
+                                                    <Icon icon="solar:star-bold" className="text-yellow-400 w-3 h-3" />
+                                                    <span className="text-[10px] text-muted-foreground font-semibold">{product.rating || "4.5"}</span>
+                                                </div>
+                                                <button
+                                                    onClick={(e) => handleAddToCart(e, product)}
+                                                    title="Ajouter au panier"
+                                                    className="p-1.5 rounded-xl bg-brand-primary/10 text-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-200"
+                                                >
+                                                    <Icon icon="solar:cart-plus-bold" width={15} />
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                             );
                         })
                     )}
@@ -299,13 +362,18 @@ export default function Store() {
 
                 {/* Empty State */}
                 {!loading && products.length === 0 && (
-                    <div className="py-32 flex flex-col items-center justify-center text-center">
-                        <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center text-muted-foreground mb-6">
-                            <Icon icon="solar:box-bold-duotone" width={64} />
+                    <div className="py-24 flex flex-col items-center justify-center text-center">
+                        <div className="w-20 h-20 bg-brand-primary/10 rounded-full flex items-center justify-center mb-5">
+                            <Icon icon="solar:box-bold-duotone" width={38} className="text-brand-primary" />
                         </div>
-                        <h3 className="text-xl font-bold text-foreground mb-2">Aucun produit trouvé</h3>
-                        <p className="text-muted-foreground max-w-sm">Désolé, nous n'avons trouvé aucun article correspondant à votre recherche ou catégorie.</p>
-                        <button onClick={() => { setSelectedCategory(null); setSearchTerm(""); fetchData(); }} className="mt-8 px-8 py-3 bg-primary text-primary-foreground rounded-2xl font-bold text-sm hover:opacity-90 transition-all" >
+                        <h3 className="text-lg font-bold text-foreground mb-2">Aucun produit trouvé</h3>
+                        <p className="text-muted-foreground text-sm max-w-xs">
+                            Aucun article ne correspond à votre recherche ou à cette catégorie.
+                        </p>
+                        <button
+                            onClick={() => { setSelectedCategory(null); setSearchTerm(""); fetchData(); }}
+                            className="mt-6 px-6 py-2.5 bg-brand-primary text-white rounded-xl font-bold text-sm hover:bg-brand-primary/90 transition-colors shadow-lg shadow-brand-primary/20"
+                        >
                             Réinitialiser les filtres
                         </button>
                     </div>
@@ -313,23 +381,33 @@ export default function Store() {
 
                 {/* Pagination */}
                 {totalItemsCount > limit && (
-                    <div className="mt-20 flex items-center justify-center gap-4">
-                        <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="flex items-center gap-2 px-6 py-3 border border-border rounded-2xl font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30"  >
-                            <Icon icon="solar:alt-arrow-left-bold" />
-                            Précédent
+                    <div className="mt-14 flex items-center justify-center gap-1.5">
+                        <button
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage((p) => p - 1)}
+                            className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <Icon icon="solar:alt-arrow-left-bold" width={15} />
                         </button>
 
-                        <div className="flex items-center gap-1">
-                            {Array.from({ length: Math.ceil(totalItemsCount / limit) }, (_, i) => i + 1).map((page) => (
-                                <button key={page} onClick={() => setCurrentPage(page)} className={`w-12 h-12 flex items-center justify-center rounded-2xl font-bold text-sm transition-all ${currentPage === page ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25" : "text-muted-foreground hover:text-foreground"}`}>
-                                    {page}
-                                </button>
-                            ))}
-                        </div>
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                            <button
+                                key={page}
+                                onClick={() => setCurrentPage(page)}
+                                className={`w-10 h-10 flex items-center justify-center rounded-xl font-semibold text-sm transition-all ${currentPage === page
+                                    ? "bg-brand-primary text-white shadow-md shadow-brand-primary/25"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-accent"}`}
+                            >
+                                {page}
+                            </button>
+                        ))}
 
-                        <button disabled={currentPage === Math.ceil(totalItemsCount / limit)} onClick={() => setCurrentPage(p => p + 1)} className="flex items-center gap-2 px-6 py-3 border border-border rounded-2xl font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30"  >
-                            Suivant
-                            <Icon icon="solar:alt-arrow-right-bold" />
+                        <button
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage((p) => p + 1)}
+                            className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <Icon icon="solar:alt-arrow-right-bold" width={15} />
                         </button>
                     </div>
                 )}
@@ -341,12 +419,10 @@ export default function Store() {
                 onClose={() => setIsProductModalOpen(false)}
                 product={selectedProduct}
             />
-
             <CartDetailModal
                 isOpen={isCartModalOpen}
                 onClose={() => setIsCartModalOpen(false)}
             />
         </div>
-
     );
 }

@@ -71,13 +71,13 @@ export default function Navbar() {
                 </div>
 
                 {/* Center: Menu + Cart + Login Pill (Orange on scroll or non-hero pages) */}
-                <div className={`flex items-center gap-6 px-4 py-2 rounded-full border transition-all duration-500 pointer-events-auto shadow-lg  ${isScrolled ? "bg-background/20 border-brand-primary scale-95" : "bg-background/20 backdrop-blur-md border-white/10 hover:bg-background/30"}`} >
+                <div className={`flex items-center gap-6 px-4 py-2 rounded-full border transition-all duration-500 pointer-events-auto shadow-lg  ${isScrolled ? "bg-white border-brand-primary scale-95" : "bg-background/20 backdrop-blur-md border-white/10 hover:bg-background/30"}`} >
                     <nav className="flex items-center gap-1">
                         {NAV_LINKS.map((link) => {
                             const active = isTabActive(link.href);
-                            const isColorInverted = isScrolled || pathname !== "/";
+                            const isOtherPage = pathname !== "/";
                             return (
-                                <Link key={link.label} href={link.href} className={`uppercase px-5 py-2 rounded-full text-xs font-bold transition-all duration-300  ${active ? (isColorInverted ? "bg-brand-secondary text-brand-primary shadow-md" : "bg-white text-brand-primary shadow-md") : (isColorInverted ? "text-brand-secondary hover:bg-brand-secondary/10" : "text-white hover:bg-white/10")}`}  >
+                                <Link key={link.label} href={link.href} className={`uppercase px-5 py-2 rounded-full text-xs font-bold transition-all duration-300  ${active ? (isScrolled ? "bg-[#242078] text-white shadow-md" : (isOtherPage ? "bg-brand-secondary text-brand-primary shadow-md" : "bg-white text-brand-primary shadow-md")) : (isScrolled ? "text-[#242078] hover:bg-[#242078]/10" : (isOtherPage ? "text-brand-secondary hover:bg-brand-secondary/10" : "text-white hover:bg-white/10"))}`}  >
                                     {link.label}
                                 </Link>
                             );
@@ -87,17 +87,17 @@ export default function Navbar() {
                     <div className="flex items-center gap-4 border-l border-white/20 pl-6">
                         <ThemeToggle />
                         {/* Bouton Panier */}
-                        <button onClick={() => setIsCartModalOpen(true)} className={`relative p-2.5 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm ${isScrolled || pathname !== "/" ? "bg-brand-secondary text-brand-primary" : "bg-white/10 text-white hover:bg-white/20"}`} >
+                        <button onClick={() => setIsCartModalOpen(true)} className={`relative p-2.5 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm ${isScrolled ? "bg-[#242078] text-white" : (pathname !== "/" ? "bg-brand-secondary text-brand-primary" : "bg-white/10 text-white hover:bg-white/20")}`} >
                             <Icon icon="solar:cart-large-minimalistic-bold" className="w-5 h-5" />
                             {totalItems > 0 && (
-                                <span className={`absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-[10px] font-bold rounded-full border-2 animate-in zoom-in ${isScrolled || pathname !== "/" ? "bg-red-500 text-white border-brand-primary" : "bg-brand-primary text-white border-[#0a1a10]"}`} >
+                                <span className={`absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-[10px] font-bold rounded-full border-2 animate-in zoom-in ${isScrolled ? "bg-red-500 text-white border-white" : (pathname !== "/" ? "bg-red-500 text-white border-brand-secondary" : "bg-brand-primary text-white border-[#0a1a10]")}`} >
                                     {totalItems}
                                 </span>
                             )}
                         </button>
 
                         {/* Bouton Login (même style que panier) */}
-                        <Link href="/account" className={`relative p-2.5 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm ${isScrolled || pathname !== "/" ? "bg-brand-secondary text-brand-primary" : "bg-white/10 text-white hover:bg-white/20"} flex items-center justify-center`} >
+                        <Link href="/account" className={`relative p-2.5 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm ${isScrolled ? "bg-[#242078] text-white" : (pathname !== "/" ? "bg-brand-secondary text-brand-primary" : "bg-white/10 text-white hover:bg-white/20")} flex items-center justify-center`} >
                             <Icon icon="solar:user-minus-bold" className="w-5 h-5" />
                         </Link>
                     </div>

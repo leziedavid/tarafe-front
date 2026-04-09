@@ -43,10 +43,9 @@ export default function Home() {
       <ProductCardsSection serviceCards={response?.HomePageSections.service_cards ?? []} />
       <CollectionsSection product={response?.realisations ?? []} isLabel={true} />
       <AlternatingFeaturesSection feature={response?.HomePageSections.features ?? []} />
-      <ContactForm />
       <PartnersList partners={response?.partenaires ?? []} isPaginate={true} isLoading={loading} />
+      <ContactForm />
       <FinalCTASection finals={response?.HomePageSections.final_ctas ?? []} />
-
       <Footer reglages={response?.reglages ?? []} />
     </main>
   );

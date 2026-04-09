@@ -135,20 +135,13 @@ export default function HomeGallerie() {
 
                 {/* Categories */}
                 <div className="flex flex-nowrap sm:flex-wrap items-center gap-3 mb-8 overflow-x-auto hide-scrollbar pb-2 sm:pb-0 px-2 sm:px-0">
-                    <button
-                        onClick={() => handleFilter(0)}
-                        className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === 0 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-background text-foreground border-border hover:border-brand-primary/50"}`}
-                    >
+                    <button onClick={() => handleFilter(0)} className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === 0 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-background text-foreground border-border hover:border-brand-primary/50"}`}  >
                         Tous
                     </button>
 
                     {categories.length > 0 ? (
                         categories.map((cat) => (
-                            <button
-                                key={cat.idcategories_gallery}
-                                onClick={() => handleFilter(cat.idcategories_gallery)}
-                                className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === cat.idcategories_gallery ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-background text-foreground border-border hover:border-brand-primary/50"}`}
-                            >
+                            <button key={cat.idcategories_gallery} onClick={() => handleFilter(cat.idcategories_gallery)} className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === cat.idcategories_gallery ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-background text-foreground border-border hover:border-brand-primary/50"}`} >
                                 {cat.libelle}
                             </button>
                         ))
@@ -159,11 +152,7 @@ export default function HomeGallerie() {
                     )}
 
                     {activeCategory !== 0 && (
-                        <button
-                            onClick={resetFilters}
-                            className="shrink-0 p-2.5 rounded-full bg-secondary text-secondary-foreground hover:text-brand-primary transition-colors"
-                            title="Réinitialiser"
-                        >
+                        <button onClick={resetFilters} className="shrink-0 p-2.5 rounded-full bg-secondary text-secondary-foreground hover:text-brand-primary transition-colors" title="Réinitialiser" >
                             <Icon icon="solar:backspace-bold" width="24" height="24" />
                         </button>
                     )}
@@ -176,24 +165,9 @@ export default function HomeGallerie() {
                     <>
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-0">
                             {gallery.map((item, index) => (
-                                <div
-                                    key={item.id_gallerie_images}
-                                    className="group cursor-pointer"
-                                    onClick={() => {
-                                        setSelectedImages(gallery.map(g => ({ file_path: g.files_gallerie_images })));
-                                        setInitialIndex(index);
-                                        setModalOpen(true);
-                                    }}
-                                >
+                                <div key={item.id_gallerie_images} className="group cursor-pointer" onClick={() => { setSelectedImages(gallery.map(g => ({ file_path: g.files_gallerie_images }))); setInitialIndex(index); setModalOpen(true); }} >
                                     <div className="relative aspect-[3/4] rounded-3xl bg-muted overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500">
-                                        <Image
-                                            src={`${urlImages}/${item.files_gallerie_images}`}
-                                            alt={item.libelle_gallerie_images || "Gallery Image"}
-                                            fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                            unoptimized
-                                        />
-
+                                        <Image src={`${urlImages}/${item.files_gallerie_images}`} alt={item.libelle_gallerie_images || "Gallery Image"} fill className="object-cover transition-transform duration-700 group-hover:scale-110" unoptimized />
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-500 backdrop-blur-[2px]">
                                             <div className="bg-white/10 backdrop-blur-xl p-4 rounded-full border border-white/20 transform translate-y-8 group-hover:translate-y-0 transition-all duration-500 shadow-2xl">
                                                 <Icon icon="solar:eye-bold" className="w-8 h-8 text-white" />
@@ -207,11 +181,7 @@ export default function HomeGallerie() {
                         {/* Pagination */}
                         {gallery.length > 0 && totalPages > 1 && (
                             <div className="flex items-center justify-center gap-4 mt-12">
-                                <button
-                                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl border border-border font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                                    onClick={onPreviousPage}
-                                    disabled={currentPage === 1}
-                                >
+                                <button className="flex items-center gap-2 px-6 py-2.5 rounded-xl border border-border font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30 disabled:cursor-not-allowed" onClick={onPreviousPage} disabled={currentPage === 1} >
                                     <Icon icon="solar:alt-arrow-left-bold" width="20" height="20" />
                                     Précédent
                                 </button>
@@ -220,11 +190,7 @@ export default function HomeGallerie() {
                                     {currentPage} / {totalPages}
                                 </div>
 
-                                <button
-                                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl border border-border font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                                    onClick={onNextPage}
-                                    disabled={currentPage === totalPages}
-                                >
+                                <button className="flex items-center gap-2 px-6 py-2.5 rounded-xl border border-border font-bold text-sm hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-30 disabled:cursor-not-allowed" onClick={onNextPage} disabled={currentPage === totalPages}  >
                                     Suivant
                                     <Icon icon="solar:alt-arrow-right-bold" width="20" height="20" />
                                 </button>
@@ -242,17 +208,8 @@ export default function HomeGallerie() {
             </section>
 
             <Footer reglages={reglage} />
-
             {modalOpen && selectedImages && (
-                <ImagePreview
-                    data={selectedImages}
-                    imageKey="file_path"
-                    initialIndex={initialIndex}
-                    onClose={() => {
-                        setModalOpen(false);
-                        setInitialIndex(null);
-                    }}
-                />
+                <ImagePreview data={selectedImages} imageKey="file_path" initialIndex={initialIndex} onClose={() => { setModalOpen(false); setInitialIndex(null); }} />
             )}
         </>
     );
