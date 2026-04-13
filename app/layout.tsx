@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     url: "tarafe.com",
   },
   icons: {
-    icon: "/logos2.png",
+    icon: "/favicon.jpg?v=1",
   },
 };
 

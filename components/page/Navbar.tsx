@@ -41,11 +41,7 @@ export default function Navbar() {
     };
 
     const currentTheme = mounted ? resolvedTheme : "light";
-    const logoSrc = (currentTheme === "dark")
-        ? "/ads/Logo_blanc.png"
-        : (isScrolled || pathname !== "/")
-            ? "/ads/logos2.png"
-            : "/ads/Logo_blanc.png";
+    const logoSrc = (currentTheme === "dark") ? "/ads/Logo_blanc.png" : (isScrolled || pathname !== "/") ? "/favicon.jpg" : "/ads/Logo_blanc.png";
 
     return (
         <>
@@ -53,7 +49,7 @@ export default function Navbar() {
             <div className={`fixed top-6 left-6 z-50 md:hidden pointer-events-none transition-all duration-500 ${isScrolled ? "opacity-0 -translate-y-10" : "opacity-100 translate-y-0"}`}>
                 <Link href="/" className="pointer-events-auto block transition-transform active:scale-95">
                     <div className="relative w-40 h-12">
-                        <Image src={logoSrc} alt="Tarafe Logo" fill className="object-contain" priority />
+                        <Image src={logoSrc} alt="Tarafe Logo" fill className="object-contain" priority unoptimized />
                     </div>
                 </Link>
             </div>
