@@ -11,9 +11,10 @@ import { toast } from "sonner";
 import { Select2 } from "@/components/form/Select2";
 import Link from "next/link";
 import { getAllCategoriesIn, getSubCategoriesbyCategory } from "@/service/categoryServices";
-import { createProduct, getAllProducts, getProductStats, updateProduct } from "@/service/productsServices";
+import { createProduct, deleteProduct, getAllProducts, getProductStats, updateProduct } from "@/service/productsServices";
 import { prepareProductParams } from "@/types/prepareProductParams";
 import { getImagesUrl } from "@/types/baseUrl";
+import DeleteModal from "@/components/modal/DeleteModal";
 
 export default function ProductsPage() {
 
@@ -39,6 +40,9 @@ export default function ProductsPage() {
     const [limit] = useState(10);
     const urlImages = getImagesUrl();
     const [productStats, setProductStats] = useState<ProductStats | null>(null);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [productIdToDelete, setProductIdToDelete] = useState<number | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // getAllProducts avec filtres
     const fetchData = async () => {
@@ -228,11 +232,33 @@ export default function ProductsPage() {
         ));
     };
 
-    // Delete product
-    const deleteProduct = (productId: number) => {
-        if (confirm("Êtes-vous sûr de vouloir supprimer ce produit ?")) {
-            setProducts(prev => prev.filter(product => product.id !== productId));
-            // Note: Ajouter ici l'appel API pour supprimer réellement
+    // Delete product logic
+    const openDeleteDialog = (productId: number) => {
+        setProductIdToDelete(productId);
+        setIsDeleteDialogOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!productIdToDelete) return;
+
+        setIsDeleting(true);
+        try {
+            const res = await deleteProduct(productIdToDelete);
+            if (res.statusCode === 200) {
+                toast.success("Produit supprimé avec succès");
+                // Mettre à jour la liste localement ou rafraîchir
+                setProducts(prev => prev.filter(p => p.id !== productIdToDelete));
+                fetchProductStats(); // Mettre à jour les stats aussi
+            } else {
+                toast.error(res.message || "Erreur lors de la suppression");
+            }
+        } catch (error) {
+            console.error("Delete error:", error);
+            toast.error("Une erreur est survenue lors de la suppression");
+        } finally {
+            setIsDeleting(false);
+            setIsDeleteDialogOpen(false);
+            setProductIdToDelete(null);
         }
     };
 
@@ -374,7 +400,7 @@ export default function ProductsPage() {
                                     <button type="button" className="p-1 hover:bg-gray-100 rounded" onClick={() => AddProduct(product)}>
                                         <Edit className="w-4 h-4" />
                                     </button>
-                                    <button type="button" className="p-1 hover:bg-gray-100 rounded" onClick={() => deleteProduct(product.id)}>
+                                    <button type="button" className="p-1 hover:bg-gray-100 rounded" onClick={() => openDeleteDialog(product.id)}>
                                         <Trash2 className="w-4 h-4" />
                                     </button>
                                 </div>
@@ -577,7 +603,7 @@ export default function ProductsPage() {
                                     <button type="button" className="p-1.5 hover:bg-gray-100 rounded" onClick={() => AddProduct(product)}>
                                         <Edit className="w-4 h-4" />
                                     </button>
-                                    <button type="button" className="p-1.5 hover:bg-gray-100 rounded" onClick={() => deleteProduct(product.id)}>
+                                    <button type="button" className="p-1.5 hover:bg-gray-100 rounded" onClick={() => openDeleteDialog(product.id)}>
                                         <Trash2 className="w-4 h-4" />
                                     </button>
                                 </div>
@@ -996,6 +1022,16 @@ export default function ProductsPage() {
                     onClose={() => setOpen(false)}
                 />
             </MyModal>
+
+            {/* Modal de suppression */}
+            <DeleteModal
+                open={isDeleteDialogOpen}
+                onClose={() => setIsDeleteDialogOpen(false)}
+                onConfirm={handleConfirmDelete}
+                loading={isDeleting}
+                title="Supprimer le produit"
+                message="Êtes-vous sûr de vouloir supprimer ce produit ? Cette action retirera définitivement l'article de votre boutique."
+            />
         </AdminLayout>
     );
 }
