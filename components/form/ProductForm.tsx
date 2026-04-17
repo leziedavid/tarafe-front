@@ -6,10 +6,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { Icon } from "@iconify/react";
 import { CategoryProduct, SubCategoryProduct, Product } from "@/types/interfaces";
 import { Select2 } from "./Select2";
+import RichTextEditor from "@/components/rich-text-editor";
 import { getSubCategoriesbyCategory } from "@/service/categoryServices";
 import { toast } from "sonner";
 import { getStoreId, getUserInfos } from "@/app/middleware";
@@ -109,6 +110,7 @@ export default function ProductForm({
         watch,
         setValue,
         getValues,
+        control,
         formState: { errors },
     } = useForm<ProductFormValues>({
         resolver: zodResolver(productSchema),
@@ -186,20 +188,17 @@ export default function ProductForm({
         try {
             const res = await getSubCategoriesbyCategory(categoryId);
 
-            let filtered: SubCategoryProduct[] = [];
-
             if (res.statusCode === 200 && Array.isArray(res.data)) {
-                filtered = res.data.filter(sub => sub.category_id === categoryId);
-                setFilteredSubCategories(filtered);
+                setFilteredSubCategories(res.data);
+
+                const currentSubCategory = getValues("subCategoryId");
+                if (currentSubCategory && !res.data.some(sub => sub.id === currentSubCategory)) {
+                    setValue("subCategoryId", 0);
+                    setSelectedSubCategory(null);
+                }
             } else {
                 toast.error(res?.message || "Erreur lors du chargement des sous-catégories");
                 setFilteredSubCategories([]);
-            }
-
-            const currentSubCategory = getValues("subCategoryId");
-            if (currentSubCategory && !filtered.some(sub => sub.id === currentSubCategory)) {
-                setValue("subCategoryId", 0);
-                setSelectedSubCategory(null);
             }
         } catch (error: any) {
             console.error("Erreur filterSubCategories:", error);
@@ -381,7 +380,6 @@ export default function ProductForm({
 
     const watchedPrice = watch("price");
     const watchedOldPrice = watch("oldPrice");
-    const watchedDescription = watch("description");
     const watchedAvailable = watch("available");
     const watchedFeatured = watch("featured");
 
@@ -418,8 +416,6 @@ export default function ProductForm({
                     </p>
                 </div>
 
-                {/* <pre> {JSON.stringify(initialValue, null, 2)} </pre> */}
-
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
                     {/* Images Section */}
                     <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -439,33 +435,14 @@ export default function ProductForm({
                                 <Icon icon="solar:upload-minimalistic-bold" className="w-8 h-8 text-gray-400 mb-2" />
                                 <span className="text-xs text-gray-600">Ajouter une image</span>
                                 <span className="text-xs text-gray-400 mt-1">JPG, PNG, WEBP</span>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    multiple
-                                    onChange={(e) => e.target.files && handleImageUpload(e.target.files)}
-                                    disabled={images.length >= 8}
-                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                />
+                                <input type="file" accept="image/*" multiple onChange={(e) => e.target.files && handleImageUpload(e.target.files)} disabled={images.length >= 8} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                             </label>
 
                             {/* Image Preview */}
                             {images.map((image, index) => (
                                 <div key={index} className="relative h-48 rounded-lg overflow-hidden group">
-                                    <Image
-                                        src={image.startsWith('blob:') ? image : `${urlImages}/${image}`}
-                                        alt={`Produit ${index + 1}`}
-                                        fill
-                                        className="object-cover"
-                                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
-                                        unoptimized
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => removeImage(index)}
-                                        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                        aria-label={`Supprimer l'image ${index + 1}`}
-                                    >
+                                    <Image src={image.startsWith('blob:') ? image : `${urlImages}/${image}`} alt={`Produit ${index + 1}`} fill className="object-cover" sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw" unoptimized />
+                                    <button type="button" onClick={() => removeImage(index)} className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" aria-label={`Supprimer l'image ${index + 1}`}>
                                         <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
                                     </button>
                                     <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2">
@@ -493,13 +470,7 @@ export default function ProductForm({
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                                     Nom du produit *
                                 </label>
-                                <input
-                                    id="name"
-                                    type="text"
-                                    {...register("name")}
-                                    placeholder="Ex: iPhone 15 Pro Max"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                                />
+                                <input id="name" type="text" {...register("name")} placeholder="Ex: iPhone 15 Pro Max" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent" />
                                 {errors.name && (
                                     <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
                                 )}
@@ -512,13 +483,7 @@ export default function ProductForm({
                                 </label>
                                 <div className="relative">
                                     <Icon icon="solar:hashtag-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        id="sku"
-                                        type="text"
-                                        {...register("sku")}
-                                        placeholder="Ex: IPH15PM-001"
-                                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent uppercase"
-                                    />
+                                    <input id="sku" type="text" {...register("sku")} placeholder="Ex: IPH15PM-001" className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent uppercase" />
                                 </div>
                                 {errors.sku && (
                                     <p className="text-red-500 text-sm mt-1">{errors.sku.message}</p>
@@ -532,14 +497,7 @@ export default function ProductForm({
                                 </label>
                                 <div className="relative">
                                     <Icon icon="solar:hand-money-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        id="price"
-                                        type="number"
-                                        step="0.01"
-                                        {...register("price", { valueAsNumber: true })}
-                                        placeholder="0.00"
-                                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                                    />
+                                    <input id="price" type="number" step="0.01" {...register("price", { valueAsNumber: true })} placeholder="0.00" className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent" />
                                 </div>
                                 <p className="text-sm text-gray-500 mt-1">
                                     {formatPrice(watchedPrice)}
@@ -556,14 +514,7 @@ export default function ProductForm({
                                 </label>
                                 <div className="relative">
                                     <Icon icon="solar:hand-money-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        id="oldPrice"
-                                        type="number"
-                                        step="0.01"
-                                        {...register("oldPrice", { valueAsNumber: true })}
-                                        placeholder="0.00"
-                                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                                    />
+                                    <input id="oldPrice" type="number" step="0.01" {...register("oldPrice", { valueAsNumber: true })} placeholder="0.00" className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent" />
                                 </div>
                                 <p className="text-sm text-gray-500 mt-1">
                                     {watchedOldPrice ? formatPrice(watchedOldPrice) : "Non défini"}
@@ -575,13 +526,7 @@ export default function ProductForm({
                                 <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-2">
                                     Quantité en stock *
                                 </label>
-                                <input
-                                    id="stock"
-                                    type="number"
-                                    {...register("stock", { valueAsNumber: true })}
-                                    placeholder="0"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
-                                />
+                                <input id="stock" type="number" {...register("stock", { valueAsNumber: true })} placeholder="0" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent" />
                                 {errors.stock && (
                                     <p className="text-red-500 text-sm mt-1">{errors.stock.message}</p>
                                 )}
@@ -592,15 +537,7 @@ export default function ProductForm({
                                 <label htmlFor="tag" className="block text-sm font-medium text-gray-700 mb-2">
                                     Étiquette promotionnelle
                                 </label>
-                                <Select2
-                                    options={tagOptions}
-                                    selectedItem={selectedTag}
-                                    onSelectionChange={handleTagChange}
-                                    labelExtractor={(item) => item.label}
-                                    valueExtractor={(item) => item.value}
-                                    placeholder="Sélectionner une étiquette"
-                                    mode="single"
-                                />
+                                <Select2 options={tagOptions} selectedItem={selectedTag} onSelectionChange={handleTagChange} labelExtractor={(item) => item.label} valueExtractor={(item) => item.value} placeholder="Sélectionner une étiquette" mode="single" />
                             </div>
 
                         </div>
@@ -619,15 +556,7 @@ export default function ProductForm({
                                 <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-2">
                                     Catégorie principale *
                                 </label>
-                                <Select2
-                                    options={categoryOptions}
-                                    selectedItem={selectedCategory}
-                                    onSelectionChange={handleCategoryChange}
-                                    labelExtractor={(item) => item.label}
-                                    valueExtractor={(item) => item.value}
-                                    placeholder="Sélectionnez une catégorie"
-                                    mode="single"
-                                />
+                                <Select2 options={categoryOptions} selectedItem={selectedCategory} onSelectionChange={handleCategoryChange} labelExtractor={(item) => item.label} valueExtractor={(item) => item.value} placeholder="Sélectionnez une catégorie" mode="single" />
                                 {errors.categoryId && (
                                     <p className="text-red-500 text-sm mt-1">{errors.categoryId.message}</p>
                                 )}
@@ -638,16 +567,7 @@ export default function ProductForm({
                                 <label htmlFor="subCategoryId" className="block text-sm font-medium text-gray-700 mb-2">
                                     Sous-catégorie *
                                 </label>
-                                <Select2
-                                    options={subCategoryOptions}
-                                    selectedItem={selectedSubCategory}
-                                    onSelectionChange={handleSubCategoryChange}
-                                    labelExtractor={(item) => item.label}
-                                    valueExtractor={(item) => item.value}
-                                    placeholder="Sélectionnez une sous-catégorie"
-                                    mode="single"
-                                    disabled={!selectedCategory}
-                                />
+                                <Select2 options={subCategoryOptions} selectedItem={selectedSubCategory} onSelectionChange={handleSubCategoryChange} labelExtractor={(item) => item.label} valueExtractor={(item) => item.value} placeholder="Sélectionnez une sous-catégorie" mode="single" disabled={!selectedCategory} />
                                 {errors.subCategoryId && (
                                     <p className="text-red-500 text-sm mt-1">{errors.subCategoryId.message}</p>
                                 )}
@@ -665,46 +585,20 @@ export default function ProductForm({
                         {/* Couleurs */}
                         <div className="mb-6">
                             <div className="flex items-center justify-between mb-4">
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Couleurs disponibles
-                                </label>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsAddingColor(true)}
-                                    className="text-sm text-brand-primary hover:text-blue-800"
-                                >
+                                <label className="block text-sm font-medium text-gray-700">Couleurs disponibles</label>
+                                <button type="button" onClick={() => setIsAddingColor(true)} className="text-sm text-brand-primary hover:text-blue-800">
                                     + Ajouter une couleur
                                 </button>
                             </div>
 
                             {isAddingColor && (
                                 <div className="flex items-center gap-2 mb-4 p-4 bg-gray-50 rounded-lg">
-                                    <input
-                                        type="color"
-                                        value={newColor}
-                                        onChange={(e) => setNewColor(e.target.value)}
-                                        className="w-10 h-10 cursor-pointer"
-                                        aria-label="Sélecteur de couleur"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={newColor}
-                                        onChange={(e) => setNewColor(e.target.value)}
-                                        className="flex-1 px-3 py-2 border border-gray-300 rounded"
-                                        placeholder="#000000"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={addColor}
-                                        className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary"
-                                    >
+                                    <input type="color" value={newColor} onChange={(e) => setNewColor(e.target.value)} className="w-10 h-10 cursor-pointer" aria-label="Sélecteur de couleur" />
+                                    <input type="text" value={newColor} onChange={(e) => setNewColor(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded" placeholder="#000000" />
+                                    <button type="button" onClick={addColor} className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary">
                                         Ajouter
                                     </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAddingColor(false)}
-                                        className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                                    >
+                                    <button type="button" onClick={() => setIsAddingColor(false)} className="px-4 py-2 text-gray-600 hover:text-gray-800">
                                         Annuler
                                     </button>
                                 </div>
@@ -712,34 +606,12 @@ export default function ProductForm({
 
                             <div className="flex flex-wrap gap-2">
                                 {availableColors.map((color) => (
-                                    <label
-                                        key={color}
-                                        className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all ${selectedColors.includes(color)
-                                            ? 'bg-blue-50 border-brand-primary'
-                                            : 'border-gray-300 hover:border-blue-300'
-                                            }`}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedColors.includes(color)}
-                                            onChange={(e) => toggleColor(color, e.target.checked)}
-                                            className="hidden"
-                                        />
-                                        <div
-                                            className="w-6 h-6 rounded-full border border-gray-300"
-                                            style={{ backgroundColor: color }}
-                                        />
+                                    <label key={color} className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all ${selectedColors.includes(color) ? 'bg-blue-50 border-brand-primary' : 'border-gray-300 hover:border-blue-300'}`}>
+                                        <input type="checkbox" checked={selectedColors.includes(color)} onChange={(e) => toggleColor(color, e.target.checked)} className="hidden" />
+                                        <div className="w-6 h-6 rounded-full border border-gray-300" style={{ backgroundColor: color }} />
                                         <span className="text-sm">{color}</span>
                                         {selectedColors.includes(color) && (
-                                            <button
-                                                type="button"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    removeColor(color);
-                                                }}
-                                                className="ml-2 text-red-500 hover:text-red-700"
-                                                aria-label={`Supprimer la couleur ${color}`}
-                                            >
+                                            <button type="button" onClick={(e) => { e.preventDefault(); removeColor(color); }} className="ml-2 text-red-500 hover:text-red-700" aria-label={`Supprimer la couleur ${color}`}>
                                                 <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
                                             </button>
                                         )}
@@ -754,39 +626,19 @@ export default function ProductForm({
                         {/* Tailles */}
                         <div>
                             <div className="flex items-center justify-between mb-4">
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Tailles disponibles
-                                </label>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsAddingSize(true)}
-                                    className="text-sm text-brand-primary hover:text-blue-800"
-                                >
+                                <label className="block text-sm font-medium text-gray-700">Tailles disponibles</label>
+                                <button type="button" onClick={() => setIsAddingSize(true)} className="text-sm text-brand-primary hover:text-blue-800">
                                     + Ajouter une taille
                                 </button>
                             </div>
 
                             {isAddingSize && (
                                 <div className="flex items-center gap-2 mb-4 p-4 bg-gray-50 rounded-lg">
-                                    <input
-                                        type="text"
-                                        value={newSize}
-                                        onChange={(e) => setNewSize(e.target.value)}
-                                        placeholder="Ex: XL, 38, 256GB"
-                                        className="flex-1 px-3 py-2 border border-gray-300 rounded"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={addSize}
-                                        className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary"
-                                    >
+                                    <input type="text" value={newSize} onChange={(e) => setNewSize(e.target.value)} placeholder="Ex: XL, 38, 256GB" className="flex-1 px-3 py-2 border border-gray-300 rounded" />
+                                    <button type="button" onClick={addSize} className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary">
                                         Ajouter
                                     </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAddingSize(false)}
-                                        className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                                    >
+                                    <button type="button" onClick={() => setIsAddingSize(false)} className="px-4 py-2 text-gray-600 hover:text-gray-800">
                                         Annuler
                                     </button>
                                 </div>
@@ -794,30 +646,12 @@ export default function ProductForm({
 
                             <div className="flex flex-wrap gap-2">
                                 {availableSizes.map((size) => (
-                                    <label
-                                        key={size}
-                                        className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all ${selectedSizes.includes(size)
-                                            ? 'bg-blue-50 border-brand-primary'
-                                            : 'border-gray-300 hover:border-blue-300'
-                                            }`}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedSizes.includes(size)}
-                                            onChange={(e) => toggleSize(size, e.target.checked)}
-                                            className="hidden"
-                                        />
+                                    <label key={size} className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all ${selectedSizes.includes(size) ? 'bg-blue-50 border-brand-primary' : 'border-gray-300 hover:border-blue-300'}`}>
+                                        <input type="checkbox" checked={selectedSizes.includes(size)} onChange={(e) => toggleSize(size, e.target.checked)} className="hidden" />
                                         <span className="text-sm">{size}</span>
                                         {selectedSizes.includes(size) && (
-                                            <button
-                                                type="button"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    removeSize(size);
-                                                }}
-                                                className="ml-2 text-red-500 hover:text-red-700"
-                                                aria-label={`Supprimer la taille ${size}`}
-                                            >
+                                            <button type="button" onClick={(e) => { e.preventDefault(); removeSize(size); }}
+                                                className="ml-2 text-red-500 hover:text-red-700" aria-label={`Supprimer la taille ${size}`}>
                                                 <Icon icon="solar:close-circle-bold" className="w-4 h-4" />
                                             </button>
                                         )}
@@ -842,10 +676,7 @@ export default function ProductForm({
                             {/* Pour "available" */}
                             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                                 <div className="flex-1">
-                                    <label
-                                        htmlFor="available"
-                                        className="block text-sm font-medium text-gray-900 mb-1 cursor-pointer"
-                                    >
+                                    <label htmlFor="available" className="block text-sm font-medium text-gray-900 mb-1 cursor-pointer">
                                         Disponible à la vente
                                     </label>
                                     <p className="text-sm text-gray-600">
@@ -854,35 +685,15 @@ export default function ProductForm({
                                 </div>
 
                                 <label className="relative inline-flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        id="available"
-                                        checked={watch("available") === 1}
-                                        onChange={(e) => {
-                                            const value = e.target.checked ? 1 : 0;
-                                            setValue("available", value, { shouldValidate: true });
-                                        }}
-                                        className="sr-only peer"
-                                    />
-                                    <div className="
-                                        w-11 h-6 bg-gray-300 rounded-full peer 
-                                        peer-focus:ring-2 peer-focus:ring-offset-2 peer-focus:ring-brand-primary/30
-                                        peer-checked:bg-green-500
-                                        after:content-[''] after:absolute after:top-0.5 after:left-[2px]
-                                        after:bg-white after:rounded-full after:h-5 after:w-5
-                                        after:transition-all peer-checked:after:translate-x-full
-                                        peer-checked:after:border-white transition-colors duration-200
-                                    "></div>
+                                    <input type="checkbox" id="available" checked={watch("available") === 1} onChange={(e) => { const value = e.target.checked ? 1 : 0; setValue("available", value, { shouldValidate: true }); }} className="sr-only peer" />
+                                    <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-focus:ring-2 peer-focus:ring-offset-2 peer-focus:ring-brand-primary/30 peer-checked:bg-green-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white transition-colors duration-200 "></div>
                                 </label>
                             </div>
 
                             {/* Pour "featured" */}
                             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                                 <div className="flex-1">
-                                    <label
-                                        htmlFor="featured"
-                                        className="block text-sm font-medium text-gray-900 mb-1 cursor-pointer"
-                                    >
+                                    <label htmlFor="featured" className="block text-sm font-medium text-gray-900 mb-1 cursor-pointer">
                                         Mettre en vedette
                                     </label>
                                     <p className="text-sm text-gray-600">
@@ -891,25 +702,8 @@ export default function ProductForm({
                                 </div>
 
                                 <label className="relative inline-flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        id="featured"
-                                        checked={watch("featured") === 1}
-                                        onChange={(e) => {
-                                            const value = e.target.checked ? 1 : 0;
-                                            setValue("featured", value, { shouldValidate: true });
-                                        }}
-                                        className="sr-only peer"
-                                    />
-                                    <div className="
-                                            w-11 h-6 bg-gray-300 rounded-full peer 
-                                            peer-focus:ring-2 peer-focus:ring-offset-2 peer-focus:ring-brand-primary/30
-                                            peer-checked:bg-blue-500
-                                            after:content-[''] after:absolute after:top-0.5 after:left-[2px]
-                                            after:bg-white after:rounded-full after:h-5 after:w-5
-                                            after:transition-all peer-checked:after:translate-x-full
-                                            peer-checked:after:border-white transition-colors duration-200
-                                        "></div>
+                                    <input type="checkbox" id="featured" checked={watch("featured") === 1} onChange={(e) => { const value = e.target.checked ? 1 : 0; setValue("featured", value, { shouldValidate: true }); }} className="sr-only peer" />
+                                    <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-focus:ring-2 peer-focus:ring-offset-2 peer-focus:ring-brand-primary/30 peer-checked:bg-blue-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white transition-colors duration-200"></div>
                                 </label>
                             </div>
                         </div>
@@ -926,37 +720,22 @@ export default function ProductForm({
                             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
                                 Description du produit *
                             </label>
-                            <textarea
-                                id="description"
-                                {...register("description")}
-                                rows={8}
-                                placeholder="Décrivez votre produit en détail..."
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent resize-none"
+                            <Controller name="description" control={control} render={({ field }) => (
+                                <RichTextEditor content={field.value || ""} onChange={field.onChange} editable={true} />
+                            )}
                             />
                             {errors.description && (
                                 <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
                             )}
-                            <p className="text-sm text-gray-500 mt-2">
-                                {watchedDescription?.length || 0} caractères
-                            </p>
                         </div>
                     </div>
 
                     {/* Boutons d'action */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-end pt-6 border-t border-gray-200">
-                        <button
-                            type="button"
-                            onClick={() => onClose()}
-                            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                            disabled={isSubmitting}
-                        >
+                        <button type="button" onClick={() => onClose()} className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" disabled={isSubmitting}>
                             Annuler
                         </button>
-                        <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
+                        <button type="submit" disabled={isSubmitting} className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                             {isSubmitting ? (
                                 <>
                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

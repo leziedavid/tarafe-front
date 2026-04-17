@@ -35,7 +35,7 @@ export default function ProductHero({ data }: ProductHeroProps) {
     const slide = data[activeIndex];
 
     return (
-        <div className="relative w-full h-[20rem] md:h-[36rem] rounded-2xl md:rounded-3xl overflow-hidden mt-12 md:mt-0">
+        <div className="relative w-full h-[16rem] md:h-[24rem] rounded-2xl md:rounded-3xl overflow-hidden mt-12 md:mt-0">
             {/* Background Image */}
             <AnimatePresence mode="wait">
                 <motion.div
@@ -44,15 +44,8 @@ export default function ProductHero({ data }: ProductHeroProps) {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="absolute inset-0"
-                >
-                    <Image
-                        src={slide.image}
-                        alt="Hero"
-                        fill
-                        className="object-cover"
-                        priority
-                    />
+                    className="absolute inset-0" >
+                    <Image src={slide.image} alt="Hero" fill className="object-cover" priority />
                 </motion.div>
             </AnimatePresence>
 
@@ -61,7 +54,7 @@ export default function ProductHero({ data }: ProductHeroProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
             {/* Content */}
-            <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-14 lg:px-20">
+            {/* <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-14 lg:px-20">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={slide.id}
@@ -113,7 +106,7 @@ export default function ProductHero({ data }: ProductHeroProps) {
                         </motion.button>
                     </motion.div>
                 </AnimatePresence>
-            </div>
+            </div> */}
 
             {/* Slide Dots */}
             {data.length > 1 && (

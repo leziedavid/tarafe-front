@@ -306,32 +306,14 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                 <Icon icon="solar:upload-minimalistic-bold" className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
                                 <span className="text-xs text-gray-600 dark:text-gray-400">Ajouter une image</span>
                                 <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">JPG, PNG</span>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => e.target.files && handleImageUpload(e.target.files)}
-                                    disabled={existingImageUrls.length + images.length >= 8}
-                                    multiple
-                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                />
+                                <input type="file" accept="image/*" onChange={(e) => e.target.files && handleImageUpload(e.target.files)} disabled={existingImageUrls.length + images.length >= 8} multiple className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                             </label>
 
                             {/* Images existantes */}
                             {existingImageUrls.map((imageUrl, index) => (
                                 <div key={`existing-${index}`} className="relative h-32 rounded-lg overflow-hidden group">
-                                    <Image
-                                        src={imageUrl.url}
-                                        alt={`Image existante ${index + 1}`}
-                                        fill
-                                        className="object-cover"
-                                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                                        unoptimized
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => removeImage(index, true)}
-                                        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
+                                    <Image src={imageUrl.url} alt={`Image existante ${index + 1}`} fill className="object-cover" sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw" unoptimized />
+                                    <button type="button" onClick={() => removeImage(index, true)} className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                                         <X className="w-4 h-4" />
                                     </button>
                                     <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2 truncate">
@@ -343,18 +325,8 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                             {/* Nouvelles images */}
                             {imagePreviews.map((preview, index) => (
                                 <div key={`new-${index}`} className="relative h-32 rounded-lg overflow-hidden group">
-                                    <Image
-                                        src={preview}
-                                        alt={`Nouvelle image ${index + 1}`}
-                                        fill
-                                        className="object-cover"
-                                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                                        unoptimized
-                                    />
-                                    <button type="button"
-                                        onClick={() => removeImage(index, false)}
-                                        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
+                                    <Image src={preview} alt={`Nouvelle image ${index + 1}`} fill className="object-cover" sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw" unoptimized />
+                                    <button type="button" onClick={() => removeImage(index, false)} className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                                         <X className="w-4 h-4" />
                                     </button>
                                     <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2">
@@ -387,13 +359,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                 </label>
                                 <div className="relative">
                                     <Icon icon="solar:hashtag-bold" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        id="libelle"
-                                        {...register("libelle")}
-                                        type="text"
-                                        placeholder="Ex: Projet de construction"
-                                        className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    />
+                                    <input id="libelle" {...register("libelle")} type="text" placeholder="Ex: Projet de construction" className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                                 </div>
                                 {errors.libelle && (
                                     <p className="text-red-500 text-sm mt-1">{errors.libelle.message}</p>
@@ -405,15 +371,7 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     Catégories *
                                 </label>
-                                <Select2
-                                    options={categoryOptions}
-                                    selectedItem={selectedCategory}
-                                    onSelectionChange={handleCategoryChange}
-                                    labelExtractor={(item: { value: number; label: string }) => item.label}
-                                    valueExtractor={(item: { value: number; label: string }) => item.value.toString()}
-                                    placeholder="Sélectionnez des catégories"
-                                    mode="multiple"
-                                />
+                                <Select2 options={categoryOptions} selectedItem={selectedCategory} onSelectionChange={handleCategoryChange} labelExtractor={(item: { value: number; label: string }) => item.label} valueExtractor={(item: { value: number; label: string }) => item.value.toString()} placeholder="Sélectionnez des catégories" mode="multiple" />
                                 {loadingCategories && (
                                     <p className="text-sm text-gray-500 mt-1">Chargement des catégories...</p>
                                 )}
@@ -435,16 +393,9 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
                             <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Description *
                             </label>
-                            <Controller
-                                name="description"
-                                control={control}
-                                render={({ field }) => (
-                                    <RichTextEditor
-                                        content={field.value || ""}
-                                        onChange={field.onChange}
-                                        editable={true}
-                                    />
-                                )}
+                            <Controller name="description" control={control} render={({ field }) => (
+                                <RichTextEditor content={field.value || ""} onChange={field.onChange} editable={true} />
+                            )}
                             />
                             {errors.description && (
                                 <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
@@ -454,19 +405,10 @@ export default function RealisationsForm({ isOpen, onClose, datas, fetchdatas }:
 
                     {/* Boutons d'action */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-end pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <Button
-                            type="button"
-                            onClick={onClose}
-                            className="px-6 py-3 border bg-white border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                            disabled={isUploading}
-                        >
+                        <Button type="button" onClick={onClose} className="px-6 py-3 border bg-white border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" disabled={isUploading}>
                             Annuler
                         </Button>
-                        <Button
-                            type="submit"
-                            disabled={isUploading}
-                            className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
+                        <Button type="submit" disabled={isUploading} className="px-6 py-3 bg-brand-primary text-white rounded-lg hover:bg-brand-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                             {isUploading ? (
                                 <>
                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
