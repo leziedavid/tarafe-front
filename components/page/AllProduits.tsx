@@ -168,19 +168,23 @@ export default function AllProduits() {
                 </div>
 
 
-                <div className="flex flex-nowrap sm:flex-wrap items-center gap-3 mb-8 overflow-x-auto hide-scrollbar pb-2 sm:pb-0 px-5 md:px-15">
-                    <button key="all" onClick={() => { handleFilter(0); }} className={`shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === 0 ? "bg-brand-primary text-white border-brand-primary shadow-lg shadow-brand-primary/20" : "bg-background text-foreground border-border"}`}  >
-                        Tous
-                    </button>
-
-                    {option.map((cat) => (
-                        <button
-                            key={cat.id_option_reaalisation}
-                            onClick={() => handleFilter(cat.id_option_reaalisation)}
-                            className={`shrink-0 px-5 py-2 rounded-full text-sm font-semibold border transition ${activeCategory === cat.id_option_reaalisation ? "bg-brand-primary text-white border-brand-primary shadow-lg shadow-brand-primary/20" : "bg-background text-foreground border-border"}`}  >
-                            {cat.libelleOption_reaalisation}
+                <div className="px-5 md:px-15 mb-10">
+                    <div className="flex items-center gap-2 mb-3">
+                        <Icon icon="solar:tag-bold-duotone" className="text-brand-primary w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Catégories</span>
+                    </div>
+                    <div className="flex overflow-x-auto md:flex-wrap gap-2 pb-2 scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0">
+                        <button key="all" onClick={() => { handleFilter(0); }} className={`shrink-0 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 flex items-center gap-2 ${activeCategory === 0 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/30" : "bg-background/80 text-muted-foreground hover:text-foreground border border-border/50"}`} >
+                            <Icon icon="solar:widget-add-bold-duotone" width={18} />
+                            Tous
                         </button>
-                    ))}
+                        {option.map((cat) => (
+                            <button key={cat.id_option_reaalisation} onClick={() => handleFilter(cat.id_option_reaalisation)} className={`shrink-0 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 flex items-center gap-2 ${activeCategory === cat.id_option_reaalisation ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/30" : "bg-background/80 text-muted-foreground hover:text-foreground border border-border/50"}`} >
+                                <Icon icon="solar:tag-bold-duotone" width={18} />
+                                {cat.libelleOption_reaalisation}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 <CollectionsSection product={realisations ?? []} isLabel={false} />

@@ -35,6 +35,7 @@ export default function Store() {
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [isCartModalOpen, setIsCartModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [isFilterVisible, setIsFilterVisible] = useState(false);
 
     // -----------------------------
     // Fetch Data
@@ -153,19 +154,10 @@ export default function Store() {
 
             {/* Floating Cart Button */}
             <div className="fixed bottom-7 right-5 z-[900]">
-                <motion.button
-                    whileHover={{ scale: 1.06 }}
-                    whileTap={{ scale: 0.94 }}
-                    onClick={() => setIsCartModalOpen(true)}
-                    className="relative p-3.5 bg-brand-primary text-white rounded-2xl shadow-2xl shadow-brand-primary/40"
-                >
+                <motion.button whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }} onClick={() => setIsCartModalOpen(true)} className="relative p-3.5 bg-brand-primary text-white rounded-2xl shadow-2xl shadow-brand-primary/40">
                     <Icon icon="solar:cart-large-bold" width={22} />
                     {totalItems > 0 && (
-                        <motion.span
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="absolute -top-2 -right-2 bg-white text-brand-primary min-w-[1.4rem] h-[1.4rem] flex items-center justify-center rounded-full text-[10px] font-black shadow border-2 border-brand-primary px-1"
-                        >
+                        <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-2 -right-2 bg-white text-brand-primary min-w-[1.4rem] h-[1.4rem] flex items-center justify-center rounded-full text-[10px] font-black shadow border-2 border-brand-primary px-1">
                             {totalItems}
                         </motion.span>
                     )}
@@ -180,249 +172,232 @@ export default function Store() {
             <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-32">
 
                 {/* Section Header */}
-                <div className="mb-7">
-                    <span className="text-brand-primary font-bold text-xs uppercase tracking-widest">Notre Collection</span>
-                    <h2 className="text-3xl md:text-4xl font-black text-foreground mt-1">
+                <div className="mb-10 text-center md:text-left">
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-3 py-1 bg-brand-primary/10 rounded-full mb-4">
+                        <span className="w-1.5 h-1.5 bg-brand-primary rounded-full animate-pulse" />
+                        <span className="text-brand-primary font-bold text-[10px] uppercase tracking-[0.2em]">Excellence Crafts</span>
+                    </motion.div>
+                    <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight leading-none mb-4">
                         Boutique <span className="text-brand-primary">Tarafé</span>
                     </h2>
-                    <p className="text-muted-foreground text-sm mt-1.5">Découvrez notre collection exclusive de produits premium.</p>
+                    <p className="text-muted-foreground text-base md:text-lg max-w-2xl font-medium leading-relaxed">
+                        Découvrez une collection exclusive où l'artisanat traditionnel rencontre le design contemporain.
+                    </p>
                 </div>
 
-                {/* Search + Sort */}
-                <div className="flex flex-col sm:flex-row gap-3 mb-7">
-                    <div className="relative flex-1">
-                        <Icon icon="solar:magnifer-linear" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" />
-                        <input
-                            type="text"
-                            placeholder="Rechercher un produit..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            onKeyDown={(e) => e.key === "Enter" && fetchData()}
-                            className="w-full bg-card border border-border rounded-xl pl-10 pr-4 h-11 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary/40 transition-all text-foreground placeholder:text-muted-foreground"
-                        />
+                {/* Search + Sort + Filter Toggle */}
+                <div className="flex flex-col md:flex-row items-center gap-4 mb-8">
+                    <div className="relative flex-1 w-full">
+                        <Icon icon="solar:magnifer-linear" className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5 pointer-events-none" />
+                        <input type="text" placeholder="Rechercher l'exceptionnel..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onKeyDown={(e) => e.key === "Enter" && fetchData()} className="w-full bg-background/50 border rounded-xl pl-12 pr-4 h-10 text-sm focus:ring-2 focus:ring-brand-primary/20 transition-all font-medium" />
                     </div>
-                    <div className="flex gap-2">
-                        <select
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'date' | 'stock')}
-                            className="bg-card border border-border rounded-xl px-3 h-11 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand-primary/20 cursor-pointer"
-                        >
-                            <option value="date">Plus récents</option>
-                            <option value="price">Par prix</option>
-                            <option value="name">Par nom</option>
-                            <option value="stock">Par stock</option>
-                        </select>
-                        <button
-                            onClick={fetchData}
-                            className="px-4 h-11 bg-brand-primary text-white rounded-xl hover:bg-brand-primary/90 transition-colors shadow-lg shadow-brand-primary/20 flex items-center gap-2 font-semibold text-sm"
-                        >
-                            <Icon icon="solar:magnifer-bold" width={16} />
-                            <span className="hidden sm:inline">Chercher</span>
+
+                    <div className="flex items-center gap-2 w-full md:w-auto">
+                        <button onClick={() => setIsFilterVisible(!isFilterVisible)} className={`flex-1 md:flex-none h-10 px-6 rounded-2xl flex items-center justify-center gap-3 font-bold text-sm transition-all border ${isFilterVisible ? "bg-brand-primary text-white border-brand-primary shadow-xl shadow-brand-primary/20" : "bg-background/50 text-foreground border-border/50 hover:bg-background"}`} >
+                            <Icon icon={isFilterVisible ? "solar:filter-cross-bold-duotone" : "solar:filter-bold-duotone"} width={20} />
+                            Filtres
                         </button>
+
+                        <div className="relative flex-1 md:flex-none">
+                            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'date' | 'stock')} className="w-full h-10 pl-10 pr-6 bg-background/50 border border-border/50 rounded-2xl text-sm font-bold appearance-none focus:ring-2 focus:ring-brand-primary/20 transition-all cursor-pointer" >
+                                <option value="date">Plus récents</option>
+                                <option value="price">Par prix</option>
+                                <option value="name">Par nom</option>
+                                <option value="stock">Par stock</option>
+                            </select>
+                            <Icon icon="solar:sort-vertical-bold-duotone" className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-primary w-5 h-5 pointer-events-none" />
+                        </div>
                     </div>
                 </div>
 
-                {/* Categories */}
-                <div className="overflow-x-auto scrollbar-hide mb-2">
-                    <div className="flex items-center gap-2 pb-1 min-w-max">
-                        <button
-                            onClick={() => { setSelectedCategory(null); setSelectedSubCategory(null); setCurrentPage(1); }}
-                            className={`px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${!selectedCategory
-                                ? "bg-brand-primary text-white shadow-md shadow-brand-primary/25"
-                                : "bg-card text-muted-foreground border border-border hover:border-brand-primary/40 hover:text-foreground"}`}
-                        >
-                            Tous les produits
-                        </button>
-                        {categories.map((cat) => (
-                            <button
-                                key={cat.id}
-                                onClick={() => { setSelectedCategory(cat.id); setSelectedSubCategory(null); setCurrentPage(1); }}
-                                className={`px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${selectedCategory === cat.id
-                                    ? "bg-brand-primary text-white shadow-md shadow-brand-primary/25"
-                                    : "bg-card text-muted-foreground border border-border hover:border-brand-primary/40 hover:text-foreground"}`}
-                            >
-                                {cat.name}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Sub Categories */}
+                {/* Categories & Subcategories (Collapsible) */}
                 <AnimatePresence>
-                    {subCategories.length > 0 && (
-                        <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden"
-                        >
-                            <div className="overflow-x-auto scrollbar-hide pt-3 mb-2">
-                                <div className="flex items-center gap-2 pb-1 min-w-max">
-                                    {subCategories.map((sub) => (
-                                        <button
-                                            key={sub.id}
-                                            onClick={() => { setSelectedSubCategory(sub.id); setCurrentPage(1); }}
-                                            className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${selectedSubCategory === sub.id
-                                                ? "bg-foreground text-background"
-                                                : "bg-muted text-muted-foreground hover:bg-muted/70"}`}
-                                        >
-                                            {sub.name}
+                    {isFilterVisible && (
+                        <motion.div initial={{ opacity: 0, height: 0, marginBottom: 0 }} animate={{ opacity: 1, height: "auto", marginBottom: 20 }} exit={{ opacity: 0, height: 0, marginBottom: 0 }} className="backdrop-blur-sm p-4 md:p-6 overflow-hidden" >
+                            <div className="space-y-4">
+                                {/* Main Categories */}
+                                <div>
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <Icon icon="solar:tag-bold-duotone" className="text-brand-primary w-4 h-4" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Catégories</span>
+                                    </div>
+                                    <div className="flex overflow-x-auto md:flex-wrap gap-2 pb-2 scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0">
+                                        <button onClick={() => { setSelectedCategory(null); setSelectedSubCategory(null); setCurrentPage(1); }} className={`shrink-0 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 flex items-center gap-2 ${!selectedCategory ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/30" : "bg-background/80 text-muted-foreground hover:text-foreground border border-border/50"}`} >
+                                            <Icon icon="solar:widget-add-bold-duotone" width={18} />
+                                            Tous les produits
                                         </button>
-                                    ))}
+                                        {categories.map((cat) => (
+                                            <button key={cat.id} onClick={() => { setSelectedCategory(cat.id); setSelectedSubCategory(null); setCurrentPage(1); }} className={`shrink-0 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 flex items-center gap-2 ${selectedCategory === cat.id ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/30" : "bg-background/80 text-muted-foreground hover:text-foreground border border-border/50"}`} >
+                                                <Icon icon="solar:tag-bold-duotone" width={18} />
+                                                {cat.name}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
+
+                                {/* Sub Categories */}
+                                <AnimatePresence>
+                                    {subCategories.length > 0 && (
+                                        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="pt-4 border-t" >
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <Icon icon="solar:layers-minimalistic-bold-duotone" className="text-brand-primary w-4 h-4" />
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Sous-Catégories</span>
+                                            </div>
+                                            <div className="flex overflow-x-auto md:flex-wrap gap-2 pb-2 scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0">
+                                                {subCategories.map((sub) => (
+                                                    <button key={sub.id} onClick={() => { setSelectedSubCategory(sub.id); setCurrentPage(1); }} className={`shrink-0 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 ${selectedSubCategory === sub.id ? "bg-foreground text-background shadow-lg shadow-foreground/20" : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"}`} >
+                                                        {sub.name}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
-                {/* Results Count */}
-                {!loading && products.length > 0 && (
-                    <p className="text-xs text-muted-foreground mt-4 mb-6">
-                        {totalItemsCount} produit{totalItemsCount > 1 ? "s" : ""} trouvé{totalItemsCount > 1 ? "s" : ""}
-                    </p>
-                )}
+                {/* Results Section */}
+                <div className="mt-8">
+                    {loading ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                            {renderCardSkeleton()}
+                        </div>
+                    ) : products.length > 0 ? (
+                        <>
+                            <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest mb-8 px-1">
+                                {totalItemsCount} produit{totalItemsCount > 1 ? "s" : ""} d'exception trouvé{totalItemsCount > 1 ? "s" : ""}
+                            </p>
 
-                {/* Product Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-                    {loading ? renderCardSkeleton() : (
-                        products.map((product, index) => {
-                            const price = parseFloat(product.price).toLocaleString();
+                            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 leading-normal">
+                                {products.map((product, index) => {
+                                    const currentPrice = parseFloat(product.price);
+                                    const oldPrice = product.old_price ? parseFloat(product.old_price) : null;
+                                    const hasDiscount = oldPrice && oldPrice > currentPrice;
+                                    const discountPercentage = hasDiscount ? Math.round(((oldPrice - currentPrice) / oldPrice) * 100) : 0;
 
-                            return (
-                                <motion.div
-                                    key={product.id}
-                                    initial={{ opacity: 0, y: 24 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.04, duration: 0.35 }}
-                                    className="group cursor-pointer"
-                                    onClick={() => openProductDetail(product)}
-                                >
-                                    {/* Image */}
-                                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-muted">
-                                        {/* Tag */}
-                                        {product.tag && (
-                                            <span className={`absolute top-2.5 left-2.5 z-20 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm ${product.tag === "NEW ARRIVAL" ? "bg-white text-black" : "bg-brand-primary text-white"}`}>
-                                                {product.tag}
-                                            </span>
-                                        )}
-
-                                        {/* Image */}
-                                        <Image
-                                            src={`${urlImages}/${product.image}`}
-                                            alt={product.name}
-                                            fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                            unoptimized
-                                        />
-
-                                        {/* Hover overlay */}
-                                        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                            <motion.span
-                                                initial={false}
-                                                className="bg-white text-black px-4 py-2 rounded-full text-xs font-bold shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-300"
-                                            >
-                                                Voir le produit
-                                            </motion.span>
-                                        </div>
-                                    </div>
-
-                                    {/* Info */}
-                                    <div className="mt-3 px-0.5">
-                                        <h3 className="font-semibold text-sm text-foreground line-clamp-1 group-hover:text-brand-primary transition-colors leading-snug">
-                                            {product.name}
-                                        </h3>
-                                        <p className="text-[11px] text-muted-foreground mt-0.5">
-                                            {product.category?.name || "Premium"}
-                                        </p>
-                                        <div className="flex items-center justify-between mt-2">
-                                            <span className="font-black text-brand-primary text-sm">
-                                                {price}
-                                                <span className="text-[10px] font-bold ml-0.5">FCFA</span>
-                                            </span>
-                                            <div className="flex items-center gap-2">
-                                                <div className="flex items-center gap-0.5">
-                                                    <Icon icon="solar:star-bold" className="text-yellow-400 w-3 h-3" />
-                                                    <span className="text-[10px] text-muted-foreground font-semibold">{product.rating || "4.5"}</span>
+                                    return (
+                                        <motion.div key={product.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05, duration: 0.5, ease: "easeOut" }} className="group relative flex flex-col h-full backdrop-blur-sm  p-2 hover:bg-card/60 transition-all duration-300" >
+                                            {/* Image Container */}
+                                            <div className="relative aspect-[4/5] rounded-[1rem] overflow-hidden bg-muted cursor-pointer" onClick={() => openProductDetail(product)} >
+                                                {/* Status Badges */}
+                                                <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+                                                    {product.tag && (
+                                                        <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg backdrop-blur-md ${product.tag === "NEW ARRIVAL" ? "bg-white text-black" : "bg-brand-primary text-white"}`}>
+                                                            {product.tag}
+                                                        </span>
+                                                    )}
+                                                    {hasDiscount && (
+                                                        <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-[10px] font-bold shadow-lg shadow-emerald-500/30">
+                                                            -{discountPercentage}%
+                                                        </span>
+                                                    )}
                                                 </div>
-                                                <button
-                                                    onClick={(e) => handleAddToCart(e, product)}
-                                                    title="Ajouter au panier"
-                                                    className="p-1.5 rounded-xl bg-brand-primary/10 text-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-200"
-                                                >
-                                                    <Icon icon="solar:cart-plus-bold" width={15} />
-                                                </button>
+
+                                                {/* Main Image */}
+                                                <Image src={`${urlImages}/${product.image}`} alt={product.name} fill className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" unoptimized />
+
+                                                {/* Overlay */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
+                                                    <motion.button initial={false} className="w-full bg-white text-black py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-2xl flex items-center justify-center gap-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500" >
+                                                        <Icon icon="solar:eye-bold" width={16} />
+                                                        Aperçu rapide
+                                                    </motion.button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            );
-                        })
+
+                                            {/* Content */}
+                                            <div className="mt-5 space-y-3 px-3 pb-4">
+                                                <div>
+                                                    <div className="flex items-center gap-1.5 mb-1.5">
+                                                        <Icon icon="solar:tag-bold-duotone" className="text-brand-primary w-3 h-3" />
+                                                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                                                            {product.category?.name || "Premium Collection"}
+                                                        </span>
+                                                    </div>
+                                                    <h3 className="font-extrabold text-base text-foreground line-clamp-2 leading-tight group-hover:text-brand-primary transition-colors cursor-pointer" onClick={() => openProductDetail(product)}>
+                                                        {product.name}
+                                                    </h3>
+                                                </div>
+
+                                                <div className="flex items-end justify-between gap-4 pt-2">
+                                                    <div className="flex flex-col">
+                                                        {oldPrice && (
+                                                            <span className="text-xs text-muted-foreground/60 line-through font-bold mb-0.5">
+                                                                {oldPrice.toLocaleString()} <span className="text-[8px]">FCFA</span>
+                                                            </span>
+                                                        )}
+                                                        <span className="font-black text-xl text-brand-primary leading-none flex items-baseline gap-1">
+                                                            {currentPrice.toLocaleString()}
+                                                            <span className="text-[10px] font-black tracking-tighter">FCFA</span>
+                                                        </span>
+                                                    </div>
+
+                                                    <button onClick={(e) => handleAddToCart(e, product)} className="w-11 h-11 rounded-2xl bg-brand-primary text-white flex items-center justify-center shadow-lg shadow-brand-primary/20 hover:bg-brand-secondary transition-all duration-300 active:scale-90" aria-label="Ajouter au panier" >
+                                                        <Icon icon="solar:cart-large-bold-duotone" width={22} />
+                                                    </button>
+                                                </div>
+
+                                                {/* Meta Info */}
+                                                <div className="pt-3 border-t border-border/40 flex items-center justify-between">
+                                                    <div className="flex items-center gap-1">
+                                                        <Icon icon="solar:star-bold" className="text-yellow-400 w-3 h-3" />
+                                                        <span className="text-[10px] text-muted-foreground font-black">
+                                                            {product.rating || "4.5"}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-1 text-emerald-500">
+                                                        <Icon icon="solar:box-minimalistic-bold-duotone" width={12} />
+                                                        <span className="text-[9px] font-bold">En Stock</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="py-24 flex flex-col items-center justify-center text-center">
+                            <div className="w-24 h-24 bg-brand-primary/10 rounded-[2rem] flex items-center justify-center mb-6">
+                                <Icon icon="solar:box-bold-duotone" width={44} className="text-brand-primary" />
+                            </div>
+                            <h3 className="text-2xl font-black text-foreground mb-3">Aucun produit trouvé</h3>
+                            <p className="text-muted-foreground text-sm max-w-xs font-medium leading-relaxed">
+                                Nous n'avons pas trouvé de pépites correspondant à votre recherche. Essayez d'ajuster vos filtres.
+                            </p>
+                            <button onClick={() => { setSelectedCategory(null); setSearchTerm(""); fetchData(); }} className="mt-8 px-8 py-4 bg-brand-primary text-white rounded-2xl font-bold text-sm hover:bg-brand-primary/90 transition-all shadow-xl shadow-brand-primary/25 active:scale-95" >
+                                Réinitialiser les filtres
+                            </button>
+                        </div>
                     )}
                 </div>
 
-                {/* Empty State */}
-                {!loading && products.length === 0 && (
-                    <div className="py-24 flex flex-col items-center justify-center text-center">
-                        <div className="w-20 h-20 bg-brand-primary/10 rounded-full flex items-center justify-center mb-5">
-                            <Icon icon="solar:box-bold-duotone" width={38} className="text-brand-primary" />
-                        </div>
-                        <h3 className="text-lg font-bold text-foreground mb-2">Aucun produit trouvé</h3>
-                        <p className="text-muted-foreground text-sm max-w-xs">
-                            Aucun article ne correspond à votre recherche ou à cette catégorie.
-                        </p>
-                        <button
-                            onClick={() => { setSelectedCategory(null); setSearchTerm(""); fetchData(); }}
-                            className="mt-6 px-6 py-2.5 bg-brand-primary text-white rounded-xl font-bold text-sm hover:bg-brand-primary/90 transition-colors shadow-lg shadow-brand-primary/20"
-                        >
-                            Réinitialiser les filtres
-                        </button>
-                    </div>
-                )}
-
                 {/* Pagination */}
                 {totalItemsCount > limit && (
-                    <div className="mt-14 flex items-center justify-center gap-1.5">
-                        <button
-                            disabled={currentPage === 1}
-                            onClick={() => setCurrentPage((p) => p - 1)}
-                            className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                        >
-                            <Icon icon="solar:alt-arrow-left-bold" width={15} />
+                    <div className="mt-14 flex items-center justify-center gap-2">
+                        <button disabled={currentPage === 1} onClick={() => setCurrentPage((p) => p - 1)} className="w-12 h-12 flex items-center justify-center rounded-2xl border border-border/50 text-muted-foreground hover:bg-brand-primary hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm" >
+                            <Icon icon="solar:alt-arrow-left-bold" width={18} />
                         </button>
 
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                            <button
-                                key={page}
-                                onClick={() => setCurrentPage(page)}
-                                className={`w-10 h-10 flex items-center justify-center rounded-xl font-semibold text-sm transition-all ${currentPage === page
-                                    ? "bg-brand-primary text-white shadow-md shadow-brand-primary/25"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-accent"}`}
-                            >
+                            <button key={page} onClick={() => setCurrentPage(page)} className={`w-12 h-12 flex items-center justify-center rounded-2xl font-black text-sm transition-all ${currentPage === page ? "bg-brand-primary text-white shadow-xl shadow-brand-primary/30" : "text-muted-foreground hover:text-foreground hover:bg-accent border border-border/30"}`} >
                                 {page}
                             </button>
                         ))}
 
-                        <button
-                            disabled={currentPage === totalPages}
-                            onClick={() => setCurrentPage((p) => p + 1)}
-                            className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                        >
-                            <Icon icon="solar:alt-arrow-right-bold" width={15} />
+                        <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((p) => p + 1)} className="w-12 h-12 flex items-center justify-center rounded-2xl border border-border/50 text-muted-foreground hover:bg-brand-primary hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm" >
+                            <Icon icon="solar:alt-arrow-right-bold" width={18} />
                         </button>
                     </div>
                 )}
+
             </section>
 
             {/* Modals */}
-            <ProductDetailModal
-                isOpen={isProductModalOpen}
-                onClose={() => setIsProductModalOpen(false)}
-                product={selectedProduct}
-            />
-            <CartDetailModal
-                isOpen={isCartModalOpen}
-                onClose={() => setIsCartModalOpen(false)}
-            />
+            <ProductDetailModal isOpen={isProductModalOpen} onClose={() => setIsProductModalOpen(false)} product={selectedProduct} />
+            <CartDetailModal isOpen={isCartModalOpen} onClose={() => setIsCartModalOpen(false)} />
         </div>
     );
 }

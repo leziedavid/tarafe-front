@@ -406,6 +406,7 @@ export default function ProductForm({
     return (
         <div className="min-h-screen">
             <div className="max-w-6xl mx-auto">
+
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
@@ -749,6 +750,7 @@ export default function ProductForm({
                         </button>
                     </div>
                 </form>
+
             </div>
         </div>
     );

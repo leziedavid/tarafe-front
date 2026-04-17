@@ -134,28 +134,23 @@ export default function HomeGallerie() {
                 </div>
 
                 {/* Categories */}
-                <div className="flex flex-nowrap sm:flex-wrap items-center gap-3 mb-8 overflow-x-auto hide-scrollbar pb-2 sm:pb-0 px-2 sm:px-0">
-                    <button onClick={() => handleFilter(0)} className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === 0 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-background text-foreground border-border hover:border-brand-primary/50"}`}  >
-                        Tous
-                    </button>
-
-                    {categories.length > 0 ? (
-                        categories.map((cat) => (
-                            <button key={cat.idcategories_gallery} onClick={() => handleFilter(cat.idcategories_gallery)} className={`shrink-0 px-6 py-2.5 rounded-full text-sm font-bold border transition-all duration-300 ${activeCategory === cat.idcategories_gallery ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/25 border-brand-primary" : "bg-background text-foreground border-border hover:border-brand-primary/50"}`} >
+                <div className="mb-10">
+                    <div className="flex items-center gap-2 mb-3">
+                        <Icon icon="solar:tag-bold-duotone" className="text-brand-primary w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Catégories</span>
+                    </div>
+                    <div className="flex overflow-x-auto md:flex-wrap gap-2 pb-2 scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0">
+                        <button onClick={() => handleFilter(0)} className={`shrink-0 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 flex items-center gap-2 ${activeCategory === 0 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/30" : "bg-background/80 text-muted-foreground hover:text-foreground border border-border/50"}`} >
+                            <Icon icon="solar:widget-add-bold-duotone" width={18} />
+                            Tous
+                        </button>
+                        {categories.map((cat) => (
+                            <button key={cat.idcategories_gallery} onClick={() => handleFilter(cat.idcategories_gallery)} className={`shrink-0 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 flex items-center gap-2 ${activeCategory === cat.idcategories_gallery ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/30" : "bg-background/80 text-muted-foreground hover:text-foreground border border-border/50"}`} >
+                                <Icon icon="solar:tag-bold-duotone" width={18} />
                                 {cat.libelle}
                             </button>
-                        ))
-                    ) : (
-                        Array(4).fill(0).map((_, i) => (
-                            <div key={i} className="shrink-0 w-24 h-10 bg-muted rounded-full animate-pulse" />
-                        ))
-                    )}
-
-                    {activeCategory !== 0 && (
-                        <button onClick={resetFilters} className="shrink-0 p-2.5 rounded-full bg-secondary text-secondary-foreground hover:text-brand-primary transition-colors" title="Réinitialiser" >
-                            <Icon icon="solar:backspace-bold" width="24" height="24" />
-                        </button>
-                    )}
+                        ))}
+                    </div>
                 </div>
 
                 {/* Grid */}

@@ -188,9 +188,7 @@ export default function ProductDetailModal({ isOpen, onClose, product }: Product
                                     {/* Description */}
                                     <div className="space-y-4">
                                         <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400">Description du produit</h3>
-                                        <div className="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
-                                            {product.description || "Aucune description détaillée n'est disponible pour ce produit."}
-                                        </div>
+                                        <div dangerouslySetInnerHTML={{ __html: product.description || "Aucune description détaillée n'est disponible pour ce produit." }} className="text-base text-gray-600 dark:text-gray-400 leading-relaxed" />
                                     </div>
 
                                     {/* Product Options (placeholder if needed) */}
@@ -209,29 +207,17 @@ export default function ProductDetailModal({ isOpen, onClose, product }: Product
                                     <div className="space-y-6 pt-4">
                                         <div className="flex items-center justify-between">
                                             <span className="text-sm font-bold tracking-widest uppercase text-gray-400">Quantité</span>
-                                            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-2xl p-1 border border-gray-200 dark:border-gray-700">
-                                                <button
-                                                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                                                    className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-brand-primary transition-colors"
-                                                >
-                                                    <Icon icon="solar:minus-bold" width={20} />
-                                                </button>
+                                            <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 border border-gray-200 dark:border-gray-700">
+                                                <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="w-10 h-10 flex items-center justify-center text-gray-500  hover:text-brand-primary transition-colors" >
+                                                    <Icon icon="solar:minus-circle-outline" width="24" height="24" />                                                </button>
                                                 <span className="w-12 text-center font-bold text-lg">{quantity}</span>
-                                                <button
-                                                    onClick={() => setQuantity(q => Math.min(product.stock || 99, q + 1))}
-                                                    className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-brand-primary transition-colors"
-                                                >
-                                                    <Icon icon="solar:add-bold" width={20} />
-                                                </button>
+                                                <button onClick={() => setQuantity(q => Math.min(product.stock || 99, q + 1))} className="w-10 h-10 flex items-center justify-center text-gray-500  hover:text-brand-primary transition-colors" >
+                                                    <Icon icon="solar:add-circle-broken" width="24" height="24" />                                                </button>
                                             </div>
                                         </div>
 
                                         <div className="flex flex-col sm:flex-row gap-4">
-                                            <button
-                                                onClick={handleNegotiate}
-                                                disabled={isNegotiating}
-                                                className="flex-1 py-3 px-6 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white rounded-[1.5rem] font-bold text-sm active:scale-95 transition-all flex items-center justify-center gap-2 border border-gray-200 dark:border-gray-700"
-                                            >
+                                            <button onClick={handleNegotiate} disabled={isNegotiating} className="flex-1 py-3 px-6 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white rounded-[1.5rem] font-bold text-sm active:scale-95 transition-all flex items-center justify-center gap-2 border border-gray-200 dark:border-gray-700" >
                                                 {isNegotiating ? (
                                                     <Icon icon="line-md:loading-twotone-loop" width={20} />
                                                 ) : (
@@ -239,11 +225,7 @@ export default function ProductDetailModal({ isOpen, onClose, product }: Product
                                                 )}
                                                 Négocier
                                             </button>
-                                            <button
-                                                onClick={handleAddToCart}
-                                                disabled={product.stock <= 0}
-                                                className="flex-[1.5] py-3 px-6 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-[1.5rem] font-bold text-sm active:scale-95 transition-all shadow-xl shadow-brand-primary/25 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                            >
+                                            <button onClick={handleAddToCart} disabled={product.stock <= 0} className="flex-[1.5] py-3 px-6 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-[1.5rem] font-bold text-sm active:scale-95 transition-all shadow-xl shadow-brand-primary/25 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" >
                                                 <Icon icon="solar:cart-large-bold-duotone" width={22} />
                                                 Ajouter au panier
                                             </button>
