@@ -68,7 +68,7 @@ export default function CartDetailModal({ isOpen, onClose }: CartDetailModalProp
                 toast.success("Commande validée avec succès !");
                 clearCart();
                 onClose();
-                router.push("/dashboard/commandes");
+                router.push("/account");
 
             } else { toast.error(res.message || "Erreur lors de la validation"); }
 
