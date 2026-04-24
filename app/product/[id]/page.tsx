@@ -236,29 +236,16 @@ export default function Page() {
                     {/* Image principale avec boutons de slide */}
                     <div className="relative mx-auto h-[600px] overflow-hidden bg-white">
                         {activeImage && (
-                            <Image
-                                src={`${urlImages}/${activeImage.src}`}
-                                alt={realisation.libelle_realisations}
-                                fill
-                                className="object-contain"
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                                unoptimized
-                            />
+                            <Image src={`${urlImages}/${activeImage.src}`} alt={realisation.libelle_realisations} fill className="object-contain" sizes="(max-width: 768px) 100vw, 50vw" unoptimized />
                         )}
 
                         {/* Boutons de navigation du slider */}
                         {totalImages > 1 && (
                             <>
-                                <button
-                                    onClick={prevImage}
-                                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-all z-20"
-                                >
+                                <button onClick={prevImage} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-all z-20">
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
-                                <button
-                                    onClick={nextImage}
-                                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-all z-20"
-                                >
+                                <button onClick={nextImage} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition-all z-20">
                                     <ChevronRight className="w-5 h-5" />
                                 </button>
 
@@ -277,19 +264,8 @@ export default function Page() {
                         <div className="mt-4">
                             <div className="flex gap-2 overflow-x-auto pb-2 items-center justify-start md:justify-center">
                                 {realisationImages.map((image, index) => (
-                                    <button
-                                        key={image.id}
-                                        onClick={() => setActiveImageIndex(index)}
-                                        className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 transition-all ${index === activeImageIndex ? 'ring-2 ring-[#fd980e] scale-105' : 'opacity-70 hover:opacity-100'}`}
-                                    >
-                                        <Image
-                                            src={`${urlImages}/${image.src}`}
-                                            alt={image.alt}
-                                            fill
-                                            className="object-cover"
-                                            sizes="80px"
-                                            unoptimized
-                                        />
+                                    <button key={image.id} onClick={() => setActiveImageIndex(index)} className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 transition-all ${index === activeImageIndex ? 'ring-2 ring-[#fd980e] scale-105' : 'opacity-70 hover:opacity-100'}`}>
+                                        <Image src={`${urlImages}/${image.src}`} alt={image.alt} fill className="object-cover" sizes="80px" unoptimized />
                                     </button>
                                 ))}
                             </div>

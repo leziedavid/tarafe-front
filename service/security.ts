@@ -1,11 +1,8 @@
 import { fetchWithAuth, getTokenFromLocalStorage } from "@/app/middleware";
 import { BaseResponse } from "@/types/BaseResponse";
-import { getBaseUrl } from "@/types/baseUrl";
-import { Equipe, EquipeResponse, User } from "@/types/interfaces";
+import { EquipeResponse, User } from "@/types/interfaces";
 import { Pagination as PaginationType } from "@/types/pagination";
-
-const baseUrl = getBaseUrl();
-
+import { api } from "@/lib/proxy";
 
 /**
  * Connexion utilisateur (email ou téléphone)
@@ -13,17 +10,7 @@ const baseUrl = getBaseUrl();
  */
 export const login = async (identifier: string, password: string): Promise<BaseResponse<{ user: User; token: string; stores: any[] }>> => {
     try {
-        const response = await fetch(`${baseUrl}/auth/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({ identifier, password }),
-        });
-
-        return await response.json();
+        return await api.post('/auth/login', { identifier, password }, { skipAuth: true });
     } catch (error) {
         console.error('Erreur login:', error);
         return {
@@ -35,23 +22,35 @@ export const login = async (identifier: string, password: string): Promise<BaseR
 };
 
 /**
+ * Inscription utilisateur (Register)
+ * Basé sur l'endpoint store du UserController (POST /auth)
+ */
+export const register = async (data: any): Promise<BaseResponse<{ user: User; token: string }>> => {
+    try {
+        // Dans UserController.php de Laravel, store correspond à la création brute d'un utilisateur
+        // Si votre backend a un /api/register spécifique, adaptez l'URL ici.
+        // On utilise skipAuth: true car on n'est pas encore connecté.
+        return await api.post('/auth', data, { skipAuth: true });
+    } catch (error) {
+        console.error('Erreur inscription:', error);
+        return {
+            statusCode: 500,
+            message: 'Erreur réseau lors de l\'inscription',
+            data: undefined
+        };
+    }
+};
+
+/**
  * Rafraîchir le token
  * Le token actuel est passé en paramètre
  */
 export const refreshTokens = async (currentToken: string): Promise<BaseResponse<{ user: User; token: string }>> => {
     try {
-        const response = await fetch(`${baseUrl}/auth/refresh-token`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Authorization": `Bearer ${currentToken}`
-            },
-            credentials: "include",
+        return await api.post('/auth/refresh-token', {}, { 
+            skipAuth: true,
+            headers: { 'Authorization': `Bearer ${currentToken}` }
         });
-
-        return await response.json();
-
     } catch (error) {
         console.error('Erreur refresh token:', error);
         return {
@@ -67,36 +66,21 @@ export const refreshTokens = async (currentToken: string): Promise<BaseResponse<
  */
 export const getAllUsers = async (params?: { page?: number; limit?: number; search?: string }): Promise<BaseResponse<PaginationType<User>>> => {
     const query = new URLSearchParams(params as any).toString();
-    const response = await fetch(`${baseUrl}/auth?${query}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-    });
-    return await response.json();
+    return api.get(`/auth?${query}`);
 };
 
 /**
  * Récupérer un utilisateur par ID
  */
 export const getUserById = async (id: number): Promise<BaseResponse<User>> => {
-    const response = await fetch(`${baseUrl}/auth/${id}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-    });
-    return await response.json();
+    return api.get(`/auth/${id}`);
 };
 
 /**
  * Créer un utilisateur (FormData si photo)
  */
 export const createUser = async (data: FormData): Promise<BaseResponse<User>> => {
-    const response = await fetch(`${baseUrl}/auth`, {
-        method: "POST",
-        body: data,
-        credentials: "include",
-    });
-    return await response.json();
+    return api.post('/auth', data);
 };
 
 /**
@@ -104,23 +88,14 @@ export const createUser = async (data: FormData): Promise<BaseResponse<User>> =>
  */
 export const updateUser = async (id: number, data: FormData): Promise<BaseResponse<User>> => {
     data.append("_method", "PUT"); // Spoof PUT pour Laravel
-    const response = await fetch(`${baseUrl}/auth/${id}`, {
-        method: "POST",
-        body: data,
-        credentials: "include",
-    });
-    return await response.json();
+    return api.post(`/auth/${id}`, data);
 };
 
 /**
  * Supprimer un utilisateur
  */
 export const deleteUser = async (id: number): Promise<BaseResponse<User>> => {
-    const response = await fetch(`${baseUrl}/auth/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-    });
-    return await response.json();
+    return api.delete(`/auth/${id}`);
 };
 
 // get userdata via fetchWithAuth
@@ -128,9 +103,10 @@ export const deleteUser = async (id: number): Promise<BaseResponse<User>> => {
 export const getUserAllData = async (): Promise<BaseResponse<{ user: User; stores: any[] }>> => {
     const token = getTokenFromLocalStorage()
     if (!token) return { statusCode: 401, message: 'Non authentifié' }
-    const response = await fetchWithAuth(`${baseUrl}/auth/me`, {
+    
+    // On conserve fetchWithAuth ici car il gère déjà le refresh automatique spécifique à cette couche
+    const response = await fetchWithAuth(`/auth/me`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
     });
     return await response.json();
 };
@@ -138,9 +114,5 @@ export const getUserAllData = async (): Promise<BaseResponse<{ user: User; store
 // getall equipe
 
 export const getAllEquipe = async (): Promise<BaseResponse<EquipeResponse>> => {
-    const response = await fetch(`${baseUrl}/equipes/all/data`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-    });
-    return await response.json();
+    return api.get('/equipes/all/data');
 };

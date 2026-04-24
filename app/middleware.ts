@@ -1,17 +1,9 @@
 'use client'
 
 import { toast } from 'sonner'
-import { User, Role } from '@/types/interfaces'
+import { User, Role, UserData } from '@/types/interfaces'
+export type { UserData }
 import { refreshTokens } from '@/service/security'
-
-export interface UserData {
-    id: number
-    name: string
-    email: string
-    roles: Role
-    status: number
-    stores: any[]
-}
 
 // Stockage du token
 export const getTokenFromLocalStorage = (): string | null => {
@@ -55,7 +47,7 @@ const validateTokenWithRefresh = async (): Promise<UserData | null> => {
     }
 
     isRefreshing = true
-    
+
     refreshPromise = (async () => {
         try {
             const token = getTokenFromLocalStorage()
@@ -71,10 +63,10 @@ const validateTokenWithRefresh = async (): Promise<UserData | null> => {
 
             if (response.statusCode === 200 && response.data) {
                 console.log('✅ Token rafraîchi avec succès')
-                
+
                 // Sauvegarder le nouveau token
                 setTokenToLocalStorage(response.data.token)
-                
+
                 // Construire l'objet UserData
                 const userData: UserData = {
                     id: response.data.user.id,
@@ -84,17 +76,17 @@ const validateTokenWithRefresh = async (): Promise<UserData | null> => {
                     status: response.data.user.status,
                     stores: response.data.user.stores || []
                 }
-                
+
                 // Sauvegarder les données utilisateur
                 setUserDataToLocalStorage(userData)
-                
+
                 console.log('✅ Données utilisateur sauvegardées:', {
                     id: userData.id,
                     name: userData.name,
                     email: userData.email,
                     storesCount: userData.stores.length
                 })
-                
+
                 return userData
             } else {
                 console.error('❌ Erreur refresh token:', response.message)
@@ -155,7 +147,7 @@ export const getUserInfos = async (): Promise<{
 } | null> => {
     console.log('📋 Récupération des infos utilisateur...')
     const user = await useAuthMiddleware()
-    
+
     if (!user) {
         console.warn('⚠️ Aucun utilisateur trouvé')
         return null
@@ -242,7 +234,8 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}): Pro
         throw new Error('Non authentifié')
     }
 
-    const headers = { 'Authorization': `Bearer ${token}`,
+    const headers = {
+        'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         ...options.headers,
@@ -259,9 +252,9 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}): Pro
     // Si 401, tenter un refresh du token
     if (response.status === 401) {
         console.warn('⚠️ Token expiré (401), tentative de refresh...')
-        
+
         const userData = await validateTokenWithRefresh()
-        
+
         if (!userData) {
             console.error('❌ Refresh échoué, déconnexion')
             logout()

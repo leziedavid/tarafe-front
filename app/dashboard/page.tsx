@@ -105,7 +105,7 @@ const MOCK_RECENT_ORDERS: MyOrder[] = [
 // --- COMPONENTS ---
 
 const StatCard = ({ title, value, icon: IconComponent, trend, color }: any) => (
-    <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all hover:shadow-md">
+    <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all hover:shadow-sm">
         <div className="flex justify-between items-start mb-4">
             <div className={`p-3 rounded-xl ${color} bg-opacity-10`}>
                 <IconComponent className={`w-6 h-6 ${color.replace('bg-', 'text-')}`} />

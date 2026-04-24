@@ -6,7 +6,10 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { CategoryProduct, MyOrder, OrderStatus, SubCategoryProduct } from "@/types/interfaces";
 import { Demande } from "@/types/interfaces";
+import { getImagesUrl } from "@/types/baseUrl";
 
+
+const urlImages = getImagesUrl();
 // ===========================
 // Switch de statut générique
 // ===========================
@@ -15,7 +18,7 @@ type StatusSwitchProps<T> = { type: "user" | "appointment" | "order" | "transact
 export const StatusSwitch = <T,>({ type, status }: StatusSwitchProps<T>) => {
     const [checked, setChecked] = useState(() => {
         switch (type) {
-            case "order": return status === OrderStatus.READY;
+            case "order": return status === OrderStatus.COMPLETED;
             default: return false;
         }
     });
@@ -32,7 +35,7 @@ export const StatusSwitch = <T,>({ type, status }: StatusSwitchProps<T>) => {
             //     newStatus = value ? AppointmentStatus.CONFIRMED : AppointmentStatus.CANCELLED;
             //     break;
             case "order":
-                newStatus = value ? OrderStatus.READY : OrderStatus.CANCELLED;
+                newStatus = value ? OrderStatus.COMPLETED : OrderStatus.CANCELLED;
                 break;
             // case "transaction":
             //     newStatus = value ? TransactionStatus.COMPLETED : TransactionStatus.PENDING;
@@ -206,6 +209,77 @@ export const DemandesColumns = (): any[] => [
         render: (item: any) =>
             new Date(item.created_at).toLocaleDateString("fr-FR"),
     },
+];
+
+import { Orders } from "@/types/interfaces";
+
+// ===========================
+// Colonnes ORDERS (Dashboard)
+// ===========================
+export const OrdersColumns = (): any[] => [
+    {
+        key: "id",
+        name: "ID",
+    },
+    {
+        key: "user",
+        name: "Client",
+        render: (item: Orders) => (
+            <div className="flex flex-col">
+                <span className="font-bold text-sm">{item.user?.name || "Client Inconnu"}</span>
+                <span className="text-xs text-muted-foreground">{item.user?.email}</span>
+            </div>
+        )
+    },
+    {
+        key: "store",
+        name: "Boutique",
+        render: (item: Orders) => (
+            <div className="flex items-center gap-2">
+                {item.store?.logo && (
+                    <Image src={`${urlImages}/${item.store.logo}`} alt={item.store.name} width={24} height={24} className="rounded-full object-cover" unoptimized />
+                )}
+                <span className="text-sm font-medium">{item.store?.name || "—"}</span>
+            </div>
+        )
+    },
+    {
+        key: "total",
+        name: "Montant",
+        render: (item: Orders) => (
+            <span className="font-bold">
+                {Number(item.total).toLocaleString()} FCFA
+            </span>
+        )
+    },
+    {
+        key: "status",
+        name: "Statut",
+        render: (item: Orders) => {
+            const colors: any = {
+                PENDING: "bg-blue-100 text-blue-700",
+                VALIDED: "bg-green-100 text-green-700",
+                PAID: "bg-yellow-100 text-yellow-700",
+                DELIVERED: "bg-purple-100 text-purple-700",
+                COMPLETED: "bg-green-100 text-green-800",
+                CANCELLED: "bg-red-100 text-red-700",
+            };
+            return (
+                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase ${colors[item.status] || "bg-gray-100 text-gray-700"}`}>
+                    {item.status}
+                </span>
+            );
+        }
+    },
+    {
+        key: "created_at",
+        name: "Date",
+        render: (item: Orders) => (
+            <span className="text-sm text-muted-foreground">
+                {new Date(item.created_at).toLocaleDateString("fr-FR")}
+            </span>
+        )
+    }
 ];
 
 import { Transaction } from "@/types/interfaces";

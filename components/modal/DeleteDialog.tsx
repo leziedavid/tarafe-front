@@ -6,12 +6,18 @@ type Props = {
     open: boolean;
     onClose: () => void;
     onConfirm: () => void;
+    title?: string;
+    description?: string;
+    confirmText?: string;
 };
 
 export default function DeleteDialog({
     open,
     onClose,
     onConfirm,
+    title = "Êtes-vous sûr de vouloir supprimer cette ressource ?",
+    description = "Cette action est irréversible. Êtes-vous sûr ?",
+    confirmText = "Supprimer",
 }: Props) {
     if (!open) return null;
 
@@ -44,10 +50,10 @@ export default function DeleteDialog({
                         </div>
                         <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                             <h3 className="text-base font-semibold text-gray-900" id="dialog-title">
-                                Êtes-vous sûr de vouloir supprimer cette ressource ?
+                                {title}
                             </h3>
                             <p className="mt-2 text-sm text-gray-500">
-                                Cette action est irréversible. Êtes-vous sûr ?
+                                {description}
                             </p>
                         </div>
                     </div>
@@ -61,7 +67,7 @@ export default function DeleteDialog({
                         }}
                         className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-500 sm:ml-3 sm:w-auto"
                     >
-                        Supprimer
+                        {confirmText}
                     </button>
                     <button
                         type="button"

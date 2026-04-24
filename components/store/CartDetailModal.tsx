@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { getImagesUrl } from "@/types/baseUrl";
 import { useCart } from "../providers/CartProvider";
 import { createOrder } from "@/service/orders";
+import { useAuth } from "@/lib/proxy";
 
 interface CartDetailModalProps {
     isOpen: boolean;
@@ -24,6 +25,7 @@ const MOBILE_PROVIDERS = [
 ];
 
 export default function CartDetailModal({ isOpen, onClose }: CartDetailModalProps) {
+
     const [mounted, setMounted] = useState(false);
     const { cart, updateQuantity, removeFromCart, totalAmount, clearCart, totalItems } = useCart();
     const router = useRouter();
@@ -33,12 +35,21 @@ export default function CartDetailModal({ isOpen, onClose }: CartDetailModalProp
     const [paymentType, setPaymentType] = useState<"LIVRAISON" | "MOBILE_MONEY">("LIVRAISON");
     const [selectedMobileProvider, setSelectedMobileProvider] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    // get userid
+    const { user } = useAuth();
 
     useEffect(() => { setMounted(true); }, []);
 
     if (!mounted) return null;
 
     const handleValidateOrder = async () => {
+        if (!user) {
+            toast.error("Veuillez vous connecter pour valider votre commande");
+            router.push("/auth/login");
+            onClose();
+            return;
+        }
+
         if (cart.length === 0) return;
 
         const paymentMethod = paymentType === "LIVRAISON" ? "LIVRAISON" : selectedMobileProvider;
@@ -50,7 +61,7 @@ export default function CartDetailModal({ isOpen, onClose }: CartDetailModalProp
 
         setIsLoading(true);
         try {
-            const items = cart.map(item => ({ productId: item.id, quantity: item.quantity }));
+            const items = cart.map(item => ({ productId: item.id, quantity: item.quantity, user_id: user.id }));
             const res = await createOrder({ items, paymentMethod: paymentMethod! });
             if (res.statusCode === 200 || res.statusCode === 201) {
 
@@ -133,11 +144,11 @@ export default function CartDetailModal({ isOpen, onClose }: CartDetailModalProp
                                                         <div className="flex items-center justify-between mt-1">
                                                             <div className="flex items-center bg-background rounded-lg border border-border/50 p-1">
                                                                 <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-7 h-7 bg-gray-200 flex items-center justify-center rounded-md hover:bg-secondary transition-colors" >
-                                                                    <Icon icon="solar:minus-bold" width={14} className="text-brand-primary" />
+                                                                    <Icon icon="solar:minus-circle-outline" width="24" height="24" />
                                                                 </button>
                                                                 <span className="w-8 text-center text-xs font-black">{item.quantity}</span>
                                                                 <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="w-7 h-7 bg-gray-200 flex items-center justify-center rounded-md hover:bg-secondary transition-colors">
-                                                                    <Icon icon="solar:add-bold" width={14} className="text-brand-primary" />
+                                                                    <Icon icon="solar:add-circle-broken" width="24" height="24" />
                                                                 </button>
                                                             </div>
                                                             <p className="text-xs font-bold text-gray-900 dark:text-white">
@@ -192,11 +203,7 @@ export default function CartDetailModal({ isOpen, onClose }: CartDetailModalProp
                                             {paymentType === "MOBILE_MONEY" && (
                                                 <div className="grid grid-cols-4 gap-3 animate-in fade-in zoom-in-95 duration-200">
                                                     {MOBILE_PROVIDERS.map((provider) => (
-                                                        <button
-                                                            key={provider.id}
-                                                            onClick={() => setSelectedMobileProvider(provider.id)}
-                                                            className={`flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition-all ${selectedMobileProvider === provider.id ? "border-brand-primary bg-brand-primary/10" : "border-transparent bg-gray-50 dark:bg-gray-900"}`}
-                                                        >
+                                                        <button key={provider.id} onClick={() => setSelectedMobileProvider(provider.id)} className={`flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition-all ${selectedMobileProvider === provider.id ? "border-brand-primary bg-brand-primary/10" : "border-transparent bg-gray-50 dark:bg-gray-900"}`}>
                                                             <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${provider.color} shadow-lg`}>
                                                                 <Icon icon={provider.icon} width={20} />
                                                             </div>

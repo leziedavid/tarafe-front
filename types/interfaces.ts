@@ -1,12 +1,12 @@
 
 
 export enum OrderStatus {
-    NEW = "NEW",
-    PROCESSING = "PROCESSING",
-    READY = "READY",
-    DELIVERED = "DELIVERED",
+    PENDING = "PENDING",
+    PAID = "PAID",
+    VALIDED = "VALIDED",
     CANCELLED = "CANCELLED",
-    REFUNDED = "REFUNDED",
+    DELIVERED = "DELIVERED",
+    COMPLETED = "COMPLETED",
 }
 
 export enum UserStatus {
@@ -77,6 +77,15 @@ export interface User {
     stores: Store[];
     created_at?: string; // ISO string
     updated_at?: string; // ISO string
+}
+
+export interface UserData {
+    id: number;
+    name: string;
+    email: string;
+    roles: Role;
+    status: number;
+    stores: any[];
 }
 
 export interface Category {
@@ -542,13 +551,13 @@ export interface CategorieTransaction {
     created_at: string | null;
     updated_at: string | null;
 }
+
 export interface GraphData {
     date: string;
     value: number;
     label: string;
     color: string;
 }
-
 
 // types/interfaces.ts
 export interface Store {
@@ -564,7 +573,6 @@ export interface Store {
     updated_at: string;
 }
 
-
 // types/orders.ts
 
 export interface OrderItem {
@@ -572,26 +580,35 @@ export interface OrderItem {
     order_id: number;
     product_id: number;
     quantity: number;
-    price: number;
+    price: string; // ⚠️ string
     color?: string | null;
     size?: string | null;
     created_at: string;
     updated_at: string;
+    product: Product; // ✅ relation ajoutée
 }
 
-
-export interface Order {
+export interface Orders {
     id: number;
-    user_id: number;      // client
+    user_id: number;
     store_id: number;
-    total: number;
+    total: string;
     comment?: string | null;
     status: OrderStatus;
-    added_by: number;      // utilisateur qui a ajouté la commande
+    added_by: number;
+    date_orders?: string;
+    heurs_orders?: string;
+    Mode_paiement?: string;
+    adresse_paiement?: string;
+    contact_paiement?: string;
+    notes_orders?: string;
     created_at: string;
     updated_at: string;
-    items?: OrderItem[];   // optionnel : les items de la commande
+    items: OrderItem[];
+    user: User;
+    store: Store;
 }
+
 
 export interface TransactionDataGraphe {
     BarGraphByDate: GraphData[];
@@ -661,6 +678,7 @@ export interface OrderDetails {
     users_realisations: number;
     position: number;
 }
+
 export interface TotalTransaction {
     total_sortie_caisse: string;  // Montant total de la sortie caisse
     total_sortie_banque: string;  // Montant total de la sortie banque
@@ -760,4 +778,17 @@ export interface Pricing {
     updated_at: string;
     files?: Pricing_files[];
     reglages?: Reglage[] | null;
+}
+
+export interface TopProduct {
+    product_id: number;
+    total_sold: number;
+    product: Product;
+}
+
+export interface OrderState {
+    total_orders: number;
+    total_revenue: number;
+    orders_by_status: Record<string, number>;
+    top_products: TopProduct[];
 }

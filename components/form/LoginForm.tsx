@@ -57,7 +57,7 @@ export default function LoginForm() {
 
                 if (role !== Role.ADMIN && cartItems > 0) {
                     toast.success("Finalisez votre paiement 🛒");
-                    // router.push('/checkout');
+                    router.push('/boutique');
                     return;
                 }
 
@@ -76,7 +76,7 @@ export default function LoginForm() {
                 }
 
                 reset(); // Réinitialisation du formulaire
-            } else if (res.statusCode === 400) {
+            } else if (res.statusCode === 400 || res.statusCode === 500) {
                 toast.error(res.message || 'Informations incorrectes');
             } else if (res.statusCode === 500) {
                 toast.error('Erreur serveur, veuillez réessayer');

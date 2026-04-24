@@ -31,6 +31,7 @@ const NAV_SECTIONS: NavSection[] = [
             { label: "Demandes", icon: "solar:inbox-archive-bold-duotone", href: "/dashboard/demandes", badge: "12+" },
             { label: "Réalisations", icon: "solar:gallery-bold-duotone", href: "/dashboard/realisations" },
             { label: "Boutiques", icon: "solar:shop-bold-duotone", href: "/dashboard/store" },
+            { label: "Commandes", icon: "solar:cart-large-2-bold-duotone", href: "/dashboard/orders" },
             { label: "Liste des boutiques", icon: "solar:shop-2-bold-duotone", href: "/dashboard/boutiques" },
             { label: "Management", icon: "solar:pen-new-square-bold-duotone", href: "/dashboard/management" },
             { label: "Configurations", icon: "solar:settings-bold-duotone", href: "/dashboard/configurations" },

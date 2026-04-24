@@ -1,77 +1,38 @@
-
 import { BaseResponse } from "@/types/BaseResponse";
-import { getBaseUrl } from "@/types/baseUrl";
 import { AdminRealisationFilters, AllDataResponse, ApiResponse, DetailRealisation, OptionRealisation, Realisation } from "@/types/interfaces";
 import { Pagination as PaginationType } from "@/types/pagination";
-
-// export const getAllRealisations = async (page: number, limit: number): Promise<BaseResponse<PaginationType<ApiResponse>>> => {
-//     const q = `?page=${page ?? 1}&limit=${limit ?? 10}`;
-//     const response = await fetch(`${getBaseUrl()}/homepage-data`, { method: "GET" });
-//     return await response.json();
-// }
-
+import { api } from "@/lib/proxy";
 
 // CRUD
 // createRealisation
 
 export const createRealisation = async (data: FormData): Promise<BaseResponse<Realisation>> => {
-    const response = await fetch(`${getBaseUrl()}/realisations/create`, {
-        method: 'POST',
-        body: data,
-    });
-    return await response.json();
+    return api.post('/realisations/create', data);
 }
-
 
 // updateRealisations
 export const updateRealisation = async (id: number, data: FormData): Promise<BaseResponse<Realisation>> => {
-    const response = await fetch(`${getBaseUrl()}/realisations/${id}`, {
-        // method: 'PUT',
-        method: 'POST',
-        body: data,
-    });
-    return await response.json();
+    // Note: Laravel can be tricky with PUT and FormData, usually POST + _method=PUT is preferred
+    // If original code used POST, we keep it.
+    return api.post(`/realisations/${id}`, data);
 }
-
 
 // deleteRealisations
 export const deleteRealisation = async (id: number): Promise<BaseResponse<Realisation>> => {
-    const response = await fetch(`${getBaseUrl()}/realisations/${id}`, {
-        method: 'DELETE',
-    });
-    return await response.json();
+    return api.delete(`/realisations/${id}`);
 }
 
 export const getAllRealisations = async (): Promise<BaseResponse<ApiResponse>> => {
-    const response = await fetch(`${getBaseUrl()}/realisations/homepage-data`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-    return await response.json();
+    return api.get('/realisations/homepage-data');
 };
 
-// getRealisationsByLaballe https://ms.cloud.tarafe.com/api/v1/realisation/libelle/Trousses%20beaut%C3%A9%20personnalisables
-
 export const getRealisationsByLaballe = async (labelle: string): Promise<BaseResponse<DetailRealisation>> => {
-    const response = await fetch(`${getBaseUrl()}/realisations/libelle/${labelle}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-    return await response.json();
+    return api.get(`/realisations/libelle/${encodeURIComponent(labelle)}`);
 };
 
 // Service pour récupérer les réalisations
 export const getAllRealisationsByFilter = async (page: number, limit: number, search: number): Promise<BaseResponse<AllDataResponse>> => {
-    console.log(search);
-    const response = await fetch(`${getBaseUrl()}/realisations/status/${search}?page=${page}&limit=${limit}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-    });
-    return await response.json();
+    return api.get(`/realisations/status/${search}?page=${page}&limit=${limit}`);
 };
 
 // getall admin realisations
@@ -88,104 +49,43 @@ const buildQueryParams = (filters: AdminRealisationFilters) => {
 
 export const getAllRealisationsByAdmin = async (filters: AdminRealisationFilters): Promise<BaseResponse<PaginationType<Realisation>>> => {
     const query = buildQueryParams(filters);
-    const response = await fetch(`${getBaseUrl()}/realisations/all/admin/data?${query}`,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }
-    );
-    return await response.json();
+    return api.get(`/realisations/all/admin/data?${query}`);
 };
 
 // updateRealisationStatut
 export const updateRealisationStatut = async (id: number, statut: string): Promise<BaseResponse<Realisation>> => {
-    const response = await fetch(`${getBaseUrl()}/realisations/update/stats/${id}/statut`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ statut_realisations: statut }),
-    });
-    return await response.json();
+    return api.put(`/realisations/update/stats/${id}/statut`, { statut_realisations: statut });
 }
 
 // updateRealisationActive
 export const updateRealisationActive = async (id: number, statut: string): Promise<BaseResponse<Realisation>> => {
-    const response = await fetch(`${getBaseUrl()}/realisations/update/${id}/isActive`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ isActive: statut }),
-    });
-    return await response.json();
+    return api.put(`/realisations/update/${id}/isActive`, { isActive: statut });
 }
 
 // lieste des categorie de realisation et ses CRUD
 
 export const getCategories = async (): Promise<BaseResponse<OptionRealisation[]>> => {
-    const response = await fetch(`${getBaseUrl()}/categories-realisation`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    return await response.json();
+    return api.get('/categories-realisation');
 }
 
 export const createCategory = async (data: OptionRealisation): Promise<BaseResponse<OptionRealisation>> => {
-    const response = await fetch(`${getBaseUrl()}/categories-realisation/create`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    });
-    return await response.json();
+    return api.post('/categories-realisation/create', data);
 }
 
 export const updateCategory = async (id: number, data: OptionRealisation): Promise<BaseResponse<OptionRealisation>> => {
-    const response = await fetch(`${getBaseUrl()}/categories-realisation/update/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    });
-    return await response.json();
+    return api.put(`/categories-realisation/update/${id}`, data);
 }
 
 export const deleteCategory = async (id: number): Promise<BaseResponse<OptionRealisation>> => {
-    const response = await fetch(`${getBaseUrl()}/categories-realisation/delete/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    return await response.json();
+    return api.delete(`/categories-realisation/delete/${id}`);
 }
 
 export const getCategoryById = async (id: number): Promise<BaseResponse<OptionRealisation>> => {
-    const response = await fetch(`${getBaseUrl()}/categories-realisation/${id}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    return await response.json();
+    return api.get(`/categories-realisation/${id}`);
 }
-
 
 // api option realisation table pivo
 // getCategoriesById 
 export const getCategoriesById = async (id: number): Promise<BaseResponse<OptionRealisation>> => {
-    const response = await fetch(`${getBaseUrl()}/options/${id}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    return await response.json();
+    return api.get(`/options/${id}`);
 }

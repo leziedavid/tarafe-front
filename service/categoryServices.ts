@@ -1,162 +1,77 @@
-import { fetchWithAuth } from "@/app/middleware";
 import { BaseResponse } from "@/types/BaseResponse";
-import { getBaseUrl } from "@/types/baseUrl";
 import { CategoryProduct, SubCategoryProduct } from "@/types/interfaces";
 import { Pagination as PaginationType } from "@/types/pagination";
-
-const baseUrl = getBaseUrl();
+import { api } from "@/lib/proxy";
 
 // ========================== CATÉGORIES ==========================
 
 // Récupérer toutes les catégories
 export const getAllCategories = async (page: number = 1, limit: number = 10): Promise<BaseResponse<PaginationType<CategoryProduct>>> => {
-    const response = await fetch(`${baseUrl}/products-categories?page=${page}&limit=${limit}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-    });
-    return response.json();
+    return api.get(`/products-categories?page=${page}&limit=${limit}`);
 };
 
-// Récupérer toutes les catégories
+// Récupérer toutes les catégories sans pagination
 export const getAllCategoriesIn = async (): Promise<BaseResponse<CategoryProduct[]>> => {
-    const response = await fetch(`${baseUrl}/products-categories/all`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-    });
-    return response.json();
+    return api.get('/products-categories/all');
 };
-
 
 // Récupérer une catégorie par ID
 export const getCategoryById = async (id: number): Promise<BaseResponse<CategoryProduct>> => {
-    const response = await fetch(`${baseUrl}/products-categories/${id}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-    });
-    return response.json();
+    return api.get(`/products-categories/${id}`);
 };
 
-// Créer une catégorie
 // Créer une ou plusieurs catégories
 export const createCategory = async (data: { name: string; slug: string } | { name: string; slug: string }[]): Promise<BaseResponse<CategoryProduct>> => {
-    const response = await fetch(`${baseUrl}/products-categories`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data), // supporte un objet ou un tableau
-        credentials: 'include',
-    });
-    return response.json();
+    return api.post('/products-categories', data);
 };
 
 // Mettre à jour une catégorie
 export const updateCategory = async (id: number, data: { name: string; slug: string }): Promise<BaseResponse<CategoryProduct>> => {
-    const response = await fetch(`${baseUrl}/products-categories/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-        credentials: 'include',
-    });
-    return response.json();
+    return api.put(`/products-categories/${id}`, data);
 };
 
 // Supprimer une catégorie
 export const deleteCategory = async (id: number): Promise<BaseResponse<CategoryProduct>> => {
-    const response = await fetch(`${baseUrl}/products-categories/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-    });
-    return response.json();
+    return api.delete(`/products-categories/${id}`);
 };
 
 // ========================== SOUS-CATÉGORIES ==========================
 
-
-
-//{category}/sub-categories
+// Récupérer les sous-catégories par catégorie
 export const getSubCategoriesbyCategory = async (category: number): Promise<BaseResponse<SubCategoryProduct[]>> => {
-    const response = await fetch(`${baseUrl}/products-categories/${category}/sub-categories`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-    });
-    return response.json();
+    return api.get(`/products-categories/${category}/sub-categories`);
 };
 
 // Récupérer toutes les sous-catégories
 export const getAllSubCategories = async (page: number = 1, limit: number = 10): Promise<BaseResponse<PaginationType<SubCategoryProduct>>> => {
-    const response = await fetch(`${baseUrl}/products-sous-categories?page=${page}&limit=${limit}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-    });
-    return response.json();
+    return api.get(`/products-sous-categories?page=${page}&limit=${limit}`);
 };
 
 // Récupérer une sous-catégorie par ID
 export const getSubCategoryById = async (id: number): Promise<BaseResponse<SubCategoryProduct>> => {
-    const response = await fetch(`${baseUrl}/products-sous-categories/${id}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-    });
-    return response.json();
+    return api.get(`/products-sous-categories/${id}`);
 };
 
-// Créer une ou plusieurs sous-catégories
 // Créer une ou plusieurs sous-catégories
 export const createSubCategory = async (
     data: { name: string; category_id: number; slug: string; added_by: number;}[]): Promise<BaseResponse<SubCategoryProduct>> => {
 
-    // 🔁 mapping frontend → backend
     const payload = data.map(item => ({
         name: item.name,
         slug: item.slug,
-        category_id: item.category_id, // ✅ IMPORTANT
+        category_id: item.category_id,
         added_by: item.added_by,
     }));
 
-    const response = await fetch(`${baseUrl}/products-sous-categories`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json', // 👈 force JSON côté Laravel
-        },
-        body: JSON.stringify(payload),
-    });
-
-    // 🔥 GESTION ERREUR PROPRE
-    if (!response.ok) {
-        const text = await response.text();
-        console.error("API ERROR createSubCategory:", text);
-        throw new Error("Erreur serveur lors de la création des sous-catégories");
-    }
-
-    return response.json();
+    return api.post('/products-sous-categories', payload);
 };
-
-
 
 // Mettre à jour une sous-catégorie
 export const updateSubCategory = async (id: number, data: { name: string; category_id: number }): Promise<BaseResponse<SubCategoryProduct>> => {
-    const response = await fetchWithAuth(`${baseUrl}/products-sous-categories/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-        credentials: 'include',
-    });
-    return response.json();
+    return api.put(`/products-sous-categories/${id}`, data);
 };
 
 // Supprimer une sous-catégorie
 export const deleteSubCategory = async (id: number): Promise<BaseResponse<SubCategoryProduct>> => {
-    const response = await fetch(`${baseUrl}/products-sous-categories/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-    });
-    return response.json();
+    return api.delete(`/products-sous-categories/${id}`);
 };

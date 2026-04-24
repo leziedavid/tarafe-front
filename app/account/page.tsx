@@ -10,15 +10,19 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import Navbar from "@/components/page/Navbar";
 import { useAuthMiddleware, logout, UserData } from "@/app/middleware";
-import { getMyAllorders } from "@/service/orders";
+import { getMyAllorders, updateStatus } from "@/service/orders";
 import { updateUser } from "@/service/security";
-import { Order, OrderStatus } from "@/types/interfaces";
+import { Orders, OrderStatus } from "@/types/interfaces";
 import { Pagination } from "@/types/pagination";
 import HeaderCard from "@/components/account/HeaderCard";
+import MyModal from "@/components/modal/MyModal";
+import OrderDetailsModal from "@/components/modal/OrderDetailsModal";
+import DeleteDialog from "@/components/modal/DeleteDialog";
 
 type TabType = "Commandes" | "Mon compte";
 
 export default function AccountPage() {
+
     const router = useRouter();
     const [isMounted, setIsMounted] = useState(false);
     const [user, setUser] = useState<UserData | null>(null);
@@ -26,8 +30,8 @@ export default function AccountPage() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     // Orders state
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [orderPagination, setOrderPagination] = useState<Pagination<Order> | null>(null);
+    const [orders, setOrders] = useState<Orders[]>([]);
+    const [orderPagination, setOrderPagination] = useState<Pagination<Orders> | null>(null);
     const [isLoadingOrders, setIsLoadingOrders] = useState(false);
     const [orderPage, setOrderPage] = useState(1);
 
@@ -36,6 +40,15 @@ export default function AccountPage() {
     const [profileName, setProfileName] = useState("");
     const [profileEmail, setProfileEmail] = useState("");
     const [isSavingProfile, setIsSavingProfile] = useState(false);
+
+    // Modal state
+    const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState<Orders | null>(null);
+
+    // Cancel Dialog State
+    const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
+    const [orderToCancel, setOrderToCancel] = useState<Orders | null>(null);
+    const [isCancelling, setIsCancelling] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
@@ -114,12 +127,42 @@ export default function AccountPage() {
         router.push("/auth/login");
     };
 
+    const handleViewDetails = (order: Orders) => {
+        setSelectedOrder(order);
+        setIsDetailsModalOpen(true);
+    };
+
+    const handleOpenCancelDialog = (order: Orders) => {
+        setOrderToCancel(order);
+        setIsCancelDialogOpen(true);
+    };
+
+    const handleConfirmCancel = async () => {
+        if (!orderToCancel) return;
+        setIsCancelling(true);
+        try {
+            const res = await updateStatus(orderToCancel.id, "CANCELLED");
+            if (res.statusCode === 200 || res.statusCode === 201) {
+                toast.success("Commande annulée avec succès");
+                fetchOrders();
+                setIsCancelDialogOpen(false);
+            } else {
+                toast.error(res.message || "Erreur lors de l'annulation");
+            }
+        } catch (error) {
+            toast.error("Une erreur est survenue");
+        } finally {
+            setIsCancelling(false);
+        }
+    };
+
     const getStatusColor = (status: OrderStatus) => {
         switch (status) {
-            case OrderStatus.NEW: return "bg-blue-100 text-blue-700";
-            case OrderStatus.PROCESSING: return "bg-yellow-100 text-yellow-700";
-            case OrderStatus.READY: return "bg-purple-100 text-purple-700";
-            case OrderStatus.DELIVERED: return "bg-green-100 text-green-700";
+            case OrderStatus.PENDING: return "bg-blue-100 text-blue-700";
+            case OrderStatus.PAID: return "bg-yellow-100 text-yellow-700";
+            case OrderStatus.VALIDED: return "bg-emerald-100 text-emerald-700";
+            case OrderStatus.DELIVERED: return "bg-purple-100 text-purple-700";
+            case OrderStatus.COMPLETED: return "bg-green-100 text-green-700";
             case OrderStatus.CANCELLED: return "bg-red-100 text-red-700";
             default: return "bg-gray-100 text-gray-700";
         }
@@ -163,9 +206,25 @@ export default function AccountPage() {
                                                         <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase ${getStatusColor(order.status)}`}>
                                                             {order.status}
                                                         </span>
-                                                        <Button variant="outline" size="sm" className="rounded-xl border-border hover:bg-muted font-bold">
+                                                        <Button
+                                                            onClick={() => handleViewDetails(order)}
+                                                            variant="outline"
+                                                            size="sm"
+                                                            className="rounded-xl border-border hover:bg-muted font-bold"
+                                                        >
                                                             Détails
                                                         </Button>
+
+                                                        {(order.status === OrderStatus.PENDING || order.status === OrderStatus.VALIDED) && (
+                                                            <Button
+                                                                onClick={() => handleOpenCancelDialog(order)}
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                className="text-red-500 hover:text-red-700 hover:bg-red-50 font-bold rounded-xl"
+                                                            >
+                                                                Annuler
+                                                            </Button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
@@ -243,10 +302,7 @@ export default function AccountPage() {
             <div className="md:hidden">
                 <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
                     <SheetTrigger asChild>
-                        <button
-                            className="fixed bottom-32 left-8 z-[9999] w-16 h-16 rounded-full bg-brand-primary text-white shadow-2xl border-4 border-white flex items-center justify-center pointer-events-auto active:scale-90 transition-all"
-                            aria-label="Menu du compte"
-                        >
+                        <button className="fixed bottom-32 left-8 z-[9999] w-16 h-16 rounded-full bg-brand-primary text-white shadow-2xl border-4 border-white flex items-center justify-center pointer-events-auto active:scale-90 transition-all" aria-label="Menu du compte">
                             <Icon icon="solar:reorder-bold-duotone" width={32} height={32} />
                         </button>
                     </SheetTrigger>
@@ -266,10 +322,7 @@ export default function AccountPage() {
                         </div>
 
                         <div className="grid gap-4">
-                            <button
-                                onClick={() => { setActiveTab("Commandes"); setIsMenuOpen(false); }}
-                                className={`w-full flex items-center justify-between p-6 rounded-[2rem] transition-all ${activeTab === "Commandes" ? "bg-brand-primary text-white shadow-xl shadow-brand-primary/30" : "bg-muted/50 text-foreground"}`}
-                            >
+                            <button onClick={() => { setActiveTab("Commandes"); setIsMenuOpen(false); }} className={`w-full flex items-center justify-between p-6 rounded-[2rem] transition-all ${activeTab === "Commandes" ? "bg-brand-primary text-white shadow-xl shadow-brand-primary/30" : "bg-muted/50 text-foreground"}`}>
                                 <div className="flex items-center gap-4 font-bold">
                                     <Icon icon="solar:cart-large-2-bold-duotone" width={24} />
                                     Mes Commandes
@@ -277,10 +330,7 @@ export default function AccountPage() {
                                 <Icon icon="solar:alt-arrow-right-bold" width={20} />
                             </button>
 
-                            <button
-                                onClick={() => { setActiveTab("Mon compte"); setIsMenuOpen(false); }}
-                                className={`w-full flex items-center justify-between p-6 rounded-[2rem] transition-all ${activeTab === "Mon compte" ? "bg-brand-primary text-white shadow-xl shadow-brand-primary/30" : "bg-muted/50 text-foreground"}`}
-                            >
+                            <button onClick={() => { setActiveTab("Mon compte"); setIsMenuOpen(false); }} className={`w-full flex items-center justify-between p-6 rounded-[2rem] transition-all ${activeTab === "Mon compte" ? "bg-brand-primary text-white shadow-xl shadow-brand-primary/30" : "bg-muted/50 text-foreground"}`} >
                                 <div className="flex items-center gap-4 font-bold">
                                     <Icon icon="solar:user-bold-duotone" width={24} />
                                     Mon Profil
@@ -290,10 +340,7 @@ export default function AccountPage() {
 
                             <div className="h-px bg-border my-2" />
 
-                            <button
-                                onClick={handleLogout}
-                                className="w-full flex items-center justify-between p-6 rounded-[2rem] bg-red-500/10 text-red-500 font-bold transition-all"
-                            >
+                            <button onClick={handleLogout} className="w-full flex items-center justify-between p-6 rounded-[2rem] bg-red-500/10 text-red-500 font-bold transition-all" >
                                 <div className="flex items-center gap-4">
                                     <Icon icon="solar:logout-bold-duotone" width={24} />
                                     Déconnexion
@@ -304,6 +351,22 @@ export default function AccountPage() {
                     </SheetContent>
                 </Sheet>
             </div>
+
+            {/* Modal for Order Details */}
+            {isDetailsModalOpen && selectedOrder && (
+                <MyModal open={isDetailsModalOpen} onClose={() => setIsDetailsModalOpen(false)} mode="mobile" typeModal="large" >
+                    <OrderDetailsModal order={selectedOrder} isOpen={isDetailsModalOpen} onClose={() => setIsDetailsModalOpen(false)} fetchData={fetchOrders} readonly={true} />
+                </MyModal>
+            )}
+
+            <DeleteDialog
+                open={isCancelDialogOpen}
+                onClose={() => setIsCancelDialogOpen(false)}
+                onConfirm={handleConfirmCancel}
+                title="Annuler la commande"
+                description={`Êtes-vous sûr de vouloir annuler la commande #${orderToCancel?.id} ? Cette action est irréversible.`}
+                confirmText={isCancelling ? "Annulation..." : "Confirmer l'annulation"}
+            />
 
         </>
     );

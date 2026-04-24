@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useTransition } from "react";
+import { Icon } from "@iconify/react";
 
 import { Table } from "@/components/table/tables/table";
 import AdminLayout from "@/components/dashboard/AdminLayout/AdminLayout";
@@ -375,65 +376,53 @@ export default function Page() {
 
                     </div>
 
-                    {/* <pre> {JSON.stringify(total, null, 2)} </pre>  */}
 
                     <div className="space-y-4">
-                        <div className="space-y-4">
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                                {/* Carte Solde Caisse */}
-                                <div className="bg-green-700 text-white rounded-sm border p-6">
-                                    <div className="flex flex-row items-center justify-between mb-4">
-                                        <h3 className="text-sm font-medium">Solde Caisse</h3>
-                                    </div>
-                                    <div className="text-xl font-bold">
-                                        {total?.total_general?.toLocaleString() ?? 0} FCFA
-                                    </div>
+                        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+                            {/* Carte Solde Caisse */}
+                            <div className="bg-green-700 text-white rounded-[2rem] p-8 shadow-sm shadow-green-700/20 relative overflow-hidden group">
+                                <Icon icon="solar:wallet-bold-duotone" className="absolute -right-4 -bottom-4 w-24 h-24 opacity-10 group-hover:scale-110 transition-transform" />
+                                <h3 className="text-sm font-bold opacity-80 uppercase tracking-widest mb-4">Solde Caisse</h3>
+                                <div className="text-xl font-black">
+                                    {total?.total_general?.toLocaleString() ?? 0} <span className="text-xs font-medium opacity-80">FCFA</span>
                                 </div>
-
-                                {/* Carte Total Entrée Caisse */}
-                                <div className="bg-white rounded-sm border p-6">
-                                    <div className="flex flex-row items-center justify-between mb-4">
-                                        <h3 className="text-sm font-medium">Total Entrée Caisse</h3>
-                                    </div>
-                                    <div className="text-xl font-bold">
-                                        {total?.total_entree_caisse?.toLocaleString() ?? 0} FCFA
-                                    </div>
-                                </div>
-
-                                {/* Carte Total Sortie Caisse */}
-                                <div className="bg-white rounded-sm border p-6">
-                                    <div className="flex flex-row items-center justify-between mb-4">
-                                        <h3 className="text-sm font-medium">Total Sortie Caisse</h3>
-                                    </div>
-                                    <div className="text-xl font-bold">
-                                        {total?.total_sortie_caisse?.toLocaleString() ?? 0} FCFA
-                                    </div>
-                                </div>
-
-                                {/* Carte Total Sortie Banque */}
-                                <div className="bg-white rounded-sm border p-6">
-                                    <div className="flex flex-row items-center justify-between mb-4">
-                                        <h3 className="text-sm font-medium">Total Sortie Banque</h3>
-                                    </div>
-                                    <div className="text-xl font-bold">
-                                        {total?.total_sortie_banque?.toLocaleString() ?? 0} FCFA
-                                    </div>
-                                </div>
-
-
-                                {/* Carte Total Sortie Banque */}
-                                <div className="bg-white rounded-sm border p-6">
-                                    <div className="flex flex-row items-center justify-between mb-4">
-                                        <h3 className="text-sm font-medium">Total Entrée Banque</h3>
-                                    </div>
-                                    <div className="text-xl font-bold">
-                                        {total?.total_entree_banque?.toLocaleString() ?? 0} FCFA
-                                    </div>
-                                </div>
-
-
                             </div>
 
+                            {/* Carte Total Entrée Caisse */}
+                            <div className="bg-white border-2 border-gray-50 rounded-[2rem] p-8 hover:border-green-200 transition-all group relative overflow-hidden">
+                                <Icon icon="solar:round-arrow-left-down-bold-duotone" className="absolute -right-4 -bottom-4 w-24 h-24 text-green-500 opacity-5 group-hover:scale-110 transition-transform" />
+                                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Entrée Caisse</h3>
+                                <div className="text-xl font-black text-gray-900">
+                                    {total?.total_entree_caisse?.toLocaleString() ?? 0} <span className="text-xs font-medium text-gray-400">FCFA</span>
+                                </div>
+                            </div>
+
+                            {/* Carte Total Sortie Caisse */}
+                            <div className="bg-white border-2 border-gray-50 rounded-[2rem] p-8 hover:border-red-200 transition-all group relative overflow-hidden">
+                                <Icon icon="solar:round-arrow-right-up-bold-duotone" className="absolute -right-4 -bottom-4 w-24 h-24 text-red-500 opacity-5 group-hover:scale-110 transition-transform" />
+                                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Sortie Caisse</h3>
+                                <div className="text-xl font-black text-gray-900">
+                                    {total?.total_sortie_caisse?.toLocaleString() ?? 0} <span className="text-xs font-medium text-gray-400">FCFA</span>
+                                </div>
+                            </div>
+
+                            {/* Carte Total Entrée Banque */}
+                            <div className="bg-white border-2 border-gray-50 rounded-[2rem] p-8 hover:border-blue-200 transition-all group relative overflow-hidden">
+                                <Icon icon="solar:bank-bold-duotone" className="absolute -right-4 -bottom-4 w-24 h-24 text-blue-500 opacity-5 group-hover:scale-110 transition-transform" />
+                                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Entrée Banque</h3>
+                                <div className="text-xl font-black text-gray-900">
+                                    {total?.total_entree_banque?.toLocaleString() ?? 0} <span className="text-xs font-medium text-gray-400">FCFA</span>
+                                </div>
+                            </div>
+
+                            {/* Carte Total Sortie Banque */}
+                            <div className="bg-white border-2 border-gray-50 rounded-[2rem] p-8 hover:border-orange-200 transition-all group relative overflow-hidden">
+                                <Icon icon="solar:card-send-bold-duotone" className="absolute -right-4 -bottom-4 w-24 h-24 text-orange-500 opacity-5 group-hover:scale-110 transition-transform" />
+                                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Sortie Banque</h3>
+                                <div className="text-xl font-black text-gray-900">
+                                    {total?.total_sortie_banque?.toLocaleString() ?? 0} <span className="text-xs font-medium text-gray-400">FCFA</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -509,18 +498,12 @@ export default function Page() {
 
                             {/* Actions */}
                             <div className="flex gap-2">
-                                <button
-                                    onClick={openCategorieForm}
-                                    className="flex items-center gap-2 border border-gray-300 bg-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-gray-50 transition"
-                                >
+                                <button onClick={openCategorieForm} className="flex items-center gap-2 border border-gray-300 bg-white px-4 py-2 rounded-sm text-sm font-medium hover:bg-gray-50 transition" >
                                     <List className="w-4 h-4" />
                                     <span>Liste des catégories</span>
                                 </button>
 
-                                <button
-                                    onClick={openImportDialog}
-                                    className="flex items-center gap-2 bg-brand-primary2 text-white px-4 py-2 rounded-sm text-sm font-medium hover:opacity-90 transition"
-                                >
+                                <button onClick={openImportDialog} className="flex items-center gap-2 bg-brand-primary2 text-white px-4 py-2 rounded-sm text-sm font-medium hover:opacity-90 transition" >
                                     <Upload className="w-4 h-4" />
                                     <span>Importer les transactions</span>
                                 </button>
@@ -536,9 +519,7 @@ export default function Page() {
                     </div>
 
 
-                    {/* <pre> {JSON.stringify(donnees, null, 2)} </pre> */}
-
-                    <div className="w-full p-4">
+                    <div className="w-full bg-white border-2 border-gray-50 rounded-sm p-4 overflow-hidden py-12">
                         <Table<Transaction>
                             data={donnees}
                             columns={TransactionsColumns()}
@@ -554,29 +535,35 @@ export default function Page() {
                             onPreviousPage={handlePreviousPage}
                         />
                     </div>
+
                 </div>
 
-            </AdminLayout>
+            </AdminLayout >
 
 
             {isDialogOpen && (
                 <MyModal open={open} onClose={closeAllModals} mode="mobile" typeModal="large">
                     <ImportData isOpen={open} onClose={closeAllModals} />
                 </MyModal>
-            )}
+            )
+            }
 
-            {isFormOpen && (
-                <MyModal open={open} onClose={closeAllModals} mode="mobile" typeModal="large">
-                    <CategorieTransForm isOpen={open} onClose={closeAllModals} />
-                </MyModal>
-            )}
+            {
+                isFormOpen && (
+                    <MyModal open={open} onClose={closeAllModals} mode="mobile" typeModal="large">
+                        <CategorieTransForm isOpen={open} onClose={closeAllModals} />
+                    </MyModal>
+                )
+            }
 
 
-            {isFormUpdateOpen && (
-                <MyModal open={open} onClose={closeAllModals} mode="mobile" typeModal="large">
-                    <TransacModal isOpen={open} onClose={closeAllModals} fetchData={fetchData} initialValues={initialValues} />
-                </MyModal>
-            )}
+            {
+                isFormUpdateOpen && (
+                    <MyModal open={open} onClose={closeAllModals} mode="mobile" typeModal="large">
+                        <TransacModal isOpen={open} onClose={closeAllModals} fetchData={fetchData} initialValues={initialValues} />
+                    </MyModal>
+                )
+            }
 
 
             <DeleteDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onConfirm={() => { if (selectedId) handleDeleteClick(selectedId); }} />
