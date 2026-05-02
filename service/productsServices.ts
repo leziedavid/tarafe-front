@@ -6,21 +6,31 @@ import { api } from "@/lib/proxy";
 /**
  * Récupérer tous les produits avec pagination et filtres optionnels
  */
-export const getAllProducts = async (params?: {page?: number;limit?: number;search?: string;category_id?: number;sub_category_id?: number;store_id?: number;available?: boolean;}): Promise<BaseResponse<PaginationType<Product>>> => {
+export const getAllProducts = async (params?: { page?: number; limit?: number; search?: string; category_id?: number; sub_category_id?: number; store_id?: number; available?: boolean; }): Promise<BaseResponse<PaginationType<Product>>> => {
     const query = new URLSearchParams(params as any).toString();
     return api.get(`/products?${query}`);
 };
 
 /**
+ * Récupérer tous les produits avec pagination et filtres optionnels
+ */
+export const getForAdmin = async (params?: { page?: number; limit?: number; search?: string; category_id?: number; sub_category_id?: number; store_id?: number; available?: boolean; }): Promise<BaseResponse<PaginationType<Product>>> => {
+    const query = new URLSearchParams(params as any).toString();
+    return api.get(`/products/admin/all_liste?${query}`);
+};
+
+
+
+/**
  * Filtrer les produits (advanced)
  */
-export const filterProducts = async (params?: {page?: number;limit?: number;search?: string;category_id?: number;sub_category_id?: number;store_id?: number;available?: boolean;}): Promise<BaseResponse<PaginationType<Product>>> => {
+export const filterProducts = async (params?: { page?: number; limit?: number; search?: string; category_id?: number; sub_category_id?: number; store_id?: number; available?: boolean; }): Promise<BaseResponse<PaginationType<Product>>> => {
     const query = new URLSearchParams(params as any).toString();
     return api.get(`/products/filter?${query}`);
 };
 
 // ProductStats     // Récupérer les statistiques des produits
-export const getProductStats = async (params?: {page?: number;limit?: number;search?: string;category_id?: number;sub_category_id?: number;store_id?: number;available?: boolean;}): Promise<BaseResponse<ProductStats>> => {
+export const getProductStats = async (params?: { page?: number; limit?: number; search?: string; category_id?: number; sub_category_id?: number; store_id?: number; available?: boolean; }): Promise<BaseResponse<ProductStats>> => {
     const query = new URLSearchParams(params as any).toString();
     return api.get(`/products/stats/by-filter?${query}`);
 };
@@ -59,4 +69,18 @@ export const deleteProduct = async (id: number): Promise<BaseResponse<Product>> 
  */
 export const setMainProductImage = async (productId: number, imageId: number): Promise<BaseResponse<Product>> => {
     return api.post(`/products/${productId}/main-image/${imageId}`);
+};
+
+/**
+ * ==================================================
+ * UPDATE PRODUCT STATUS
+ * ==================================================
+ * 
+ * updateProductField(1, "statut", true);
+updateProductField(1, "stock", 50);
+updateProductField(1, "featured", false);
+
+ */
+export const updateProductField = async (productId: number, field: "statut" | "stock" | "featured", value: string | number | boolean): Promise<BaseResponse<any>> => {
+    return api.put(`/products/${productId}/${field}/${value}`);
 };

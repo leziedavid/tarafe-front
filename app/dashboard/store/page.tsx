@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { Select2 } from "@/components/form/Select2";
 import Link from "next/link";
 import { getAllCategoriesIn, getSubCategoriesbyCategory } from "@/service/categoryServices";
-import { createProduct, deleteProduct, getAllProducts, getProductStats, updateProduct } from "@/service/productsServices";
+import { createProduct, deleteProduct, getAllProducts, getForAdmin, getProductStats, updateProduct, updateProductField } from "@/service/productsServices";
 import { prepareProductParams } from "@/types/prepareProductParams";
 import { getImagesUrl } from "@/types/baseUrl";
 import DeleteModal from "@/components/modal/DeleteModal";
@@ -57,7 +57,7 @@ export default function ProductsPage() {
                 sortBy
             });
 
-            const result = await getAllProducts(params);
+            const result = await getForAdmin(params);
 
             if (result.statusCode === 200 && result.data?.data) {
                 // Les données sont déjà filtrées et triées par l'API
@@ -227,9 +227,23 @@ export default function ProductsPage() {
 
     // Toggle available
     const toggleAvailable = async (productId: number) => {
-        // Note: Cette fonction modifie localement, mais devrait aussi appeler l'API
-        setProducts(prev => prev.map(product => product.id === productId ? { ...product, available: product.available === 1 ? 0 : 1 } : product
-        ));
+        // Récupérer le produit concerné
+        const product = products.find(p => p.id === productId);
+        if (!product) return;
+        // Inverser la valeur (0/1 ou boolean)
+        const newStatus = product.available === 1 ? 0 : 1;
+        try {
+            const res = await updateProductField(productId, "statut", newStatus);
+            if (res.statusCode === 200 && res.data) {
+                fetchData();
+                fetchProductStats();
+                toast.success("Statut mis à jour");
+            } else {
+                toast.error(res.message);
+            }
+        } catch (error) {
+            toast.error("Erreur lors de la mise à jour");
+        }
     };
 
     // Delete product logic
@@ -309,7 +323,7 @@ export default function ProductsPage() {
                         {/* Image Container avec slider */}
                         <div className="relative h-40 md:h-48 overflow-hidden bg-gray-100">
                             {activeImage && (
-                                <Image 
+                                <Image
                                     src={`${urlImages}/${activeImage.path}`}
                                     alt={product.name}
                                     fill
@@ -463,7 +477,7 @@ export default function ProductsPage() {
                                 <div className="mb-3">
                                     <div className="flex gap-1">
                                         {product.colors.slice(0, 4).map((color, index) => (
-                                            <div key={index} className="w-6 h-6 rounded-full border border-gray-300"  style={{ backgroundColor: color }}  title={`Couleur ${index + 1}`} />
+                                            <div key={index} className="w-6 h-6 rounded-full border border-gray-300" style={{ backgroundColor: color }} title={`Couleur ${index + 1}`} />
                                         ))}
                                         {product.colors.length > 4 && (
                                             <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs">
@@ -496,7 +510,7 @@ export default function ProductsPage() {
                                 </div>
 
                                 {/* Featured Toggle */}
-                                <div className="flex items-center justify-between">
+                                {/* <div className="flex items-center justify-between">
                                     <span className="text-sm">En vedette</span>
                                     <label className="inline-flex items-center cursor-pointer">
                                         <input
@@ -507,7 +521,7 @@ export default function ProductsPage() {
                                         />
                                         <div className="relative w-10 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-primary2"></div>
                                     </label>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -635,8 +649,7 @@ export default function ProductsPage() {
                                 {product.tag && (
                                     <span className={`text-xs font-semibold px-2 py-1 rounded-full ${product.tag === "NEW ARRIVAL" ? "bg-green-800 text-white" :
                                         product.tag === "GET OFF 20%" ? "bg-red-500 text-white" :
-                                            product.tag === "BEST SELLER" ? "bg-purple-500 text-white" :
-                                                "bg-brand-primary2 text-white"
+                                            product.tag === "BEST SELLER" ? "bg-purple-500 text-white" : "bg-brand-primary2 text-white"
                                         }`}>
                                         {product.tag}
                                     </span>
@@ -649,12 +662,7 @@ export default function ProductsPage() {
                                 <div className="flex flex-wrap gap-4">
                                     <div className="flex items-center">
                                         <label className="inline-flex items-center cursor-pointer">
-                                            <input
-                                                type="checkbox"
-                                                className="sr-only peer"
-                                                checked={product.available === 1}
-                                                onChange={() => toggleAvailable(product.id)}
-                                            />
+                                            <input type="checkbox" className="sr-only peer" checked={product.available === 1} onChange={() => toggleAvailable(product.id)} />
                                             <div className="relative w-9 h-5 bg-neutral-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-800"></div>
                                             <span className="select-none ms-2 text-sm font-medium">
                                                 {product.available === 1 ? "Disponible" : "Indisponible"}
@@ -662,7 +670,7 @@ export default function ProductsPage() {
                                         </label>
                                     </div>
 
-                                    <div className="flex items-center">
+                                    {/* <div className="flex items-center">
                                         <label className="inline-flex items-center cursor-pointer">
                                             <input type="checkbox" className="sr-only peer" checked={product.featured === 1}
                                                 onChange={() => toggleFeatured(product.id)} />
@@ -671,7 +679,7 @@ export default function ProductsPage() {
                                                 {product.featured === 1 ? "Vedette" : "Normal"}
                                             </span>
                                         </label>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 {/* Miniatures */}
@@ -802,7 +810,7 @@ export default function ProductsPage() {
                                     setSelectedSubCategory(null);
                                     setCurrentPage(1);
                                 }}
-                                labelExtractor={(item) => {  if (item.id === "") {  return item.name;  }   return `${item.name}`; }}
+                                labelExtractor={(item) => { if (item.id === "") { return item.name; } return `${item.name}`; }}
                                 valueExtractor={(item) => item.id.toString()}
                                 placeholder="Toutes les catégories"
                                 mode="single"
